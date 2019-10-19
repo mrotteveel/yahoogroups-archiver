@@ -1,0 +1,3 @@
+rootProject.name = 'yahoogroups-archiver'
+enableFeaturePreview('IMPROVED_POM_SUPPORT')
+

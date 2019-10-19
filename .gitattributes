@@ -1,0 +1,10 @@
+* text=auto
+
+*.hbs           text
+*.java          text
+*.properties    text
+*.sh            text
+*.bat           text    eol=crlf
+
+*.jar           binary
+

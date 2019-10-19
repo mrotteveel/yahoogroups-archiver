@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{{groupName}} - {{{ygMessage.ygData.subject}}}</title>
+</head>
+<body>
+<div class="msg-header">
+    <div><span class="msg-subject">Subject:</span> <span class="msg-subject-value">{{{ygMessage.ygData.subject}}}</span></div>
+    <div><span class="msg-author">Author:</span> <span class="msg-author-value">{{{ygMessage.ygData.authorName}}}</span></div>
+    <div><span class="msg-postdate">Post date:</span> <span class="msg-postdate-value">{{ygMessage.ygData.offsetPostDate}}</span></div>
+</div>
+<div class="msg-body">
+{{{ygMessage.ygData.messageBody}}}
+</div>
+</body>
+</html>

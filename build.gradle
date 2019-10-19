@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'nu.studer.jooq' version '3.0.3'
+}
+
+group 'nl.lawinegevaar'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.6'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.slf4j:slf4j-simple:1.7.26'
+    implementation 'commons-cli:commons-cli:1.4'
+    implementation 'org.jooq:jooq'
+    implementation 'com.github.jknack:handlebars:4.1.2'
+
+    implementation 'com.fasterxml.jackson:jackson-bom:2.9.10'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+
+    jooqRuntime 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.6'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jooq {
+    version = '3.12.1'
+
+    archivedb(sourceSets.main) {
+        jdbc {
+            driver = 'org.firebirdsql.jdbc.FBDriver'
+            url = 'jdbc:firebirdsql://localhost/D:/data/db/yahooarchive.fdb'
+            user = 'sysdba'
+            password = 'masterkey'
+            properties {
+                property {
+                    key = 'charSet'
+                    value = 'utf-8'
+                }
+            }
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.firebird.FirebirdDatabase'
+                excludes = 'RDB\\$.*|MON\\$.*|SEC\\$.*'
+            }
+            target {
+                packageName = 'nl.lawinegevaar.yahoogroups.database.jooq'
+                directory = 'src/main/java'
+            }
+        }
+    }
+
+}
