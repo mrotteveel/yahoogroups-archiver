@@ -86,6 +86,9 @@ Building HTML archive
 Be aware: this feature is incomplete, and currently only builds individual
 messages in one directory per group. I may update this in the future.
 
+The file `src/main/resources/site.properties` can be used to configure parts of
+the HTML generation.
+
 To build a HTML archive of all messages, run
 
 ```

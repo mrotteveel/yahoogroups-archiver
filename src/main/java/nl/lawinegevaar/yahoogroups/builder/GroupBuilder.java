@@ -3,16 +3,17 @@ package nl.lawinegevaar.yahoogroups.builder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import lombok.extern.slf4j.Slf4j;
 import nl.lawinegevaar.yahoogroups.builder.json.YgMessage;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.RawdataRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -21,17 +22,20 @@ import static java.lang.String.format;
 class GroupBuilder {
 
     private final Path outputPath;
+    private final Properties siteProperties;
     private final YgroupRecord group;
     private final DatabaseAccess db;
     private final ObjectMapper objectMapper;
     private final Template template;
 
-    GroupBuilder(Path outputPath, YgroupRecord group, DatabaseAccess db) {
+    GroupBuilder(Path outputPath, Properties siteProperties, YgroupRecord group, DatabaseAccess db) {
         this.outputPath = outputPath;
+        this.siteProperties = siteProperties;
         this.group = group;
         this.db = db;
         objectMapper = new ObjectMapper();
         Handlebars handlebars = new Handlebars();
+        handlebars.registerHelpers(ConditionalHelpers.class);
         try {
             template = handlebars.compile("message");
         } catch (IOException e) {
@@ -65,7 +69,10 @@ class GroupBuilder {
         try {
             var ygMessage = objectMapper.readValue(rawdataRecord.getMessageJson(), YgMessage.class);
             try (var writer = Files.newBufferedWriter(groupPath.resolve(messageId + ".html"))) {
-                Map<String, Object> variables = Map.of("groupName", groupName, "ygMessage", ygMessage);
+                Map<String, Object> variables = Map.of(
+                        "groupName", groupName,
+                        "ygMessage", ygMessage,
+                        "site", siteProperties);
                 template.apply(variables, writer);
             }
         } catch (IOException e) {

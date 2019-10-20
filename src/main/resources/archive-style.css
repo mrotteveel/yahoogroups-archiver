@@ -1,0 +1,23 @@
+nav > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+nav > ul > li {
+    display: inline;
+    margin: 0 10px;
+}
+div.msg {
+    max-width: 80em;
+    margin: 0 auto;
+}
+div.msg div.msg-header {
+    margin: 10px 0;
+}
+div.msg div.msg-header th.msg-header-name {
+    text-align: left;
+    padding-right: 5px;
+}
+div.msg div.msg-body {
+    margin: 10px 0;
+}

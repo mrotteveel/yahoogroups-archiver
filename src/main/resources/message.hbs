@@ -1,17 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{site.lang}}">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
+    <link href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}archive-style.css{{else}}../archive-style.css{{/eq}}" rel="stylesheet" type="text/css"/>
     <title>{{groupName}} - {{{ygMessage.ygData.subject}}}</title>
 </head>
 <body>
-<div class="msg-header">
-    <div><span class="msg-subject">Subject:</span> <span class="msg-subject-value">{{{ygMessage.ygData.subject}}}</span></div>
-    <div><span class="msg-author">Author:</span> <span class="msg-author-value">{{{ygMessage.ygData.authorName}}}</span></div>
-    <div><span class="msg-postdate">Post date:</span> <span class="msg-postdate-value">{{ygMessage.ygData.offsetPostDate}}</span></div>
-</div>
-<div class="msg-body">
+<nav class="site-menu">
+    <ul>
+        <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}../{{/eq}}">{{site.name}} - Home</a></li>
+        <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+    </ul>
+</nav>
+<div class="msg">
+    <div class="msg-header">
+        <table>
+            <tr class="msg-subject">
+                <th class="msg-header-name">Subject</th>
+                <td class="msg-header-value">{{{ygMessage.ygData.subject}}}</td>
+            </tr>
+            <tr class="msg-author">
+                <th class="msg-header-name">Author</th>
+                <td class="msg-header-value">{{{ygMessage.ygData.authorName}}}</td>
+            </tr>
+            <tr class="msg-postdate">
+                <th class="msg-header-name">Post date</th>
+                <td class="msg-header-value">{{ygMessage.ygData.offsetPostDate}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="msg-body">
 {{{ygMessage.ygData.messageBody}}}
+    </div>
 </div>
 </body>
 </html>
