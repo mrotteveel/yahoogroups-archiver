@@ -28,8 +28,9 @@ public class ScraperMain {
         }
 
         String cookieString = commandLine.getOptionValue("c");
-        if (commandLine.hasOption('u')) {
-            Updater updater = new Updater(databaseInfo, cookieString);
+        if (commandLine.hasOption("u")) {
+            boolean retryGaps = commandLine.hasOption("r");
+            Updater updater = new Updater(databaseInfo, retryGaps, cookieString);
             updater.startUpdating();
         } else {
             String groupName = commandLine.getOptionValue("g");
@@ -112,6 +113,7 @@ public class ScraperMain {
                         .build())
                 .addOption("g", "group", true, "Yahoo Group to scrape")
                 .addOption("u", "update", false, "Update currently registered groups")
+                .addOption("r", "retry-gaps", false, "When updating, retry existing gaps")
                 .addOption("c", "cookie-string", true, "Cookie string");
     }
 }

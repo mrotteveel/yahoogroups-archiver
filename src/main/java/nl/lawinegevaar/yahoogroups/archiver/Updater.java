@@ -10,10 +10,12 @@ import java.util.List;
 class Updater {
 
     private final DatabaseInfo databaseInfo;
+    private final boolean retryGaps;
     private final String cookieString;
 
-    Updater(DatabaseInfo databaseInfo, String cookieString) {
+    Updater(DatabaseInfo databaseInfo, boolean retryGaps, String cookieString) {
         this.databaseInfo = databaseInfo;
+        this.retryGaps = retryGaps;
         this.cookieString = cookieString;
     }
 
@@ -31,7 +33,9 @@ class Updater {
         try {
             Scraper scraper = new Scraper(databaseInfo, yahooGroupInformation.getGroupname(), cookieString);
             scraper.startScraping();
-            scraper.retryGaps();
+            if (retryGaps) {
+                scraper.retryGaps();
+            }
         } catch (ScrapingFailureException e) {
             // Most failures are caused by group archive not being publicly available
             log.error("Scrapping for group {} failed", yahooGroupInformation.getGroupname(), e);

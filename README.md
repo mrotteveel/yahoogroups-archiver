@@ -70,8 +70,15 @@ nl.lawinegevaar.yahoogroups.archiver.ScraperMain --update
 For closed groups, you'll need to add the `--cookie-string` option as well.
 
 For each group, the update will use the last message id archived, and archive
-all newer message ids. It will not revisit previous message (for example to
-update the references between messages), nor does it revisit gaps in message ids.
+all newer message ids.
+
+When using `--update` combined with `--retry-gaps`, the updater will retry the
+gaps in message ids to see if those messages now do exist. In general retrying
+the gaps will not find new messages, although my guess is that it might catch
+messages that were on hold for moderation in previous runs. 
+
+The update option will not revisit previous message, for example to update the
+references between messages.
 
 Building HTML archive
 ---------------------
