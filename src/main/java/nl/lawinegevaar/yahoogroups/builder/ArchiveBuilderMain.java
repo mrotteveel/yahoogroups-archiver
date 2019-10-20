@@ -1,21 +1,15 @@
 package nl.lawinegevaar.yahoogroups.builder;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.lawinegevaar.yahoogroups.archiver.*;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInitializer;
 import org.apache.commons.cli.*;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 @Slf4j
 public class ArchiveBuilderMain {
     public static void main(String[] args) {
         CommandLine commandLine = getCommandLine(args);
-        Properties properties = readDatabaseConfiguration();
-        DatabaseInfo databaseInfo = createDatabaseInfo(properties);
+        DatabaseInfo databaseInfo = DatabaseInfo.createDatabaseInfo();
         initialize(databaseInfo);
         if (commandLine.hasOption("init-only")) {
             String message = "Initialization only requested, exiting...";
@@ -37,37 +31,6 @@ public class ArchiveBuilderMain {
     private static void initialize(DatabaseInfo databaseInfo) {
         DatabaseInitializer initializer = new DatabaseInitializer(databaseInfo);
         initializer.initializeDatabase();
-    }
-
-    private static DatabaseInfo createDatabaseInfo(Properties properties) {
-        return DatabaseInfo.builder()
-                .hostname(properties.getProperty("db.hostname", "localhost"))
-                .port(intValue(properties.getProperty("db.port"), 3050))
-                .databaseName(properties.getProperty("db.databaseName", "yahooarchive.fdb"))
-                .user(properties.getProperty("db.user", "sysdba"))
-                .password(properties.getProperty("db.password", "masterkey"))
-                .build();
-    }
-
-    private static int intValue(String intString, int defaultValue) {
-        if (intString == null || intString.isEmpty()) {
-            return defaultValue;
-        }
-        try {
-            return Integer.parseInt(intString);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-    private static Properties readDatabaseConfiguration() {
-        try (InputStream is = ScraperMain.class.getResourceAsStream("/database.properties")) {
-            Properties props = new Properties();
-            props.load(is);
-            return props;
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to access database.properties", e);
-        }
     }
 
     private static CommandLine getCommandLine(String[] args) {
