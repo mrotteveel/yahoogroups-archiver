@@ -9,6 +9,7 @@ import nl.lawinegevaar.yahoogroups.restclient.YahooGroupsClient;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
+import org.jooq.Record2;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -16,6 +17,9 @@ import retrofit2.Retrofit;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
 
 @Slf4j
 class Scraper {
@@ -72,6 +76,32 @@ class Scraper {
         } finally {
             httpClient.connectionPool().evictAll();
             log.info("Stopped scraping");
+        }
+    }
+
+    void retryGaps() {
+        log.info("Retying gaps for {}", group);
+        try (var dao = new DatabaseAccess(databaseInfo)) {
+            YgroupRecord ygroup = dao.getYahooGroupInformation(group);
+            int groupId = ygroup.getId();
+            log.info("GroupId: {}, Group: {}", groupId, ygroup.getGroupname());
+            try (Stream<Record2<Integer, Integer>> gapStream = dao.getGapsForGroupId(groupId)) {
+                gapStream.forEach(gap -> {
+                    int beforeGap = gap.component1();
+                    int afterGap = gap.component2();
+                    if (beforeGap >= afterGap) {
+                        throw new IllegalStateException(
+                                format("Invalid gap: before: %d, after %d", beforeGap, afterGap));
+                    }
+                    log.info("Retrying gap between {} and {}", beforeGap, afterGap);
+                    for (int messageId = beforeGap + 1; messageId < afterGap; messageId++) {
+                        retrieveAndStoreMessage(dao, groupId, messageId);
+                    }
+                });
+            }
+        } finally {
+            httpClient.connectionPool().evictAll();
+            log.info("Done retrying gaps");
         }
     }
 
@@ -137,7 +167,5 @@ class Scraper {
             throw new ScrapingFailureException("Could not retrieve highest message id", e);
         }
     }
-
-
 
 }

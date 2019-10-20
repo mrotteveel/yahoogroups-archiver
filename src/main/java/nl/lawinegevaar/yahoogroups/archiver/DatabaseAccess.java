@@ -1,7 +1,7 @@
 package nl.lawinegevaar.yahoogroups.archiver;
 
-import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 import org.jooq.*;
 import org.jooq.conf.ParamCastMode;
 import org.jooq.conf.Settings;
@@ -11,11 +11,11 @@ import org.jooq.impl.SQLDataType;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static nl.lawinegevaar.yahoogroups.database.jooq.Tables.RAWDATA;
 import static nl.lawinegevaar.yahoogroups.database.jooq.Tables.YGROUP;
-import static org.jooq.impl.DSL.max;
-import static org.jooq.impl.DSL.param;
+import static org.jooq.impl.DSL.*;
 
 class DatabaseAccess implements AutoCloseable {
 
@@ -49,6 +49,13 @@ class DatabaseAccess implements AutoCloseable {
         }
     }
 
+    YgroupRecord getYahooGroupInformation(String groupName) {
+        return ctx
+                .selectFrom(YGROUP)
+                .where(YGROUP.GROUPNAME.eq(groupName))
+                .fetchOne();
+    }
+
     YgroupRecord getOrCreateYahooGroupInformation(String groupName) {
         return ctx.transactionResult((Configuration config) -> {
             DSLContext txCtx = DSL.using(config);
@@ -67,12 +74,9 @@ class DatabaseAccess implements AutoCloseable {
     }
 
     List<YgroupRecord> getYahooGroupsInformation() {
-        return ctx.transactionResult((Configuration config) -> {
-            DSLContext txCtx = DSL.using(config);
-            return txCtx
-                    .selectFrom(YGROUP)
-                    .fetch();
-        });
+        return ctx
+                .selectFrom(YGROUP)
+                .fetch();
     }
 
     int getHighestMessageId(int groupId) {
@@ -81,6 +85,24 @@ class DatabaseAccess implements AutoCloseable {
                 .fetchOptional()
                 .map(Record1::value1)
                 .orElse(0);
+    }
+
+    Stream<Record2<Integer, Integer>> getGapsForGroupId(int groupId) {
+        TableLike<Record3<Integer, Integer, Integer>> nextMessageIdSelect = ctx
+                .select(
+                        RAWDATA.GROUP_ID,
+                        RAWDATA.MESSAGE_ID,
+                        lead(RAWDATA.MESSAGE_ID)
+                                .over(partitionBy(RAWDATA.GROUP_ID).orderBy(RAWDATA.MESSAGE_ID)).as("NEXT_MESSAGE_ID"))
+                .from(RAWDATA)
+                .where(RAWDATA.GROUP_ID.eq(groupId));
+
+        Field<Integer> messageId = nextMessageIdSelect.field(1, Integer.class);
+        Field<Integer> nextMessageId = nextMessageIdSelect.field(2, Integer.class);
+        return ctx.select(messageId, nextMessageId)
+                .from(nextMessageIdSelect)
+                .where(nextMessageId.minus(messageId).greaterThan(1))
+                .fetchStream();
     }
 
     void insertRawdata(int groupId, int messageId, String message, String rawMessage) {

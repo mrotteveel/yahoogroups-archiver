@@ -29,8 +29,9 @@ class Updater {
 
     private void updateGroup(YgroupRecord yahooGroupInformation) {
         try {
-            new Scraper(databaseInfo, yahooGroupInformation.getGroupname(), cookieString)
-                    .startScraping();
+            Scraper scraper = new Scraper(databaseInfo, yahooGroupInformation.getGroupname(), cookieString);
+            scraper.startScraping();
+            scraper.retryGaps();
         } catch (ScrapingFailureException e) {
             // Most failures are caused by group archive not being publicly available
             log.error("Scrapping for group {} failed", yahooGroupInformation.getGroupname(), e);
