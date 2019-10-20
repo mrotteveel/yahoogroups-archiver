@@ -31,8 +31,12 @@ NOTE: I have only ever run this from within an IDE (IntelliJ IDEA), so these
 instructions assume sufficient Java knowledge to get things compiled and
 running in IntelliJ IDEA or the tool of your choice.
 
+The build by default expects the database to already exist and contain the
+expected structure. To compile without that database, comment out or remove the
+entire `archivedb` section in the `jooq` section of the `build.gradle`. 
+
 The archiver can archive multiple groups, but you need to archive them
-individually. You can update to archive newer messages.
+individually. You can update to archive newer messages in existing archives.
 
 ### Archiving a group
 
