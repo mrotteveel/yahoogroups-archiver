@@ -27,6 +27,9 @@ database configured in `db.databaseName` if it does not yet exist.
 Archiving
 ---------
 
+**With the removal of the API on December 14th, 2019, the archiving no longer
+works**
+
 NOTE: I have only ever run this from within an IDE (IntelliJ IDEA), so these 
 instructions assume sufficient Java knowledge to get things compiled and
 running in IntelliJ IDEA or the tool of your choice.
@@ -82,9 +85,6 @@ references between messages.
 
 Building HTML archive
 ---------------------
-
-Be aware: this feature is incomplete, and currently only builds individual
-messages in one directory per group. I may update this in the future.
 
 The file `src/main/resources/site.properties` can be used to configure parts of
 the HTML generation.
