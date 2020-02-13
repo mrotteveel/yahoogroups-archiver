@@ -4,7 +4,7 @@
 package nl.lawinegevaar.yahoogroups.database.jooq.tables;
 
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Dbversion extends TableImpl<DbversionRecord> {
 
-    private static final long serialVersionUID = 2120929919;
+    private static final long serialVersionUID = -573094556;
 
     /**
      * The reference instance of <code>DBVERSION</code>
@@ -63,7 +63,7 @@ public class Dbversion extends TableImpl<DbversionRecord> {
     /**
      * The column <code>DBVERSION.MIGRATION_DATE</code>.
      */
-    public final TableField<DbversionRecord, Timestamp> MIGRATION_DATE = createField(DSL.name("MIGRATION_DATE"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("default current_timestamp", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+    public final TableField<DbversionRecord, LocalDateTime> MIGRATION_DATE = createField(DSL.name("MIGRATION_DATE"), org.jooq.impl.SQLDataType.LOCALDATETIME.nullable(false).defaultValue(org.jooq.impl.DSL.field("default current_timestamp", org.jooq.impl.SQLDataType.LOCALDATETIME)), this, "");
 
     /**
      * Create a <code>DBVERSION</code> table reference
@@ -144,7 +144,7 @@ public class Dbversion extends TableImpl<DbversionRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<Integer, Timestamp> fieldsRow() {
+    public Row2<Integer, LocalDateTime> fieldsRow() {
         return (Row2) super.fieldsRow();
     }
 }

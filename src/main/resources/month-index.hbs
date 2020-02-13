@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="{{site.lang}}">
+<head>
+    {{#assign "up0"}}./{{/assign}}
+    {{#assign "up1"}}../{{/assign}}
+    {{#assign "up2"}}../../{{/assign}}
+    {{#assign "up3"}}../../../{{/assign}}
+    {{#assign "siteRoot"}}{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}{{up3}}{{/eq}}{{/assign}}
+    <meta charset="utf-8"/>
+    <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
+    <title>{{groupname}} - {{monthName yearMonth.month}} {{yearMonth.year}}</title>
+</head>
+<body>
+<div class="archive-nav">
+    <nav class="site-menu">
+        <ul>
+            <li><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
+            <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+        </ul>
+    </nav>
+    <nav class="group-nav">
+        <ul>
+            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{groupName}}/{{else}}{{up2}}{{/eq}}">{{groupName}}</a></li>
+            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{groupName}}/{{yearMonth.year}}/{{else}}{{up1}}{{/eq}}">{{groupName}} - {{yearMonth.year}}</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="main-content">
+    <h1>{{groupName}} - {{monthName yearMonth.month}} {{yearMonth.year}}</h1>
+    <ul class="msg-list list">
+        {{#each posts}}
+            <li><a href="{{messageId}}.html"><b class="subject">{{subject}}</b> <em class="author">{{authorName}}</em></a></li>
+        {{/each}}
+    </ul>
+</div>
+</body>
+</html>

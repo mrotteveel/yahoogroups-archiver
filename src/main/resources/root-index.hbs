@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="{{site.lang}}">
+<head>
+    {{#assign "up0"}}./{{/assign}}
+    {{#assign "up1"}}../{{/assign}}
+    {{#assign "up2"}}../../{{/assign}}
+    {{#assign "up3"}}../../../{{/assign}}
+    {{#assign "siteRoot"}}{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}{{up0}}{{/eq}}{{/assign}}
+    <meta charset="utf-8"/>
+    <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
+    <title>{{site.name}}</title>
+</head>
+<body>
+<div class="archive-nav">
+    <nav class="site-menu">
+        <ul>
+            <li><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
+            <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="main-content">
+    <h1>{{groupName}}</h1>
+    <p>
+        {{site.introduction}}
+    </p>
+    <ul class="group-list list">
+        {{#each groups}}
+            <li><a href="{{this}}/index.html"><b class="group-name">{{this}}</b></a></li>
+        {{/each}}
+    </ul>
+</div>
+</body>
+</html>

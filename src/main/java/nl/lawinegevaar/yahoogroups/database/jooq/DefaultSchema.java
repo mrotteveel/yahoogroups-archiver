@@ -11,6 +11,8 @@ import java.util.List;
 import javax.annotation.processing.Generated;
 
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Dbversion;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.PostInformation;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Rawdata;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Ygroup;
 
@@ -33,7 +35,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -1485086954;
+    private static final long serialVersionUID = 1798791096;
 
     /**
      * The reference instance of <code></code>
@@ -44,6 +46,16 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>DBVERSION</code>.
      */
     public final Dbversion DBVERSION = nl.lawinegevaar.yahoogroups.database.jooq.tables.Dbversion.DBVERSION;
+
+    /**
+     * The table <code>LINK_INFO</code>.
+     */
+    public final LinkInfo LINK_INFO = nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo.LINK_INFO;
+
+    /**
+     * The table <code>POST_INFORMATION</code>.
+     */
+    public final PostInformation POST_INFORMATION = nl.lawinegevaar.yahoogroups.database.jooq.tables.PostInformation.POST_INFORMATION;
 
     /**
      * The table <code>RAWDATA</code>.
@@ -90,6 +102,8 @@ public class DefaultSchema extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Dbversion.DBVERSION,
+            LinkInfo.LINK_INFO,
+            PostInformation.POST_INFORMATION,
             Rawdata.RAWDATA,
             Ygroup.YGROUP);
     }

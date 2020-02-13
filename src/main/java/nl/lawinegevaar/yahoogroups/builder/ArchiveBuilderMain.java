@@ -24,7 +24,9 @@ public class ArchiveBuilderMain {
             return;
         }
 
-        new ArchiveBuilder(outputDirectory, databaseInfo)
+        boolean rebuildLinkInfo = commandLine.hasOption("r");
+
+        new ArchiveBuilder(outputDirectory, rebuildLinkInfo, databaseInfo)
                 .build();
     }
 
@@ -64,6 +66,7 @@ public class ArchiveBuilderMain {
                         .longOpt("init-only")
                         .desc("Initialize database only and exit")
                         .build())
-                .addOption("o", "output", true, "Output directory for archive (must be empty)");
+                .addOption("o", "output", true, "Output directory for archive (must be empty)")
+                .addOption("r", "rebuild-link-info", false, "Rebuild link info");
     }
 }

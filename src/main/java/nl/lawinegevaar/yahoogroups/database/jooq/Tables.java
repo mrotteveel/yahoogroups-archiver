@@ -7,6 +7,8 @@ package nl.lawinegevaar.yahoogroups.database.jooq;
 import javax.annotation.processing.Generated;
 
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Dbversion;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.PostInformation;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Rawdata;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Ygroup;
 
@@ -28,6 +30,16 @@ public class Tables {
      * The table <code>DBVERSION</code>.
      */
     public static final Dbversion DBVERSION = Dbversion.DBVERSION;
+
+    /**
+     * The table <code>LINK_INFO</code>.
+     */
+    public static final LinkInfo LINK_INFO = LinkInfo.LINK_INFO;
+
+    /**
+     * The table <code>POST_INFORMATION</code>.
+     */
+    public static final PostInformation POST_INFORMATION = PostInformation.POST_INFORMATION;
 
     /**
      * The table <code>RAWDATA</code>.

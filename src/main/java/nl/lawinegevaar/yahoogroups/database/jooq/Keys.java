@@ -7,9 +7,11 @@ package nl.lawinegevaar.yahoogroups.database.jooq;
 import javax.annotation.processing.Generated;
 
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Dbversion;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Rawdata;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Ygroup;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.DbversionRecord;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.LinkInfoRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.RawdataRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 
@@ -42,6 +44,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<DbversionRecord> PK_DBVERSION = UniqueKeys0.PK_DBVERSION;
+    public static final UniqueKey<LinkInfoRecord> PK_LINK_INFO = UniqueKeys0.PK_LINK_INFO;
     public static final UniqueKey<RawdataRecord> PK_RAWDATA = UniqueKeys0.PK_RAWDATA;
     public static final UniqueKey<YgroupRecord> PK_YGROUP = UniqueKeys0.PK_YGROUP;
     public static final UniqueKey<YgroupRecord> UQ_YGROUP_NAME = UniqueKeys0.UQ_YGROUP_NAME;
@@ -50,6 +53,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<LinkInfoRecord, RawdataRecord> FK_LINK_INFO_RAWDATA = ForeignKeys0.FK_LINK_INFO_RAWDATA;
     public static final ForeignKey<RawdataRecord, YgroupRecord> FK_RAWDATA_YGROUP = ForeignKeys0.FK_RAWDATA_YGROUP;
 
     // -------------------------------------------------------------------------
@@ -58,12 +62,14 @@ public class Keys {
 
     private static class UniqueKeys0 {
         public static final UniqueKey<DbversionRecord> PK_DBVERSION = Internal.createUniqueKey(Dbversion.DBVERSION, "PK_DBVERSION", Dbversion.DBVERSION.VERSION);
+        public static final UniqueKey<LinkInfoRecord> PK_LINK_INFO = Internal.createUniqueKey(LinkInfo.LINK_INFO, "PK_LINK_INFO", LinkInfo.LINK_INFO.GROUP_ID, LinkInfo.LINK_INFO.MESSAGE_ID);
         public static final UniqueKey<RawdataRecord> PK_RAWDATA = Internal.createUniqueKey(Rawdata.RAWDATA, "PK_RAWDATA", Rawdata.RAWDATA.GROUP_ID, Rawdata.RAWDATA.MESSAGE_ID);
         public static final UniqueKey<YgroupRecord> PK_YGROUP = Internal.createUniqueKey(Ygroup.YGROUP, "PK_YGROUP", Ygroup.YGROUP.ID);
         public static final UniqueKey<YgroupRecord> UQ_YGROUP_NAME = Internal.createUniqueKey(Ygroup.YGROUP, "UQ_YGROUP_NAME", Ygroup.YGROUP.GROUPNAME);
     }
 
     private static class ForeignKeys0 {
+        public static final ForeignKey<LinkInfoRecord, RawdataRecord> FK_LINK_INFO_RAWDATA = Internal.createForeignKey(nl.lawinegevaar.yahoogroups.database.jooq.Keys.PK_RAWDATA, LinkInfo.LINK_INFO, "FK_LINK_INFO_RAWDATA", LinkInfo.LINK_INFO.GROUP_ID, LinkInfo.LINK_INFO.MESSAGE_ID);
         public static final ForeignKey<RawdataRecord, YgroupRecord> FK_RAWDATA_YGROUP = Internal.createForeignKey(nl.lawinegevaar.yahoogroups.database.jooq.Keys.PK_YGROUP, Rawdata.RAWDATA, "FK_RAWDATA_YGROUP", Rawdata.RAWDATA.GROUP_ID);
     }
 }

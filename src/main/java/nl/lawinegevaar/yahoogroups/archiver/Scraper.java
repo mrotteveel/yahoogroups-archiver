@@ -17,6 +17,7 @@ import retrofit2.Retrofit;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -33,7 +34,9 @@ class Scraper {
     Scraper(DatabaseInfo databaseInfo, String group, String cookieString) {
         this.databaseInfo = databaseInfo;
         this.group = group;
-        var httpClientBuilder = new OkHttpClient.Builder();
+        var httpClientBuilder = new OkHttpClient.Builder()
+                .connectTimeout(0, TimeUnit.MILLISECONDS)
+                .readTimeout(0, TimeUnit.MILLISECONDS);
         if (cookieString != null) {
             httpClientBuilder.addInterceptor(chain -> {
                 Request original = chain.request();

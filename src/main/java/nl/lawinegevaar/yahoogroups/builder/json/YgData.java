@@ -27,6 +27,9 @@ public class YgData {
     private String rawEmail;
 
     public OffsetDateTime getOffsetPostDate() {
+        if (postDate == null) {
+            return null;
+        }
         long postDateEpochSeconds = Long.parseLong(postDate);
         Instant instant = Instant.ofEpochSecond(postDateEpochSeconds);
         return instant.atOffset(ZoneOffset.UTC);

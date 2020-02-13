@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="{{site.lang}}">
+<head>
+    {{#assign "up0"}}./{{/assign}}
+    {{#assign "up1"}}../{{/assign}}
+    {{#assign "up2"}}../../{{/assign}}
+    {{#assign "up3"}}../../../{{/assign}}
+    {{#assign "siteRoot"}}{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}{{up2}}{{/eq}}{{/assign}}
+    <meta charset="utf-8"/>
+    <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
+    <title>{{groupname}} - {{year}}</title>
+</head>
+<body>
+<div class="archive-nav">
+    <nav class="site-menu">
+        <ul>
+            <li><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
+            <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+        </ul>
+    </nav>
+    <nav class="group-nav">
+        <ul>
+            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{groupName}}/{{else}}{{up1}}{{/eq}}">{{groupName}}</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="main-content">
+    <h1>{{groupName}} - {{year}}</h1>
+    <table class="year-month-index">
+        <tr>
+            <th>Month</th>
+            <th>Posts</th>
+        </tr>
+        <tr>
+            <td>January {{year}}</td>
+            <td>
+                {{#with posts.[1]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>February {{year}}</td>
+            <td>
+                {{#with posts.[2]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>March {{year}}</td>
+            <td>
+                {{#with posts.[3]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>April {{year}}</td>
+            <td>
+                {{#with posts.[4]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>May {{year}}</td>
+            <td>
+                {{#with posts.[5]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>June {{year}}</td>
+            <td>
+                {{#with posts.[6]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>July {{year}}</td>
+            <td>
+                {{#with posts.[7]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>August {{year}}</td>
+            <td>
+                {{#with posts.[8]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>September {{year}}</td>
+            <td>
+                {{#with posts.[9]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>October {{year}}</td>
+            <td>
+                {{#with posts.[10]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>November {{year}}</td>
+            <td>
+                {{#with posts.[11]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+        <tr>
+            <td>December {{year}}</td>
+            <td>
+                {{#with posts.[12]}}
+                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
+                {{/with}}
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

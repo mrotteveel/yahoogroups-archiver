@@ -1,37 +1,123 @@
 <!DOCTYPE html>
 <html lang="{{site.lang}}">
 <head>
+    {{#assign "up0"}}./{{/assign}}
+    {{#assign "up1"}}../{{/assign}}
+    {{#assign "up2"}}../../{{/assign}}
+    {{#assign "up3"}}../../../{{/assign}}
+    {{#assign "siteRoot"}}{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}{{up3}}{{/eq}}{{/assign}}
     <meta charset="utf-8"/>
-    <link href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}archive-style.css{{else}}../archive-style.css{{/eq}}" rel="stylesheet" type="text/css"/>
+    <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
     <title>{{groupName}} - {{{ygMessage.ygData.subject}}}</title>
 </head>
 <body>
-<nav class="site-menu">
-    <ul>
-        <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}../{{/eq}}">{{site.name}} - Home</a></li>
-        <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
-    </ul>
-</nav>
-<div class="msg">
-    <div class="msg-header">
-        <table>
-            <tr class="msg-subject">
-                <th class="msg-header-name">Subject</th>
-                <td class="msg-header-value">{{{ygMessage.ygData.subject}}}</td>
-            </tr>
-            <tr class="msg-author">
-                <th class="msg-header-name">Author</th>
-                <td class="msg-header-value">{{{ygMessage.ygData.authorName}}}</td>
-            </tr>
-            <tr class="msg-postdate">
-                <th class="msg-header-name">Post date</th>
-                <td class="msg-header-value">{{ygMessage.ygData.offsetPostDate}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="msg-body">
+<div class="archive-nav">
+    <nav class="site-menu">
+        <ul>
+            <li><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
+            <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+        </ul>
+    </nav>
+    <nav class="group-nav">
+        <ul>
+            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{postInfo.groupname}}/{{else}}{{up2}}{{/eq}}">{{postInfo.groupname}}</a></li>
+            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{postInfo.groupname}}/{{postInfo.postYear}}/{{else}}{{up1}}{{/eq}}">{{postInfo.groupname}} - {{postInfo.postYear}}</a></li>
+            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{postInfo.groupname}}/{{postInfo.postYear}}/{{postInfo.postMonth}}/{{else}}{{up0}}{{/eq}}index.html">{{postInfo.groupname}} - {{monthName postInfo.postMonth}} {{postInfo.postYear}}</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="main-content">
+    <nav class="msg-nav">
+        <ul>
+            <li>
+                {{#if postInfo.prevInTime}}
+                    <a href="../../{{postInfo.prevInTimeYear}}/{{postInfo.prevInTimeMonth}}/{{postInfo.prevInTime}}.html">&lt; previous</a>
+                {{else}}
+                    &lt; previous
+                {{/if}}
+            </li>
+            <li>
+                {{#if postInfo.prevInTopic}}
+                    <a href="../../{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">&lt; previous (in topic)</a>
+                {{else}}
+                    &lt; previous (in topic)
+                {{/if}}
+            </li>
+            <li>
+                <a href="../../{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a>
+            </li>
+            <li>
+                {{#if postInfo.nextInTopic}}
+                    <a href="../../{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next (in topic) &gt;</a>
+                {{else}}
+                    next (in topic) &gt;
+                {{/if}}
+            </li>
+            <li>
+                {{#if postInfo.nextInTime}}
+                    <a href="../../{{postInfo.nextInTimeYear}}/{{postInfo.nextInTimeMonth}}/{{postInfo.nextInTime}}.html">next &gt;</a>
+                {{else}}
+                    next &gt;
+                {{/if}}
+            </li>
+        </ul>
+    </nav>
+    <div class="msg">
+        <div class="msg-header">
+            <table>
+                <tr class="msg-subject">
+                    <th class="msg-header-name">Subject</th>
+                    <td class="msg-header-value">{{{ygMessage.ygData.subject}}}</td>
+                </tr>
+                <tr class="msg-author">
+                    <th class="msg-header-name">Author</th>
+                    <td class="msg-header-value">{{{ygMessage.ygData.authorName}}}</td>
+                </tr>
+                <tr class="msg-postdate">
+                    <th class="msg-header-name">Post date</th>
+                    <td class="msg-header-value">{{postDate}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="msg-body">
 {{{ygMessage.ygData.messageBody}}}
+        </div>
     </div>
+    <nav class="msg-nav">
+        <ul>
+            <li>
+                {{#if postInfo.prevInTime}}
+                    <a href="../../{{postInfo.prevInTimeYear}}/{{postInfo.prevInTimeMonth}}/{{postInfo.prevInTime}}.html">&lt; previous</a>
+                {{else}}
+                    &lt; previous
+                {{/if}}
+            </li>
+            <li>
+                {{#if postInfo.prevInTopic}}
+                    <a href="../../{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">&lt; previous in topic</a>
+                {{else}}
+                    &lt; previous in topic
+                {{/if}}
+            </li>
+            <li>
+                <a href="../../{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a>
+            </li>
+            <li>
+                {{#if postInfo.nextInTopic}}
+                    <a href="../../{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic &gt;</a>
+                {{else}}
+                    next in topic &gt;
+                {{/if}}
+            </li>
+            <li>
+                {{#if postInfo.nextInTime}}
+                    <a href="../../{{postInfo.nextInTimeYear}}/{{postInfo.nextInTimeMonth}}/{{postInfo.nextInTime}}.html">next &gt;</a>
+                {{else}}
+                    next &gt;
+                {{/if}}
+            </li>
+        </ul>
+    </nav>
 </div>
 </body>
 </html>

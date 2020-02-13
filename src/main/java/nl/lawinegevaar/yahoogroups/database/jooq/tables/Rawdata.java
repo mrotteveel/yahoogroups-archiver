@@ -4,7 +4,7 @@
 package nl.lawinegevaar.yahoogroups.database.jooq.tables;
 
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Rawdata extends TableImpl<RawdataRecord> {
 
-    private static final long serialVersionUID = 1429076577;
+    private static final long serialVersionUID = -1028869722;
 
     /**
      * The reference instance of <code>RAWDATA</code>
@@ -78,7 +78,7 @@ public class Rawdata extends TableImpl<RawdataRecord> {
     /**
      * The column <code>RAWDATA.LAST_UPDATE</code>.
      */
-    public final TableField<RawdataRecord, Timestamp> LAST_UPDATE = createField(DSL.name("LAST_UPDATE"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("default current_timestamp", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+    public final TableField<RawdataRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("LAST_UPDATE"), org.jooq.impl.SQLDataType.LOCALDATETIME.nullable(false).defaultValue(org.jooq.impl.DSL.field("default current_timestamp", org.jooq.impl.SQLDataType.LOCALDATETIME)), this, "");
 
     /**
      * Create a <code>RAWDATA</code> table reference
@@ -168,7 +168,7 @@ public class Rawdata extends TableImpl<RawdataRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, Integer, String, String, Timestamp> fieldsRow() {
+    public Row5<Integer, Integer, String, String, LocalDateTime> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 }

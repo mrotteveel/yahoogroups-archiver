@@ -10,25 +10,25 @@ sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.6'
-    implementation 'org.slf4j:slf4j-api:1.7.26'
-    implementation 'org.slf4j:slf4j-simple:1.7.26'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    implementation 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.8'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'org.slf4j:slf4j-simple:1.7.30'
     implementation 'commons-cli:commons-cli:1.4'
     implementation 'org.jooq:jooq'
     implementation 'com.github.jknack:handlebars:4.1.2'
+    implementation 'com.github.jknack:handlebars-helpers:4.1.2'
 
-    implementation 'com.fasterxml.jackson:jackson-bom:2.9.10'
+    implementation 'com.fasterxml.jackson:jackson-bom:2.10.2.20200130'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
 
-    jooqRuntime 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.6'
+    jooqRuntime 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.8'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
@@ -39,7 +39,7 @@ jooq {
     archivedb(sourceSets.main) {
         jdbc {
             driver = 'org.firebirdsql.jdbc.FBDriver'
-            url = 'jdbc:firebirdsql://localhost/D:/data/db/yahooarchive.fdb'
+            url = 'jdbc:firebirdsql://localhost/E:/db/yahooarchive.fdb'
             user = 'sysdba'
             password = 'masterkey'
             properties {
@@ -51,6 +51,9 @@ jooq {
         }
         generator {
             name = 'org.jooq.codegen.DefaultGenerator'
+            generate {
+                javaTimeTypes = 'true'
+            }
             strategy {
                 name = 'org.jooq.codegen.DefaultGeneratorStrategy'
             }

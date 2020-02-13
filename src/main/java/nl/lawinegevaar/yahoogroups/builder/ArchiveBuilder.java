@@ -1,6 +1,11 @@
 package nl.lawinegevaar.yahoogroups.builder;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.helper.AssignHelper;
+import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import lombok.extern.slf4j.Slf4j;
+import nl.lawinegevaar.yahoogroups.builder.handlebars.ArchiveHelpers;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 
@@ -9,7 +14,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -18,15 +25,22 @@ class ArchiveBuilder {
 
     private final DatabaseInfo databaseInfo;
     private final Path outputPath;
+    private final boolean rebuildLinkInfo;
     private final Properties siteProperties;
+    private final Handlebars handlebars;
 
-    ArchiveBuilder(String outputDirectory, DatabaseInfo databaseInfo) {
+    ArchiveBuilder(String outputDirectory, boolean rebuildLinkInfo, DatabaseInfo databaseInfo) {
         outputPath = createOutputDirectory(outputDirectory);
+        this.rebuildLinkInfo = rebuildLinkInfo;
         if (isNotEmpty(outputPath)) {
             throw new ArchiveBuildingException("Output path " + outputPath + " is not empty");
         }
         this.databaseInfo = databaseInfo;
         siteProperties = readSiteProperties();
+        handlebars = new Handlebars()
+                .registerHelpers(ConditionalHelpers.class)
+                .registerHelper(AssignHelper.NAME, AssignHelper.INSTANCE)
+                .registerHelpers(ArchiveHelpers.class);
     }
 
     void build() {
@@ -35,9 +49,28 @@ class ArchiveBuilder {
             List<YgroupRecord> yahooGroupsInformation = db.getYahooGroupsInformation();
             log.info("Starting build for {} groups", yahooGroupsInformation.size());
             for (YgroupRecord group : yahooGroupsInformation) {
-                new GroupBuilder(outputPath, siteProperties, group, db)
+                new GroupBuilder(outputPath, rebuildLinkInfo, siteProperties, handlebars, group, db)
                         .build();
             }
+
+            buildIndex(yahooGroupsInformation);
+        }
+        log.info("Building groups complete");
+    }
+
+    private void buildIndex(List<YgroupRecord> yahooGroupsInformation) {
+        log.info("Building root index");
+        List<String> groupNames = yahooGroupsInformation.stream()
+                .map(YgroupRecord::getGroupname)
+                .collect(Collectors.toList());
+        try (var writer = Files.newBufferedWriter(outputPath.resolve("index.html"))) {
+            Template rootIndex = handlebars.compile("root-index");
+            Map<String, Object> variables = Map.of(
+                    "groups", groupNames,
+                    "site", siteProperties);
+            rootIndex.apply(variables, writer);
+        } catch (IOException e) {
+            throw new ArchiveBuildingException("Could not create root index", e);
         }
     }
 
