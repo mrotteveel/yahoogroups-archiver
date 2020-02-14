@@ -7,6 +7,12 @@ nav > ul > li {
     display: inline;
     margin: 0 10px;
 }
+nav > ul > li.previous > :only-child::before {
+    content: "<"
+}
+nav > ul > li.next > :only-child::after {
+    content: ">"
+}
 div.msg {
     max-width: 80em;
     margin: 0 auto;
@@ -20,4 +26,10 @@ div.msg div.msg-header th.msg-header-name {
 }
 div.msg div.msg-body {
     margin: 10px 0;
+}
+ul.msg-list span.subject {
+    font-weight: bold;
+}
+ul.msg-list span.author {
+    font-style: italic;
 }

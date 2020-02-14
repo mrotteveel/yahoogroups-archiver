@@ -1,133 +1,173 @@
 <!DOCTYPE html>
 <html lang="{{site.lang}}">
 <head>
-    {{#assign "up0"}}./{{/assign}}
-    {{#assign "up1"}}../{{/assign}}
-    {{#assign "up2"}}../../{{/assign}}
-    {{#assign "up3"}}../../../{{/assign}}
-    {{#assign "siteRoot"}}{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}{{up2}}{{/eq}}{{/assign}}
+    {{~#eq site.useAbsolutePaths 'true'~}}
+        {{~#assign "siteRoot"}}{{site.baseUrl}}{{/assign~}}
+        {{~#assign "groupRoot"}}{{siteRoot}}{{groupName}}/{{/assign~}}
+        {{~#assign "yearRoot"}}{{groupRoot}}{{year}}/{{/assign~}}
+    {{~else~}}
+        {{~#assign "siteRoot"}}../../{{/assign~}}
+        {{~#assign "groupRoot"}}../{{/assign~}}
+        {{~#assign "yearRoot"}}./{{/assign~}}
+    {{~/eq}}
     <meta charset="utf-8"/>
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
-    <title>{{groupname}} - {{year}}</title>
+    <title>{{groupName}} - {{year}}</title>
 </head>
-<body>
+<body class="year-index">
 <div class="archive-nav">
     <nav class="site-menu">
         <ul>
-            <li><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
-            <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+            <li class="site-root"><a href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
+            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="parent-site-name">{{site.parentSiteName}}</span></a></li>
         </ul>
     </nav>
     <nav class="group-nav">
         <ul>
-            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{groupName}}/{{else}}{{up1}}{{/eq}}">{{groupName}}</a></li>
+            <li class="group-root"><a href="{{groupRoot}}"><span class="group-name">{{groupName}}</span></a></li>
         </ul>
     </nav>
 </div>
 <div class="main-content">
-    <h1>{{groupName}} - {{year}}</h1>
+    <h1><span class="group-name">{{groupName}}</span> - <span class="year">{{year}}</span></h1>
+    <nav class="group-year-nav content-nav-top">
+        <ul>
+            <li class="previous previous-year">
+                {{~#with yearNavigation.previous~}}
+                    <a href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
+                {{~else~}}
+                    <span>previous year</span>
+                {{~/with~}}
+            </li>
+            <li class="next next-year">
+                {{~#with yearNavigation.next~}}
+                    <a href="{{groupRoot}}{{this}}/">next year (<span class="year">{{this}}</span>)</a>
+                {{~else~}}
+                    <span>next year</span>
+                {{~/with~}}
+            </li>
+        </ul>
+    </nav>
     <table class="year-month-index">
         <tr>
-            <th>Month</th>
-            <th>Posts</th>
+            <th class="month">Month</th>
+            <th class="post-count">Posts</th>
         </tr>
         <tr>
-            <td>January {{year}}</td>
-            <td>
-                {{#with posts.[1]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">January</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[1]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>February {{year}}</td>
-            <td>
-                {{#with posts.[2]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">February</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[2]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>March {{year}}</td>
-            <td>
-                {{#with posts.[3]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">March</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[3]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>April {{year}}</td>
-            <td>
-                {{#with posts.[4]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">April</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[4]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>May {{year}}</td>
-            <td>
-                {{#with posts.[5]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">May</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[5]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>June {{year}}</td>
-            <td>
-                {{#with posts.[6]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">June</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[6]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>July {{year}}</td>
-            <td>
-                {{#with posts.[7]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">July</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[7]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>August {{year}}</td>
-            <td>
-                {{#with posts.[8]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">August</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[8]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>September {{year}}</td>
-            <td>
-                {{#with posts.[9]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">September</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[9]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>October {{year}}</td>
-            <td>
-                {{#with posts.[10]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">October</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[10]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>November {{year}}</td>
-            <td>
-                {{#with posts.[11]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">November</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[11]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
         <tr>
-            <td>December {{year}}</td>
-            <td>
-                {{#with posts.[12]}}
-                    <a href="{{yearMonth.month}}/index.html">{{postCount}}</a>
-                {{/with}}
+            <td class="month"><span class="month-name">December</span> <span class="year">{{year}}</span></td>
+            <td class="post-count">
+                {{~#with posts.[12]~}}
+                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
+                {{~/with~}}
             </td>
         </tr>
     </table>
+    <nav class="group-year-nav content-nav-bottom">
+        <ul>
+            <li class="previous previous-year">
+                {{~#with yearNavigation.previous~}}
+                    <a href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
+                {{~else~}}
+                    <span>previous year</span>
+                {{~/with~}}
+            </li>
+            <li class="next next-year">
+                {{~#with yearNavigation.next~}}
+                    <a href="{{groupRoot}}{{this}}/">next year (<span class="year">{{this}}</span>)</a>
+                {{~else~}}
+                    <span>next year</span>
+                {{~/with~}}
+            </li>
+        </ul>
+    </nav>
 </div>
 </body>
 </html>

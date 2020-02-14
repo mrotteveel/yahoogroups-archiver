@@ -9,11 +9,11 @@ import static java.lang.String.format;
 @Getter
 public final class YearMonth {
 
-    private final short year;
-    private final short month;
+    private final int year;
+    private final int month;
     private Path path;
 
-    public YearMonth(short year, short month) {
+    public YearMonth(int year, int month) {
         this.year = year;
         this.month = month;
     }

@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="{{site.lang}}">
 <head>
-    {{#assign "up0"}}./{{/assign}}
-    {{#assign "up1"}}../{{/assign}}
-    {{#assign "up2"}}../../{{/assign}}
-    {{#assign "up3"}}../../../{{/assign}}
-    {{#assign "siteRoot"}}{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}{{up1}}{{/eq}}{{/assign}}
+    {{~#eq site.useAbsolutePaths 'true'~}}
+        {{~#assign "siteRoot"}}{{site.baseUrl}}{{/assign~}}
+        {{~#assign "groupRoot"}}{{siteRoot}}{{groupName}}/{{/assign~}}
+    {{~else~}}
+        {{~#assign "siteRoot"}}../{{/assign~}}
+        {{~#assign "groupRoot"}}./{{/assign~}}
+    {{~/eq}}
     <meta charset="utf-8"/>
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
-    <title>{{groupname}}</title>
+    <title>{{groupName}}</title>
 </head>
-<body>
+<body class="group-index">
 <div class="archive-nav">
     <nav class="site-menu">
         <ul>
-            <li><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
-            <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+            <li class="site-root"><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
+            <li class="parent-site"><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
         </ul>
     </nav>
 </div>
 <div class="main-content">
-    <h1>{{groupName}}</h1>
-    <ul class="year-list list">
-        {{#each years}}
-            <li><a href="{{this}}/index.html"><b class="year">{{this}}</b></a></li>
-        {{/each}}
+    <h1><span class="group-name">{{groupName}}</span></h1>
+    <ul class="year-list">
+        {{~#each years}}
+        <li class="group-year"><a href="{{groupRoot}}{{this}}/"><span class="year">{{this}}</span></a></li>
+        {{~/each}}
     </ul>
 </div>
 </body>

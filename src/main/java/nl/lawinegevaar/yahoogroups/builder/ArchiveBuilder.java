@@ -13,9 +13,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -44,6 +47,7 @@ class ArchiveBuilder {
     }
 
     void build() {
+        log.info("Starting building of groups at {}", OffsetDateTime.now());
         copyStyle(outputPath);
         try (var db = new DatabaseAccess(databaseInfo)) {
             List<YgroupRecord> yahooGroupsInformation = db.getYahooGroupsInformation();
@@ -55,13 +59,18 @@ class ArchiveBuilder {
 
             buildIndex(yahooGroupsInformation);
         }
-        log.info("Building groups complete");
+        log.info("Awaiting task completion");
+        if (!ForkJoinPool.commonPool().awaitQuiescence(5, TimeUnit.MINUTES)) {
+            log.warn("Common pool still had tasks remaining after five minutes");
+        }
+        log.info("Building groups complete at {}", OffsetDateTime.now());
     }
 
     private void buildIndex(List<YgroupRecord> yahooGroupsInformation) {
         log.info("Building root index");
         List<String> groupNames = yahooGroupsInformation.stream()
                 .map(YgroupRecord::getGroupname)
+                .sorted()
                 .collect(Collectors.toList());
         try (var writer = Files.newBufferedWriter(outputPath.resolve("index.html"))) {
             Template rootIndex = handlebars.compile("root-index");

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import lombok.extern.slf4j.Slf4j;
-import nl.lawinegevaar.yahoogroups.builder.beans.PostSummary;
-import nl.lawinegevaar.yahoogroups.builder.beans.PostsPerMonth;
-import nl.lawinegevaar.yahoogroups.builder.beans.YearMonth;
+import nl.lawinegevaar.yahoogroups.builder.beans.*;
 import nl.lawinegevaar.yahoogroups.builder.json.YgData;
 import nl.lawinegevaar.yahoogroups.builder.json.YgMessage;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.PostInformationRecord;
@@ -21,10 +19,12 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparingInt;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
@@ -43,6 +43,8 @@ class GroupBuilder {
 
     private final Map<Integer, Map<Integer, YearMonth>> yearMonthDeduplication = new HashMap<>();
     private final Map<YearMonth, List<PostSummary>> postsByYearMonth = new HashMap<>();
+    private List<YearMonth> yearMonths;
+    private List<Integer> years;
     private final Template monthIndex;
     private final Template yearIndex;
     private final Template groupIndex;
@@ -93,12 +95,6 @@ class GroupBuilder {
 
     private void buildGroupIndex() {
         log.info("Building group index for {}", groupName);
-        List<String> years = postsByYearMonth.keySet().stream()
-                .mapToInt(YearMonth::getYear)
-                .distinct()
-                .sorted()
-                .mapToObj(String::valueOf)
-                .collect(toList());
         try (var writer = Files.newBufferedWriter(groupPath.resolve("index.html"))) {
             Map<String, Object> variables = Map.of(
                     "years", years,
@@ -115,28 +111,35 @@ class GroupBuilder {
         log.info("Building year indices for {}", groupName);
         postsByYearMonth.entrySet().stream()
                 .map(entry -> new PostsPerMonth(entry.getKey(), entry.getValue().size()))
-                .collect(groupingBy(posts -> (int) posts.getYearMonth().getYear()))
+                .collect(groupingBy(posts -> posts.getYearMonth().getYear()))
                 .forEach(this::buildYearIndex);
     }
 
-    private void buildYearIndex(int year, List<PostsPerMonth> postsPerMonthList) {
-        Map<String, PostsPerMonth> posts = postsPerMonthList.stream()
-                .collect(toMap(ppm -> String.valueOf(ppm.getYearMonth().getMonth()), identity()));
-        Path yearPath = groupPath.resolve(String.valueOf(year));
-        try {
-            Files.createDirectories(yearPath);
-            try (var writer = Files.newBufferedWriter(yearPath.resolve("index.html"))) {
-                Map<String, Object> variables = Map.of(
-                        "year", year,
-                        "posts", posts,
-                        "groupName", groupName,
-                        "site", siteProperties);
-                yearIndex.apply(variables, writer);
+    private void buildYearIndex(Integer year, List<PostsPerMonth> postsPerMonthList) {
+        ForkJoinPool.commonPool().execute(() -> {
+            Map<String, PostsPerMonth> posts = postsPerMonthList.stream()
+                    .collect(toMap(ppm -> String.valueOf(ppm.getYearMonth().getMonth()), identity()));
+            Path yearPath = groupPath.resolve(String.valueOf(year));
+            try {
+                Files.createDirectories(yearPath);
+                try (var writer = Files.newBufferedWriter(yearPath.resolve("index.html"))) {
+                    Map<String, Object> variables = Map.of(
+                            "year", year,
+                            "posts", posts,
+                            "yearNavigation", createYearNavigation(year),
+                            "groupName", groupName,
+                            "site", siteProperties);
+                    yearIndex.apply(variables, writer);
+                }
+            } catch (IOException e) {
+                throw new ArchiveBuildingException(
+                        format("Could not create year index for %s - %d", groupName, year), e);
             }
-        } catch (IOException e) {
-            throw new ArchiveBuildingException(
-                    format("Could not create year index for %s - %d", groupName, year), e);
-        }
+        });
+    }
+
+    private YearNavigation createYearNavigation(Integer year) {
+        return new YearNavigation(previous(year), next(year));
     }
 
     private void buildMonthIndices() {
@@ -145,21 +148,28 @@ class GroupBuilder {
     }
 
     private void buildMonthIndex(YearMonth yearMonth, List<PostSummary> postSummaries) {
-        postSummaries.sort(comparing(PostSummary::getMessageId));
-        try {
-            Path yearMonthPath = createPath(yearMonth);
-            try (var writer = Files.newBufferedWriter(yearMonthPath.resolve("index.html"))) {
-                Map<String, Object> variables = Map.of(
-                        "yearMonth", yearMonth,
-                        "posts", postSummaries,
-                        "groupName", groupName,
-                        "site", siteProperties);
-                monthIndex.apply(variables, writer);
+        ForkJoinPool.commonPool().execute(() -> {
+            postSummaries.sort(comparing(PostSummary::getMessageId));
+            try {
+                Path yearMonthPath = createPath(yearMonth);
+                try (var writer = Files.newBufferedWriter(yearMonthPath.resolve("index.html"))) {
+                    Map<String, Object> variables = Map.of(
+                            "yearMonth", yearMonth,
+                            "posts", postSummaries,
+                            "monthNavigation", createMonthNavigation(yearMonth),
+                            "groupName", groupName,
+                            "site", siteProperties);
+                    monthIndex.apply(variables, writer);
+                }
+            } catch (IOException e) {
+                throw new ArchiveBuildingException(
+                        format("Could not create month index for %s - %s", groupName, yearMonth), e);
             }
-        } catch (IOException e) {
-            throw new ArchiveBuildingException(
-                    format("Could not create month index for %s - %s", groupName, yearMonth), e);
-        }
+        });
+    }
+
+    private MonthNavigation createMonthNavigation(YearMonth yearMonth) {
+        return new MonthNavigation(previous(yearMonth), next(yearMonth));
     }
 
     private void buildMessages() {
@@ -168,6 +178,23 @@ class GroupBuilder {
             postInformationRecordStream
                     .forEach(this::buildForRecord);
         }
+        populateYearMonthsList();
+        populateYearsList();
+    }
+
+    private void populateYearMonthsList() {
+        yearMonths = postsByYearMonth.keySet().stream()
+                .sorted(comparingInt(YearMonth::getYear).thenComparingInt(YearMonth::getMonth))
+                .collect(toList());
+    }
+
+    private void populateYearsList() {
+        years = postsByYearMonth.keySet().stream()
+                .mapToInt(YearMonth::getYear)
+                .distinct()
+                .sorted()
+                .boxed()
+                .collect(toList());
     }
 
     private void buildForRecord(PostInformationRecord postInformationRecord) {
@@ -177,16 +204,22 @@ class GroupBuilder {
             var ygMessage = objectMapper.readValue(postInformationRecord.getMessageJson(), YgMessage.class);
             YearMonth yearMonth = getYearMonth(postInformationRecord);
             Path yearMonthPath = createPath(yearMonth);
-            OffsetDateTime offsetPostDate = postInformationRecord.getPostDate().atOffset(ZoneOffset.UTC);
 
-            try (var writer = Files.newBufferedWriter(yearMonthPath.resolve(messageId + ".html"))) {
-                Map<String, Object> variables = Map.of(
-                        "ygMessage", ygMessage,
-                        "postInfo", postInformationRecord,
-                        "postDate", offsetPostDate,
-                        "site", siteProperties);
-                messageTemplate.apply(variables, writer);
-            }
+            ForkJoinPool.commonPool().execute(() -> {
+                OffsetDateTime offsetPostDate = postInformationRecord.getPostDate().atOffset(ZoneOffset.UTC);
+                try (var writer = Files.newBufferedWriter(yearMonthPath.resolve(messageId + ".html"))) {
+                    Map<String, Object> variables = Map.of(
+                            "ygMessage", ygMessage,
+                            "postInfo", postInformationRecord,
+                            "postDate", offsetPostDate,
+                            "groupName", groupName,
+                            "site", siteProperties);
+                    messageTemplate.apply(variables, writer);
+                } catch (Exception e) {
+                    log.error(format("Unable to parse message for groupId: %d, messageId: %d; skipping",
+                            groupId, messageId), e);
+                }
+            });
 
             addSummary(yearMonth, PostSummary.of(ygMessage.getYgData()));
         } catch (Exception e) {
@@ -210,10 +243,70 @@ class GroupBuilder {
         return getYearMonth(postInformationRecord.getPostYear(), postInformationRecord.getPostMonth());
     }
 
-    private YearMonth getYearMonth(short year, short month) {
+    private YearMonth getYearMonth(int year, int month) {
         return yearMonthDeduplication
-                .computeIfAbsent((int) year, k -> new HashMap<>())
-                .computeIfAbsent((int) month, k -> new YearMonth(year, month));
+                .computeIfAbsent(year, k -> new HashMap<>())
+                .computeIfAbsent(month, k -> new YearMonth(year, month));
+    }
+
+    /**
+     * Determines the previous YearMonth. This method only works correctly after all messages have been processed.
+     *
+     * @param current current YearMonth
+     * @return Previous YearMonth, or {@code null}
+     */
+    private YearMonth previous(YearMonth current) {
+        int currentIndex = yearMonths.indexOf(current);
+        int previousIndex = currentIndex - 1;
+        if (previousIndex < 0) {
+            return null;
+        }
+        return yearMonths.get(previousIndex);
+    }
+
+    /**
+     * Determines the previous year. This method only works correctly after all messages have been processed.
+     *
+     * @param currentYear current year
+     * @return Previous year, or {@code null}
+     */
+    private Integer previous(Integer currentYear) {
+        int currentIndex = years.indexOf(currentYear);
+        int previousIndex = currentIndex - 1;
+        if (previousIndex < 0) {
+            return null;
+        }
+        return years.get(previousIndex);
+    }
+
+    /**
+     * Determines the next YearMonth. This method only works correctly after all messages have been processed.
+     *
+     * @param current current YearMonth
+     * @return Next YearMonth, or {@code null}
+     */
+    private YearMonth next(YearMonth current) {
+        int currentIndex = yearMonths.indexOf(current);
+        int nextIndex = currentIndex + 1;
+        if (currentIndex == -1 || nextIndex >= yearMonths.size()) {
+            return null;
+        }
+        return yearMonths.get(nextIndex);
+    }
+
+    /**
+     * Determines the next year. This method only works correctly after all messages have been processed.
+     *
+     * @param currentYear current year
+     * @return Next year, or {@code null}
+     */
+    private Integer next(Integer currentYear) {
+        int currentIndex = years.indexOf(currentYear);
+        int nextIndex = currentIndex + 1;
+        if (currentIndex == -1 || nextIndex >= years.size()) {
+            return null;
+        }
+        return years.get(nextIndex);
     }
 
     private void populateLinkInformation() {

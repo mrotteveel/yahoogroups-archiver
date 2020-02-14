@@ -1,37 +1,79 @@
 <!DOCTYPE html>
 <html lang="{{site.lang}}">
 <head>
-    {{#assign "up0"}}./{{/assign}}
-    {{#assign "up1"}}../{{/assign}}
-    {{#assign "up2"}}../../{{/assign}}
-    {{#assign "up3"}}../../../{{/assign}}
-    {{#assign "siteRoot"}}{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{else}}{{up3}}{{/eq}}{{/assign}}
+    {{~#eq site.useAbsolutePaths 'true'~}}
+        {{~#assign "siteRoot"}}{{site.baseUrl}}{{/assign~}}
+        {{~#assign "groupRoot"}}{{siteRoot}}{{groupName}}/{{/assign~}}
+        {{~#assign "yearRoot"}}{{groupRoot}}{{yearMonth.year}}/{{/assign~}}
+        {{~#assign "monthRoot"}}{{yearRoot}}{{yearMonth.month}}/{{/assign~}}
+    {{~else~}}
+        {{~#assign "siteRoot"}}../../../{{/assign~}}
+        {{~#assign "groupRoot"}}../../{{/assign~}}
+        {{~#assign "yearRoot"}}../{{/assign~}}
+        {{~#assign "monthRoot"}}./{{/assign~}}
+    {{~/eq}}
     <meta charset="utf-8"/>
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
-    <title>{{groupname}} - {{monthName yearMonth.month}} {{yearMonth.year}}</title>
+    <title>{{groupName}} - {{monthName yearMonth.month}} {{yearMonth.year}}</title>
 </head>
-<body>
+<body class="month-index">
 <div class="archive-nav">
     <nav class="site-menu">
         <ul>
-            <li><a href="{{siteRoot}}">{{site.name}} - Home</a></li>
-            <li><a href="{{site.parentSiteUrl}}">{{site.parentSiteName}}</a></li>
+            <li class="site-root"><a href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
+            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="parent-site-name">{{site.parentSiteName}}</span></a></li>
         </ul>
     </nav>
     <nav class="group-nav">
         <ul>
-            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{groupName}}/{{else}}{{up2}}{{/eq}}">{{groupName}}</a></li>
-            <li><a href="{{#eq site.useAbsolutePaths 'true'}}{{site.baseUrl}}{{groupName}}/{{yearMonth.year}}/{{else}}{{up1}}{{/eq}}">{{groupName}} - {{yearMonth.year}}</a></li>
+            <li class="group-root"><a href="{{groupRoot}}"><span class="group-name">{{groupName}}</span></a></li>
+            <li class="group-year"><a href="{{yearRoot}}"><span class="group-name">{{groupName}}</span> - <span class="year">{{yearMonth.year}}</span></a></li>
         </ul>
     </nav>
 </div>
 <div class="main-content">
-    <h1>{{groupName}} - {{monthName yearMonth.month}} {{yearMonth.year}}</h1>
-    <ul class="msg-list list">
-        {{#each posts}}
-            <li><a href="{{messageId}}.html"><b class="subject">{{subject}}</b> <em class="author">{{authorName}}</em></a></li>
-        {{/each}}
+    <h1><span class="group-name">{{groupName}}</span> - <span class="month-name">{{monthName yearMonth.month}}</span> <span class="year">{{yearMonth.year}}</span></h1>
+    <nav class="group-month-nav content-nav-top">
+        <ul>
+            <li class="previous previous-month">
+                {{~#with monthNavigation.previous~}}
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">previous month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                {{~else~}}
+                    <span>previous month</span>
+                {{~/with~}}
+            </li>
+            <li class="next next-month">
+                {{~#with monthNavigation.next~}}
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">next month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                {{~else~}}
+                    <span>next month</span>
+                {{~/with~}}
+            </li>
+        </ul>
+    </nav>
+    <ul class="msg-list">
+        {{~#each posts}}
+        <li><a href="{{monthRoot}}{{messageId}}.html"><span class="subject">{{{subject}}}</span> <span class="author">{{{authorName}}}</span></a></li>
+        {{~/each}}
     </ul>
+    <nav class="group-month-nav content-nav-bottom">
+        <ul>
+            <li class="previous previous-month">
+                {{~#with monthNavigation.previous~}}
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">previous month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                {{~else~}}
+                    <span>previous month</span>
+                {{~/with~}}
+            </li>
+            <li class="next next-month">
+                {{~#with monthNavigation.next~}}
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">next month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                {{~else~}}
+                    <span>next month</span>
+                {{~/with~}}
+            </li>
+        </ul>
+    </nav>
 </div>
 </body>
 </html>
