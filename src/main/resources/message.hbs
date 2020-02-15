@@ -21,14 +21,14 @@
     <nav class="site-menu">
         <ul>
             <li class="site-root"><a href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
-            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="parent-site-name">{{site.parentSiteName}}</span></a></li>
+            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
         </ul>
     </nav>
     <nav class="group-nav">
         <ul>
             <li class="group-root"><a href="{{groupRoot}}"><span class="group-name">{{postInfo.groupname}}</span></a></li>
-            <li class="group-year"><a href="{{yearRoot}}"><span class="group-name">{{postInfo.groupname}} - <span class="year">{{postInfo.postYear}}</span></a></li>
-            <li class="group-year-month"><a href="{{monthRoot}}"><span class="group-name">{{postInfo.groupname}} - <span class="month-name">{{monthName postInfo.postMonth}}</span> <span class="year">{{postInfo.postYear}}</span></a></li>
+            <li class="group-year"><a href="{{yearRoot}}"><span class="group-name">{{postInfo.groupname}}</span> - <span class="year">{{postInfo.postYear}}</span></a></li>
+            <li class="group-year-month"><a href="{{monthRoot}}"><span class="group-name">{{postInfo.groupname}}</span> - <span class="month">{{monthName postInfo.postMonth}} {{postInfo.postYear}}</span></a></li>
         </ul>
     </nav>
 </div>
@@ -71,15 +71,15 @@
             <table>
                 <tr class="msg-subject">
                     <th class="msg-header-name">Subject</th>
-                    <td class="msg-header-value"><span class="subject">{{{ygMessage.ygData.subject}}}</span></td>
+                    <td class="msg-header-value subject">{{{ygMessage.ygData.subject}}}</td>
                 </tr>
                 <tr class="msg-author">
                     <th class="msg-header-name">Author</th>
-                    <td class="msg-header-value"><span class="author">{{{ygMessage.ygData.authorName}}}</span></td>
+                    <td class="msg-header-value author">{{{ygMessage.ygData.authorName}}}</td>
                 </tr>
                 <tr class="msg-postdate">
                     <th class="msg-header-name">Post date</th>
-                    <td class="msg-header-value"><span class="date-time">{{postDate}}</span></td>
+                    <td class="msg-header-value date-time">{{postDate}}</td>
                 </tr>
             </table>
         </div>

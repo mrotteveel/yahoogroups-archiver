@@ -21,7 +21,7 @@
     <nav class="site-menu">
         <ul>
             <li class="site-root"><a href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
-            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="parent-site-name">{{site.parentSiteName}}</span></a></li>
+            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
         </ul>
     </nav>
     <nav class="group-nav">
@@ -32,19 +32,19 @@
     </nav>
 </div>
 <div class="main-content">
-    <h1><span class="group-name">{{groupName}}</span> - <span class="month-name">{{monthName yearMonth.month}}</span> <span class="year">{{yearMonth.year}}</span></h1>
+    <h1><span class="group-name">{{groupName}}</span> - <span class="month">{{monthName yearMonth.month}} {{yearMonth.year}}</span></h1>
     <nav class="group-month-nav content-nav-top">
         <ul>
             <li class="previous previous-month">
                 {{~#with monthNavigation.previous~}}
-                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">previous month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">previous month (<span class="month">{{monthName this.month}} {{this.year}}</span>)</a>
                 {{~else~}}
                     <span>previous month</span>
                 {{~/with~}}
             </li>
             <li class="next next-month">
                 {{~#with monthNavigation.next~}}
-                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">next month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">next month (<span class="month">{{monthName this.month}} {{this.year}}</span>)</a>
                 {{~else~}}
                     <span>next month</span>
                 {{~/with~}}
@@ -60,14 +60,14 @@
         <ul>
             <li class="previous previous-month">
                 {{~#with monthNavigation.previous~}}
-                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">previous month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">previous month (<span class="month">{{monthName this.month}} {{this.year}}</span>)</a>
                 {{~else~}}
                     <span>previous month</span>
                 {{~/with~}}
             </li>
             <li class="next next-month">
                 {{~#with monthNavigation.next~}}
-                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">next month (<span class="month-name">{{monthName this.month}}</span> <span class="year">{{this.year}}</span>)</a>
+                    <a href="{{groupRoot}}{{this.year}}/{{this.month}}/">next month (<span class="month">{{monthName this.month}} {{this.year}}</span>)</a>
                 {{~else~}}
                     <span>next month</span>
                 {{~/with~}}
