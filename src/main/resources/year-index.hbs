@@ -48,34 +48,42 @@
             </li>
         </ul>
     </nav>
-    <table class="year-month-index">
-        <tr>
-            <th class="month">Month</th>
-            <th class="post-count">Posts</th>
-        </tr>
-        {{~#*inline "month-row"}}
-        <tr>
-            <td class="month">{{monthName month}} {{year}}</td>
-            <td class="post-count">
-                {{~#with post~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        {{~/inline~}}
-        {{> month-row post=posts.[1] month=1 ~}}
-        {{> month-row post=posts.[2] month=2 ~}}
-        {{> month-row post=posts.[3] month=3 ~}}
-        {{> month-row post=posts.[4] month=4 ~}}
-        {{> month-row post=posts.[5] month=5 ~}}
-        {{> month-row post=posts.[6] month=6 ~}}
-        {{> month-row post=posts.[7] month=7 ~}}
-        {{> month-row post=posts.[8] month=8 ~}}
-        {{> month-row post=posts.[9] month=9 ~}}
-        {{> month-row post=posts.[10] month=10 ~}}
-        {{> month-row post=posts.[11] month=11 ~}}
-        {{> month-row post=posts.[12] month=12 }}
-    </table>
+    <div class="months">
+        <table class="year-month-index">
+            <colgroup>
+                <col class="month">
+                <col class="post-count">
+            </colgroup>
+            <tr>
+                <th class="month">Month</th>
+                <th class="post-count">Posts</th>
+            </tr>
+            {{~#*inline "month-row"}}
+            <tr>
+                <td class="month">
+                    {{~#with post~}}
+                        <a href="{{yearRoot}}{{yearMonth.month}}/">{{monthName month}} {{year}}</a>
+                    {{~else~}}
+                        {{monthName month}} {{year}}
+                    {{~/with~}}
+                </td>
+                <td class="post-count">{{post.postCount}}</td>
+            </tr>
+            {{~/inline~}}
+            {{> month-row post=posts.[1] month=1 ~}}
+            {{> month-row post=posts.[2] month=2 ~}}
+            {{> month-row post=posts.[3] month=3 ~}}
+            {{> month-row post=posts.[4] month=4 ~}}
+            {{> month-row post=posts.[5] month=5 ~}}
+            {{> month-row post=posts.[6] month=6 ~}}
+            {{> month-row post=posts.[7] month=7 ~}}
+            {{> month-row post=posts.[8] month=8 ~}}
+            {{> month-row post=posts.[9] month=9 ~}}
+            {{> month-row post=posts.[10] month=10 ~}}
+            {{> month-row post=posts.[11] month=11 ~}}
+            {{> month-row post=posts.[12] month=12 }}
+        </table>
+    </div>
     <nav class="group-year-nav content-nav-bottom">
         <ul>
             <li class="previous previous-year">

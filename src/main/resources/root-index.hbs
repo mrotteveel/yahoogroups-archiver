@@ -20,11 +20,14 @@
     <p>
         {{site.introduction}}
     </p>
-    <ul class="group-list">
-        {{~#each groups}}
-        <li class="group-name"><a href="{{siteRoot}}{{this}}"><span class="group-name">{{this}}</span></a></li>
-        {{~/each}}
-    </ul>
+    <div class="groups">
+        <h2>Groups</h2>
+        <ul class="group-list">
+            {{~#each groups}}
+            <li class="group-name"><a href="{{siteRoot}}{{this}}"><span class="group-name">{{this}}</span></a></li>
+            {{~/each}}
+        </ul>
+    </div>
 </div>
 </body>
 </html>
