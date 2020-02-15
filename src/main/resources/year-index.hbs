@@ -53,102 +53,28 @@
             <th class="month">Month</th>
             <th class="post-count">Posts</th>
         </tr>
+        {{~#*inline "month-row"}}
         <tr>
-            <td class="month"><span class="month-name">January</span> <span class="year">{{year}}</span></td>
+            <td class="month">{{monthName month}} {{year}}</td>
             <td class="post-count">
-                {{~#with posts.[1]~}}
+                {{~#with post~}}
                     <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
                 {{~/with~}}
             </td>
         </tr>
-        <tr>
-            <td class="month"><span class="month-name">February</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[2]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">March</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[3]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">April</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[4]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">May</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[5]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">June</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[6]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">July</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[7]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">August</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[8]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">September</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[9]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">October</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[10]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">November</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[11]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
-        <tr>
-            <td class="month"><span class="month-name">December</span> <span class="year">{{year}}</span></td>
-            <td class="post-count">
-                {{~#with posts.[12]~}}
-                    <a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a>
-                {{~/with~}}
-            </td>
-        </tr>
+        {{~/inline~}}
+        {{> month-row post=posts.[1] month=1 ~}}
+        {{> month-row post=posts.[2] month=2 ~}}
+        {{> month-row post=posts.[3] month=3 ~}}
+        {{> month-row post=posts.[4] month=4 ~}}
+        {{> month-row post=posts.[5] month=5 ~}}
+        {{> month-row post=posts.[6] month=6 ~}}
+        {{> month-row post=posts.[7] month=7 ~}}
+        {{> month-row post=posts.[8] month=8 ~}}
+        {{> month-row post=posts.[9] month=9 ~}}
+        {{> month-row post=posts.[10] month=10 ~}}
+        {{> month-row post=posts.[11] month=11 ~}}
+        {{> month-row post=posts.[12] month=12 }}
     </table>
     <nav class="group-year-nav content-nav-bottom">
         <ul>
