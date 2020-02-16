@@ -37,7 +37,7 @@
             <ul class="pagination">
                 {{~#with yearNavigation.previous}}
                 <li class="page-item w-50 previous previous-year">
-                    <a class=page-link" href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
+                    <a class="page-link" href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
                 </li>
                 {{~else}}
                 <li class="page-item w-50 disabled previous previous-year">
@@ -65,36 +65,19 @@
                     <th class="month">Month</th>
                     <th class="post-count">Posts</th>
                 </tr>
-                {{~#*inline "month-row"}}
-                    <tr>
-                    {{~#with post}}
-                        <td class="month"><a href="{{yearRoot}}{{yearMonth.month}}/">{{monthName month}} {{year}}</a></td>
-                        <td class="post-count"><a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a></td>
-                    {{~else}}
-                        <td class="month">{{monthName month}} {{year}}</td>
-                        <td class="post-count">&nbsp;</td>
-                    {{~/with}}
-                    </tr>
-                {{~/inline~}}
-                {{> month-row post=posts.[1] month=1 ~}}
-                {{> month-row post=posts.[2] month=2 ~}}
-                {{> month-row post=posts.[3] month=3 ~}}
-                {{> month-row post=posts.[4] month=4 ~}}
-                {{> month-row post=posts.[5] month=5 ~}}
-                {{> month-row post=posts.[6] month=6 ~}}
-                {{> month-row post=posts.[7] month=7 ~}}
-                {{> month-row post=posts.[8] month=8 ~}}
-                {{> month-row post=posts.[9] month=9 ~}}
-                {{> month-row post=posts.[10] month=10 ~}}
-                {{> month-row post=posts.[11] month=11 ~}}
-                {{> month-row post=posts.[12] month=12 }}
+                {{~#each postsPerMonth}}
+                <tr>
+                    <td class="month"><a href="{{yearRoot}}{{yearMonth.month}}/">{{monthName yearMonth.month}} {{yearMonth.year}}</a></td>
+                    <td class="post-count"><a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a></td>
+                </tr>
+                {{~/each}}
             </table>
         </div>
         <nav class="my-sm-2 group-year-nav content-nav-bottom">
             <ul class="pagination">
                 {{~#with yearNavigation.previous}}
                 <li class="page-item w-50 previous previous-year">
-                    <a class=page-link" href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
+                    <a class="page-link" href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
                 </li>
                 {{~else}}
                 <li class="page-item w-50 disabled previous previous-year">

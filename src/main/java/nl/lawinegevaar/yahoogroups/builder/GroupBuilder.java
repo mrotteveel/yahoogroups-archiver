@@ -24,9 +24,8 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparingInt;
 import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 class GroupBuilder {
@@ -116,15 +115,14 @@ class GroupBuilder {
 
     private void buildYearIndex(Integer year, List<PostsPerMonth> postsPerMonthList) {
         ForkJoinPool.commonPool().execute(() -> {
-            Map<String, PostsPerMonth> posts = postsPerMonthList.stream()
-                    .collect(toMap(ppm -> String.valueOf(ppm.getYearMonth().getMonth()), identity()));
+            postsPerMonthList.sort(comparingInt(postsPerMonth -> postsPerMonth.getYearMonth().getMonth()));
             Path yearPath = groupPath.resolve(String.valueOf(year));
             try {
                 Files.createDirectories(yearPath);
                 try (var writer = Files.newBufferedWriter(yearPath.resolve("index.html"))) {
                     Map<String, Object> variables = Map.of(
                             "year", year,
-                            "posts", posts,
+                            "postsPerMonth", postsPerMonthList,
                             "yearNavigation", createYearNavigation(year),
                             "groupName", groupName,
                             "site", siteProperties);
