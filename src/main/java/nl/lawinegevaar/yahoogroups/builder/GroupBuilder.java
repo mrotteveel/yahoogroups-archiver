@@ -24,10 +24,9 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Comparator.comparing;
-import static java.util.Comparator.comparingInt;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 class GroupBuilder {
@@ -42,9 +41,7 @@ class GroupBuilder {
     private final Template messageTemplate;
 
     private final Map<Integer, Map<Integer, YearMonth>> yearMonthDeduplication = new HashMap<>();
-    private final Map<YearMonth, List<PostSummary>> postsByYearMonth = new HashMap<>();
-    private List<YearMonth> yearMonths;
-    private List<Integer> years;
+    private final GroupSummary groupSummary;
     private final Template monthIndex;
     private final Template yearIndex;
     private final Template groupIndex;
@@ -69,6 +66,7 @@ class GroupBuilder {
         } catch (IOException e) {
             throw new ArchiveBuildingException("Could not compile handlebars template", e);
         }
+        groupSummary = new GroupSummary(groupName);
     }
 
     void build() {
@@ -96,12 +94,7 @@ class GroupBuilder {
     private void buildGroupIndex() {
         log.info("Building group index for {}", groupName);
         ForkJoinPool.commonPool().execute(() -> {
-            List<PostsPerYear> postsPerYear = postsByYearMonth.entrySet().stream()
-                    .collect(groupingBy(entry -> entry.getKey().getYear(), summingInt(entry -> entry.getValue().size())))
-                    .entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .map(entry -> new PostsPerYear(entry.getKey(), entry.getValue()))
-                    .collect(toList());
+            List<PostsPerYear> postsPerYear = groupSummary.getPostsPerYear();
             try (var writer = Files.newBufferedWriter(groupPath.resolve("index.html"))) {
                 Map<String, Object> variables = Map.of(
                         "postsPerYear", postsPerYear,
@@ -117,9 +110,7 @@ class GroupBuilder {
 
     private void buildYearIndices() {
         log.info("Building year indices for {}", groupName);
-        postsByYearMonth.entrySet().stream()
-                .map(entry -> new PostsPerMonth(entry.getKey(), entry.getValue().size()))
-                .collect(groupingBy(posts -> posts.getYearMonth().getYear()))
+        groupSummary.getPostsPerMonthPerYear()
                 .forEach(this::buildYearIndex);
     }
 
@@ -152,7 +143,7 @@ class GroupBuilder {
 
     private void buildMonthIndices() {
         log.info("Building month indices for {}", groupName);
-        postsByYearMonth.forEach(this::buildMonthIndex);
+        groupSummary.forEachMonth(this::buildMonthIndex);
     }
 
     private void buildMonthIndex(YearMonth yearMonth, List<PostSummary> postSummaries) {
@@ -185,24 +176,9 @@ class GroupBuilder {
         try (Stream<PostInformationRecord> postInformationRecordStream = db.getPostInformationForGroup(groupName)) {
             postInformationRecordStream
                     .forEach(this::buildForRecord);
+        } finally {
+            groupSummary.doneAddingMessages();
         }
-        populateYearMonthsList();
-        populateYearsList();
-    }
-
-    private void populateYearMonthsList() {
-        yearMonths = postsByYearMonth.keySet().stream()
-                .sorted(comparingInt(YearMonth::getYear).thenComparingInt(YearMonth::getMonth))
-                .collect(toList());
-    }
-
-    private void populateYearsList() {
-        years = postsByYearMonth.keySet().stream()
-                .mapToInt(YearMonth::getYear)
-                .distinct()
-                .sorted()
-                .boxed()
-                .collect(toList());
     }
 
     private void buildForRecord(PostInformationRecord postInformationRecord) {
@@ -229,16 +205,11 @@ class GroupBuilder {
                 }
             });
 
-            addSummary(yearMonth, PostSummary.of(ygMessage.getYgData()));
+            groupSummary.addToSummary(yearMonth, ygMessage);
         } catch (Exception e) {
             log.error(
                     format("Unable to parse message for groupId: %d, messageId: %d; skipping", groupId, messageId), e);
         }
-    }
-
-    private void addSummary(YearMonth yearMonth, PostSummary postSummary) {
-        List<PostSummary> postSummaries = postsByYearMonth.computeIfAbsent(yearMonth, ignored -> new ArrayList<>());
-        postSummaries.add(postSummary);
     }
 
     private Path createPath(YearMonth yearMonth) throws IOException {
@@ -257,64 +228,20 @@ class GroupBuilder {
                 .computeIfAbsent(month, k -> new YearMonth(year, month));
     }
 
-    /**
-     * Determines the previous YearMonth. This method only works correctly after all messages have been processed.
-     *
-     * @param current current YearMonth
-     * @return Previous YearMonth, or {@code null}
-     */
     private YearMonth previous(YearMonth current) {
-        int currentIndex = yearMonths.indexOf(current);
-        int previousIndex = currentIndex - 1;
-        if (previousIndex < 0) {
-            return null;
-        }
-        return yearMonths.get(previousIndex);
+        return groupSummary.previous(current);
     }
 
-    /**
-     * Determines the previous year. This method only works correctly after all messages have been processed.
-     *
-     * @param currentYear current year
-     * @return Previous year, or {@code null}
-     */
     private Integer previous(Integer currentYear) {
-        int currentIndex = years.indexOf(currentYear);
-        int previousIndex = currentIndex - 1;
-        if (previousIndex < 0) {
-            return null;
-        }
-        return years.get(previousIndex);
+        return groupSummary.previous(currentYear);
     }
 
-    /**
-     * Determines the next YearMonth. This method only works correctly after all messages have been processed.
-     *
-     * @param current current YearMonth
-     * @return Next YearMonth, or {@code null}
-     */
     private YearMonth next(YearMonth current) {
-        int currentIndex = yearMonths.indexOf(current);
-        int nextIndex = currentIndex + 1;
-        if (currentIndex == -1 || nextIndex >= yearMonths.size()) {
-            return null;
-        }
-        return yearMonths.get(nextIndex);
+        return groupSummary.next(current);
     }
 
-    /**
-     * Determines the next year. This method only works correctly after all messages have been processed.
-     *
-     * @param currentYear current year
-     * @return Next year, or {@code null}
-     */
     private Integer next(Integer currentYear) {
-        int currentIndex = years.indexOf(currentYear);
-        int nextIndex = currentIndex + 1;
-        if (currentIndex == -1 || nextIndex >= years.size()) {
-            return null;
-        }
-        return years.get(nextIndex);
+        return groupSummary.next(currentYear);
     }
 
     private void populateLinkInformation() {
