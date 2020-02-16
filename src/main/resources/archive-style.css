@@ -1,16 +1,16 @@
-nav > ul > li.previous {
+li.previous {
     text-align: left;
 }
-nav > ul > li.previous > :only-child::before {
+li.previous > :only-child::before {
     content: "< "
 }
-nav > ul > li.first-in-topic {
+li.first-in-topic {
     text-align: center;
 }
-nav > ul > li.next {
+li.next {
     text-align: right;
 }
-nav > ul > li.next > :only-child::after {
+li.next > :only-child::after {
     content: " >"
 }
 nav.msg-nav li {
@@ -31,4 +31,10 @@ ul.msg-list span.author {
 }
 td a:only-child {
     display: block;
+}
+ul.msg-list li a:only-child, ul.group-list li a:only-child {
+    display: block;
+}
+ul.msg-list li:hover, ul.group-list li:hover {
+    background-color: #e9ecef;
 }
