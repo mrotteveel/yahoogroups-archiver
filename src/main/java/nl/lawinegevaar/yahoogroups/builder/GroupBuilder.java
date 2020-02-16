@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import lombok.extern.slf4j.Slf4j;
-import nl.lawinegevaar.yahoogroups.builder.beans.*;
 import nl.lawinegevaar.yahoogroups.builder.json.YgData;
 import nl.lawinegevaar.yahoogroups.builder.json.YgMessage;
+import nl.lawinegevaar.yahoogroups.builder.model.*;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.PostInformationRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.RawdataRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
@@ -95,16 +95,24 @@ class GroupBuilder {
 
     private void buildGroupIndex() {
         log.info("Building group index for {}", groupName);
-        try (var writer = Files.newBufferedWriter(groupPath.resolve("index.html"))) {
-            Map<String, Object> variables = Map.of(
-                    "years", years,
-                    "groupName", groupName,
-                    "site", siteProperties);
-            groupIndex.apply(variables, writer);
-        } catch (IOException e) {
-            throw new ArchiveBuildingException(
-                    format("Could not create group index for %s", groupName), e);
-        }
+        ForkJoinPool.commonPool().execute(() -> {
+            List<PostsPerYear> postsPerYear = postsByYearMonth.entrySet().stream()
+                    .collect(groupingBy(entry -> entry.getKey().getYear(), summingInt(entry -> entry.getValue().size())))
+                    .entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .map(entry -> new PostsPerYear(entry.getKey(), entry.getValue()))
+                    .collect(toList());
+            try (var writer = Files.newBufferedWriter(groupPath.resolve("index.html"))) {
+                Map<String, Object> variables = Map.of(
+                        "postsPerYear", postsPerYear,
+                        "groupName", groupName,
+                        "site", siteProperties);
+                groupIndex.apply(variables, writer);
+            } catch (IOException e) {
+                throw new ArchiveBuildingException(
+                        format("Could not create group index for %s", groupName), e);
+            }
+        });
     }
 
     private void buildYearIndices() {

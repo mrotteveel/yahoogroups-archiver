@@ -11,97 +11,108 @@
         {{~#assign "yearRoot"}}./{{/assign~}}
     {{~/eq}}
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
     <title>{{groupName}} - {{year}}</title>
 </head>
-<body class="year-index">
-<div class="archive-nav">
-    <nav class="site-menu">
-        <ul>
-            <li class="site-root"><a href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
-            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
+<body id="year-index" class="d-flex flex-column h-100">
+<header class="archive-nav">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark site-menu">
+        <ul class="navbar-nav">
+            <li class="nav-item site-root"><a class="nav-link" href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
+            <li class="nav-item parent-site"><a class="nav-link" href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
         </ul>
     </nav>
-    <nav class="group-nav">
-        <ul>
-            <li class="group-root"><a href="{{groupRoot}}"><span class="group-name">{{groupName}}</span></a></li>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light group-nav">
+        <ul class="navbar-nav">
+            <li class="nav-item group-root"><a class="nav-link" href="{{groupRoot}}"><span class="group-name">{{groupName}}</span></a></li>
         </ul>
     </nav>
-</div>
-<div class="main-content">
-    <h1><span class="group-name">{{groupName}}</span> - <span class="year">{{year}}</span></h1>
-    <nav class="group-year-nav content-nav-top">
-        <ul>
-            <li class="previous previous-year">
-                {{~#with yearNavigation.previous~}}
-                    <a href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
-                {{~else~}}
-                    <span>previous year</span>
+</header>
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        <h1><span class="group-name">{{groupName}}</span> - <span class="year">{{year}}</span></h1>
+        <nav class="my-sm-2 group-year-nav content-nav-top">
+            <ul class="pagination">
+                {{~#with yearNavigation.previous}}
+                <li class="page-item w-50 previous previous-year">
+                    <a class=page-link" href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
+                </li>
+                {{~else}}
+                <li class="page-item w-50 disabled previous previous-year">
+                    <span class="page-link">previous year</span>
+                </li>
                 {{~/with~}}
-            </li>
-            <li class="next next-year">
-                {{~#with yearNavigation.next~}}
-                    <a href="{{groupRoot}}{{this}}/">next year (<span class="year">{{this}}</span>)</a>
-                {{~else~}}
-                    <span>next year</span>
+                {{~#with yearNavigation.next}}
+                <li class="page-item w-50 next next-year">
+                    <a class="page-link" href="{{groupRoot}}{{this}}/">next year (<span class="year">{{this}}</span>)</a>
+                </li>
+                {{~else}}
+                <li class="page-item w-50 disabled next next-year">
+                    <span class="page-link">next year</span>
+                </li>
+                {{~/with}}
+            </ul>
+        </nav>
+        <div class="months">
+            <table class="table table-striped year-month-index">
+                <colgroup>
+                    <col class="month">
+                    <col class="post-count">
+                </colgroup>
+                <tr>
+                    <th class="month">Month</th>
+                    <th class="post-count">Posts</th>
+                </tr>
+                {{~#*inline "month-row"}}
+                    <tr>
+                    {{~#with post}}
+                        <td class="month"><a href="{{yearRoot}}{{yearMonth.month}}/">{{monthName month}} {{year}}</a></td>
+                        <td class="post-count"><a href="{{yearRoot}}{{yearMonth.month}}/">{{postCount}}</a></td>
+                    {{~else}}
+                        <td class="month">{{monthName month}} {{year}}</td>
+                        <td class="post-count">&nbsp;</td>
+                    {{~/with}}
+                    </tr>
+                {{~/inline~}}
+                {{> month-row post=posts.[1] month=1 ~}}
+                {{> month-row post=posts.[2] month=2 ~}}
+                {{> month-row post=posts.[3] month=3 ~}}
+                {{> month-row post=posts.[4] month=4 ~}}
+                {{> month-row post=posts.[5] month=5 ~}}
+                {{> month-row post=posts.[6] month=6 ~}}
+                {{> month-row post=posts.[7] month=7 ~}}
+                {{> month-row post=posts.[8] month=8 ~}}
+                {{> month-row post=posts.[9] month=9 ~}}
+                {{> month-row post=posts.[10] month=10 ~}}
+                {{> month-row post=posts.[11] month=11 ~}}
+                {{> month-row post=posts.[12] month=12 }}
+            </table>
+        </div>
+        <nav class="my-sm-2 group-year-nav content-nav-bottom">
+            <ul class="pagination">
+                {{~#with yearNavigation.previous}}
+                <li class="page-item w-50 previous previous-year">
+                    <a class=page-link" href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
+                </li>
+                {{~else}}
+                <li class="page-item w-50 disabled previous previous-year">
+                    <span class="page-link">previous year</span>
+                </li>
                 {{~/with~}}
-            </li>
-        </ul>
-    </nav>
-    <div class="months">
-        <table class="year-month-index">
-            <colgroup>
-                <col class="month">
-                <col class="post-count">
-            </colgroup>
-            <tr>
-                <th class="month">Month</th>
-                <th class="post-count">Posts</th>
-            </tr>
-            {{~#*inline "month-row"}}
-            <tr>
-                <td class="month">
-                    {{~#with post~}}
-                        <a href="{{yearRoot}}{{yearMonth.month}}/">{{monthName month}} {{year}}</a>
-                    {{~else~}}
-                        {{monthName month}} {{year}}
-                    {{~/with~}}
-                </td>
-                <td class="post-count">{{post.postCount}}</td>
-            </tr>
-            {{~/inline~}}
-            {{> month-row post=posts.[1] month=1 ~}}
-            {{> month-row post=posts.[2] month=2 ~}}
-            {{> month-row post=posts.[3] month=3 ~}}
-            {{> month-row post=posts.[4] month=4 ~}}
-            {{> month-row post=posts.[5] month=5 ~}}
-            {{> month-row post=posts.[6] month=6 ~}}
-            {{> month-row post=posts.[7] month=7 ~}}
-            {{> month-row post=posts.[8] month=8 ~}}
-            {{> month-row post=posts.[9] month=9 ~}}
-            {{> month-row post=posts.[10] month=10 ~}}
-            {{> month-row post=posts.[11] month=11 ~}}
-            {{> month-row post=posts.[12] month=12 }}
-        </table>
+                {{~#with yearNavigation.next}}
+                <li class="page-item w-50 next next-year">
+                    <a class="page-link" href="{{groupRoot}}{{this}}/">next year (<span class="year">{{this}}</span>)</a>
+                </li>
+                {{~else}}
+                <li class="page-item w-50 disabled next next-year">
+                    <span class="page-link">next year</span>
+                </li>
+                {{~/with}}
+            </ul>
+        </nav>
     </div>
-    <nav class="group-year-nav content-nav-bottom">
-        <ul>
-            <li class="previous previous-year">
-                {{~#with yearNavigation.previous~}}
-                    <a href="{{groupRoot}}{{this}}/">previous year (<span class="year">{{this}}</span>)</a>
-                {{~else~}}
-                    <span>previous year</span>
-                {{~/with~}}
-            </li>
-            <li class="next next-year">
-                {{~#with yearNavigation.next~}}
-                    <a href="{{groupRoot}}{{this}}/">next year (<span class="year">{{this}}</span>)</a>
-                {{~else~}}
-                    <span>next year</span>
-                {{~/with~}}
-            </li>
-        </ul>
-    </nav>
-</div>
+</main>
 </body>
 </html>

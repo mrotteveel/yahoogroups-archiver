@@ -1,4 +1,4 @@
-package nl.lawinegevaar.yahoogroups.builder.beans;
+package nl.lawinegevaar.yahoogroups.builder.model;
 
 import lombok.Getter;
 

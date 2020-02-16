@@ -13,117 +13,137 @@
         {{~#assign "monthRoot"}}./{{/assign~}}
     {{~/eq}}
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
     <title>{{groupName}} - {{{ygMessage.ygData.subject}}}</title>
 </head>
-<body class="message">
-<div class="archive-nav">
-    <nav class="site-menu">
-        <ul>
-            <li class="site-root"><a href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
-            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
+<body id="message" class="d-flex flex-column h-100">
+<header class="archive-nav">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark site-menu">
+        <ul class="navbar-nav">
+            <li class="nav-item site-root"><a class="nav-link" href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
+            <li class="nav-item parent-site"><a class="nav-link" href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
         </ul>
     </nav>
-    <nav class="group-nav">
-        <ul>
-            <li class="group-root"><a href="{{groupRoot}}"><span class="group-name">{{postInfo.groupname}}</span></a></li>
-            <li class="group-year"><a href="{{yearRoot}}"><span class="group-name">{{postInfo.groupname}}</span> - <span class="year">{{postInfo.postYear}}</span></a></li>
-            <li class="group-year-month"><a href="{{monthRoot}}"><span class="group-name">{{postInfo.groupname}}</span> - <span class="month">{{monthName postInfo.postMonth}} {{postInfo.postYear}}</span></a></li>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light group-nav">
+        <ul class="navbar-nav">
+            <li class="nav-item group-root"><a class="nav-link" href="{{groupRoot}}"><span class="group-name">{{postInfo.groupname}}</span></a></li>
+            <li class="nav-item group-year"><a class="nav-link" href="{{yearRoot}}"><span class="group-name">{{postInfo.groupname}}</span> - <span class="year">{{postInfo.postYear}}</span></a></li>
+            <li class="nav-item group-year-month"><a class="nav-link" href="{{monthRoot}}"><span class="group-name">{{postInfo.groupname}}</span> - <span class="month">{{monthName postInfo.postMonth}} {{postInfo.postYear}}</span></a></li>
         </ul>
     </nav>
-</div>
-<div class="main-content">
-    <nav class="msg-nav content-nav-top">
-        <ul>
-            <li class="previous previous-in-time">
-                {{~#if postInfo.prevInTime~}}
-                    <a href="{{groupRoot}}{{postInfo.prevInTimeYear}}/{{postInfo.prevInTimeMonth}}/{{postInfo.prevInTime}}.html">previous</a>
-                {{~else~}}
-                    <span>previous</span>
+</header>
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        <nav class="my-sm-2 msg-nav content-nav-top">
+            <ul class="pagination">
+                {{~#if postInfo.prevInTime}}
+                <li class="page-item previous previous-in-time">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.prevInTimeYear}}/{{postInfo.prevInTimeMonth}}/{{postInfo.prevInTime}}.html">previous</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled previous previous-in-time">
+                    <span class="page-link h-100">previous</span>
+                </li>
                 {{~/if~}}
-            </li>
-            <li class="previous previous-in-topic">
-                {{~#if postInfo.prevInTopic~}}
-                    <a href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous (in topic)</a>
-                {{~else~}}
-                    <span>previous (in topic)</span>
+                {{~#if postInfo.prevInTopic}}
+                <li class="page-item previous previous-in-topic">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled previous previous-in-topic">
+                    <span class="page-link h-100">previous in topic</span>
+                </li>
+                {{~/if}}
+                <li class="page-item first-in-topic"><a class="page-link h-100" href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
+                {{~#if postInfo.nextInTopic}}
+                <li class="page-item next next-in-topic">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled next next-in-topic">
+                    <span class="page-link h-100">next in topic</span>
+                </li>
                 {{~/if~}}
-            </li>
-            <li class="first-in-topic"><a href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
-            <li class="next next-in-topic">
-                {{~#if postInfo.nextInTopic~}}
-                    <a href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next (in topic)</a>
-                {{~else~}}
-                    <span>next (in topic)</span>
-                {{~/if~}}
-            </li>
-            <li class="next next-in-time">
-                {{~#if postInfo.nextInTime~}}
-                    <a href="{{groupRoot}}{{postInfo.nextInTimeYear}}/{{postInfo.nextInTimeMonth}}/{{postInfo.nextInTime}}.html">next</a>
-                {{~else~}}
-                    <span>next</span>
-                {{~/if~}}
-            </li>
-        </ul>
-    </nav>
-    <div class="msg">
-        <div class="msg-header">
-            <table>
-                <colgroup>
-                    <col class="msg-header-name">
-                    <col class="msg-header-value">
-                </colgroup>
-                <tr class="msg-subject">
-                    <th class="msg-header-name">Subject</th>
-                    <td class="msg-header-value subject">{{{ygMessage.ygData.subject}}}</td>
-                </tr>
-                <tr class="msg-author">
-                    <th class="msg-header-name">Author</th>
-                    <td class="msg-header-value author">{{{ygMessage.ygData.authorName}}}</td>
-                </tr>
-                <tr class="msg-postdate">
-                    <th class="msg-header-name">Post date</th>
-                    <td class="msg-header-value date-time">{{postDate}}</td>
-                </tr>
-            </table>
+                {{~#if postInfo.nextInTime}}
+                <li class="page-item next next-in-time">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.nextInTimeYear}}/{{postInfo.nextInTimeMonth}}/{{postInfo.nextInTime}}.html">next</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled next next-in-time">
+                    <span class="page-link h-100">next</span>
+                </li>
+                {{~/if}}
+            </ul>
+        </nav>
+        <div class="msg">
+            <div class="msg-header">
+                <table class="table table-borderless table-sm">
+                    <colgroup>
+                        <col class="msg-header-name">
+                        <col class="msg-header-value">
+                    </colgroup>
+                    <tr class="msg-subject">
+                        <th scope="row" class="pl-sm-0 msg-header-name">Subject</th>
+                        <td class="msg-header-value subject">{{{ygMessage.ygData.subject}}}</td>
+                    </tr>
+                    <tr class="msg-author">
+                        <th scope="row" class="pl-sm-0 msg-header-name">Author</th>
+                        <td class="msg-header-value author">{{{ygMessage.ygData.authorName}}}</td>
+                    </tr>
+                    <tr class="msg-postdate">
+                        <th scope="row" class="pl-sm-0 msg-header-name">Post date</th>
+                        <td class="msg-header-value date-time">{{postDate}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="my-sm-2 msg-body">
+    {{{ygMessage.ygData.messageBody}}}
+            </div>
         </div>
-        <div class="msg-body">
-{{{ygMessage.ygData.messageBody}}}
-        </div>
+        <nav class="my-sm-2 msg-nav content-nav-bottom">
+            <ul class="pagination">
+                {{~#if postInfo.prevInTime}}
+                <li class="page-item previous previous-in-time">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.prevInTimeYear}}/{{postInfo.prevInTimeMonth}}/{{postInfo.prevInTime}}.html">previous</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled previous previous-in-time">
+                    <span class="page-link h-100">previous</span>
+                </li>
+                {{~/if~}}
+                {{~#if postInfo.prevInTopic}}
+                <li class="page-item previous previous-in-topic">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled previous previous-in-topic">
+                    <span class="page-link h-100">previous in topic</span>
+                </li>
+                {{~/if}}
+                <li class="page-item first-in-topic"><a class="page-link h-100" href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
+                {{~#if postInfo.nextInTopic}}
+                <li class="page-item next next-in-topic">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled next next-in-topic">
+                    <span class="page-link h-100">next in topic</span>
+                </li>
+                {{~/if~}}
+                {{~#if postInfo.nextInTime}}
+                <li class="page-item next next-in-time">
+                    <a class="page-link h-100" href="{{groupRoot}}{{postInfo.nextInTimeYear}}/{{postInfo.nextInTimeMonth}}/{{postInfo.nextInTime}}.html">next</a>
+                </li>
+                {{~else}}
+                <li class="page-item disabled next next-in-time">
+                    <span class="page-link h-100">next</span>
+                </li>
+                {{~/if}}
+            </ul>
+        </nav>
     </div>
-    <nav class="msg-nav content-nav-bottom">
-        <ul>
-            <li class="previous previous-in-time">
-                {{~#if postInfo.prevInTime~}}
-                    <a href="{{groupRoot}}{{postInfo.prevInTimeYear}}/{{postInfo.prevInTimeMonth}}/{{postInfo.prevInTime}}.html">previous</a>
-                {{~else~}}
-                    <span>previous</span>
-                {{~/if~}}
-            </li>
-            <li class="previous previous-in-topic">
-                {{~#if postInfo.prevInTopic~}}
-                    <a href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
-                {{~else~}}
-                    <span>previous in topic</span>
-                {{~/if~}}
-            </li>
-            <li class="first-in-topic"><a href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
-            <li class="next next-in-topic">
-                {{~#if postInfo.nextInTopic~}}
-                    <a href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
-                {{~else~}}
-                    <span>next in topic</span>
-                {{~/if~}}
-            </li>
-            <li class="next next-in-time">
-                {{~#if postInfo.nextInTime~}}
-                    <a href="{{groupRoot}}{{postInfo.nextInTimeYear}}/{{postInfo.nextInTimeMonth}}/{{postInfo.nextInTime}}.html">next</a>
-                {{~else~}}
-                    <span>next</span>
-                {{~/if~}}
-            </li>
-        </ul>
-    </nav>
-</div>
+</main>
 </body>
 </html>

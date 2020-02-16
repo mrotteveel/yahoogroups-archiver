@@ -1,34 +1,27 @@
-nav > ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-nav > ul > li {
-    display: inline;
-    margin: 0 10px;
+nav > ul > li.previous {
+    text-align: left;
 }
 nav > ul > li.previous > :only-child::before {
     content: "< "
 }
+nav > ul > li.first-in-topic {
+    text-align: center;
+}
+nav > ul > li.next {
+    text-align: right;
+}
 nav > ul > li.next > :only-child::after {
     content: " >"
+}
+nav.msg-nav li {
+    width: 20%;
 }
 div.msg {
     max-width: 80em;
     margin: 0 auto;
 }
-div.msg div.msg-header {
-    margin: 10px 0;
-}
-div.msg div.msg-header th.msg-header-name {
-    text-align: left;
-    padding-right: 5px;
-}
 div.msg-body blockquote {
     color: darkblue;
-}
-div.msg div.msg-body {
-    margin: 10px 0;
 }
 ul.msg-list span.subject {
     font-weight: bold;
@@ -36,16 +29,6 @@ ul.msg-list span.subject {
 ul.msg-list span.author {
     font-style: italic;
 }
-table.year-month-index col {
-    width: 50%
-}
-table.year-month-index th, table.year-month-index td {
-    padding-left: 8px;
-    padding-right: 8px;
-}
-table.year-month-index td.post-count {
-    text-align: right;
-}
-body.year-index div.months {
-    margin: 16px 0;
+td a:only-child {
+    display: block;
 }

@@ -9,25 +9,42 @@
         {{~#assign "groupRoot"}}./{{/assign~}}
     {{~/eq}}
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
     <title>{{groupName}}</title>
 </head>
-<body class="group-index">
-<div class="archive-nav">
-    <nav class="site-menu">
-        <ul>
-            <li class="site-root"><a href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
-            <li class="parent-site"><a href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
+<body id="group-index" class="d-flex flex-column h-100">
+<header class="archive-nav">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark site-menu">
+        <ul class="navbar-nav">
+            <li class="nav-item site-root"><a class="nav-link" href="{{siteRoot}}"><span class="site-name">{{site.name}}</span> - Home</a></li>
+            <li class="nav-item parent-site"><a class="nav-link" href="{{site.parentSiteUrl}}"><span class="site-name">{{site.parentSiteName}}</span></a></li>
         </ul>
     </nav>
-</div>
-<div class="main-content">
-    <h1><span class="group-name">{{groupName}}</span></h1>
-    <ul class="year-list">
-        {{~#each years}}
-        <li class="group-year"><a href="{{groupRoot}}{{this}}/"><span class="year">{{this}}</span></a></li>
-        {{~/each}}
-    </ul>
-</div>
+</header>
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        <h1><span class="group-name">{{groupName}}</span></h1>
+        <div class="years">
+            <table class="table table-striped year-index">
+                <colgroup>
+                    <col class="year">
+                    <col class="post-count">
+                </colgroup>
+                <tr>
+                    <th class="year">Year</th>
+                    <th class="post-count">Posts</th>
+                </tr>
+                {{~#each postsPerYear}}
+                <tr>
+                    <td class="year"><a href="{{groupRoot}}{{year}}/">{{year}}</a></td>
+                    <td class="post-count"><a href="{{groupRoot}}{{year}}/">{{postCount}}</a></td>
+                </tr>
+                {{~/each}}
+            </table>
+        </div>
+    </div>
+</main>
 </body>
 </html>

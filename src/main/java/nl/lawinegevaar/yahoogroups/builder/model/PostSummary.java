@@ -1,4 +1,4 @@
-package nl.lawinegevaar.yahoogroups.builder.beans;
+package nl.lawinegevaar.yahoogroups.builder.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import nl.lawinegevaar.yahoogroups.builder.json.YgData;
 
 @Getter
 @AllArgsConstructor
-public class PostSummary {
+public final class PostSummary {
 
     private final int messageId;
     private final String subject;

@@ -1,9 +1,9 @@
-package nl.lawinegevaar.yahoogroups.builder.beans;
+package nl.lawinegevaar.yahoogroups.builder.model;
 
 import lombok.Getter;
 
 @Getter
-public class YearNavigation {
+public final class YearNavigation {
 
     private final Integer previous;
     private final Integer next;
