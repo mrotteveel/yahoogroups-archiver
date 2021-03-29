@@ -20,18 +20,21 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.ForkJoinPool;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingInt;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 class GroupBuilder {
 
     private static final Duration ALLOWED_POST_DATE_DIFFERENCE = Duration.ofHours(6);
     private final boolean rebuildLinkInfo;
+    private final PathWriterFunction pathWriterFunction;
     private final Properties siteProperties;
     private final DatabaseAccess db;
     private final ObjectMapper objectMapper;
@@ -44,10 +47,12 @@ class GroupBuilder {
     private final Template monthIndex;
     private final Template yearIndex;
     private final Template groupIndex;
+    private final Function<String, String> htmlFragmentProcessor;
 
-    GroupBuilder(Path outputPath, boolean rebuildLinkInfo, Properties siteProperties, Handlebars handlebars,
-                 YgroupRecord group, DatabaseAccess db) {
+    GroupBuilder(Path outputPath, boolean rebuildLinkInfo, PathWriterFunction pathWriterFunction,
+                 Properties siteProperties, Handlebars handlebars, YgroupRecord group, DatabaseAccess db) {
         this.rebuildLinkInfo = rebuildLinkInfo;
+        this.pathWriterFunction = pathWriterFunction;
         this.siteProperties = siteProperties;
         this.db = db;
         groupName = group.getGroupname();
@@ -66,6 +71,11 @@ class GroupBuilder {
             throw new ArchiveBuildingException("Could not compile handlebars template", e);
         }
         groupSummary = new GroupSummary(groupName);
+        List<String> whitelistedUrlPrefixes = Arrays
+                .stream(siteProperties.getProperty("whitelistedUrlPrefixes", "").split(","))
+                .filter(urlPrefix -> !urlPrefix.isBlank())
+                .collect(toList());
+        htmlFragmentProcessor = HtmlFragmentProcessor.htmlFragmentProcessor(whitelistedUrlPrefixes);
     }
 
     void build() {
@@ -94,7 +104,7 @@ class GroupBuilder {
         log.info("Building group index for {}", groupName);
         ForkJoinPool.commonPool().execute(() -> {
             List<PostsPerYear> postsPerYear = groupSummary.getPostsPerYear();
-            try (var writer = Files.newBufferedWriter(groupPath.resolve("index.html"))) {
+            try (var writer = pathWriterFunction.getWriter(groupPath.resolve("index.html"))) {
                 Map<String, Object> variables = Map.of(
                         "postsPerYear", postsPerYear,
                         "groupName", groupName,
@@ -119,7 +129,7 @@ class GroupBuilder {
             Path yearPath = groupPath.resolve(String.valueOf(year));
             try {
                 Files.createDirectories(yearPath);
-                try (var writer = Files.newBufferedWriter(yearPath.resolve("index.html"))) {
+                try (var writer = pathWriterFunction.getWriter(yearPath.resolve("index.html"))) {
                     Map<String, Object> variables = Map.of(
                             "year", year,
                             "postsPerMonth", postsPerMonthList,
@@ -149,7 +159,7 @@ class GroupBuilder {
             postSummaries.sort(comparing(PostSummary::getMessageId));
             try {
                 Path yearMonthPath = createPath(yearMonth);
-                try (var writer = Files.newBufferedWriter(yearMonthPath.resolve("index.html"))) {
+                try (var writer = pathWriterFunction.getWriter(yearMonthPath.resolve("index.html"))) {
                     Map<String, Object> variables = Map.of(
                             "yearMonth", yearMonth,
                             "posts", postSummaries,
@@ -188,8 +198,10 @@ class GroupBuilder {
             Path yearMonthPath = createPath(yearMonth);
 
             ForkJoinPool.commonPool().execute(() -> {
+                YgData ygData = ygMessage.getYgData();
+                ygData.setMessageBody(htmlFragmentProcessor.apply(ygData.getMessageBody()));
                 OffsetDateTime offsetPostDate = postInformationRecord.getPostDate().atOffset(ZoneOffset.UTC);
-                try (var writer = Files.newBufferedWriter(yearMonthPath.resolve(messageId + ".html"))) {
+                try (var writer = pathWriterFunction.getWriter(yearMonthPath.resolve(messageId + ".html"))) {
                     Map<String, Object> variables = Map.of(
                             "ygMessage", ygMessage,
                             "postInfo", postInformationRecord,

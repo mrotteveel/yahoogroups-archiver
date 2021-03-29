@@ -9,8 +9,7 @@ import nl.lawinegevaar.yahoogroups.builder.handlebars.ArchiveHelpers;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
@@ -31,8 +30,10 @@ class ArchiveBuilder {
     private final boolean rebuildLinkInfo;
     private final Properties siteProperties;
     private final Handlebars handlebars;
+    private final PathWriterFunction pathWriterFunction;
 
-    ArchiveBuilder(String outputDirectory, boolean rebuildLinkInfo, DatabaseInfo databaseInfo) {
+    ArchiveBuilder(String outputDirectory, boolean rebuildLinkInfo, PathWriterFunction pathWriterFunction,
+                   DatabaseInfo databaseInfo) {
         outputPath = createOutputDirectory(outputDirectory);
         this.rebuildLinkInfo = rebuildLinkInfo;
         if (isNotEmpty(outputPath)) {
@@ -44,6 +45,7 @@ class ArchiveBuilder {
                 .registerHelpers(ConditionalHelpers.class)
                 .registerHelper(AssignHelper.NAME, AssignHelper.INSTANCE)
                 .registerHelpers(ArchiveHelpers.class);
+        this.pathWriterFunction = pathWriterFunction;
     }
 
     void build() {
@@ -53,7 +55,7 @@ class ArchiveBuilder {
             List<YgroupRecord> yahooGroupsInformation = db.getYahooGroupsInformation();
             log.info("Starting build for {} groups", yahooGroupsInformation.size());
             for (YgroupRecord group : yahooGroupsInformation) {
-                new GroupBuilder(outputPath, rebuildLinkInfo, siteProperties, handlebars, group, db)
+                new GroupBuilder(outputPath, rebuildLinkInfo, pathWriterFunction, siteProperties, handlebars, group, db)
                         .build();
             }
 
@@ -72,7 +74,7 @@ class ArchiveBuilder {
                 .map(YgroupRecord::getGroupname)
                 .sorted()
                 .collect(Collectors.toList());
-        try (var writer = Files.newBufferedWriter(outputPath.resolve("index.html"))) {
+        try (var writer = pathWriterFunction.getWriter(outputPath.resolve("index.html"))) {
             Template rootIndex = handlebars.compile("root-index");
             Map<String, Object> variables = Map.of(
                     "groups", groupNames,
@@ -86,8 +88,9 @@ class ArchiveBuilder {
     private void copyStyle(Path outputPath) {
         Path styleFile = outputPath.resolve("archive-style.css");
         log.info("Copying archive-style.css to {}", styleFile);
-        try (InputStream is = getClass().getResourceAsStream("/archive-style.css")) {
-            Files.copy(is, styleFile);
+        try (var reader = new InputStreamReader(getClass().getResourceAsStream("/archive-style.css"));
+             var writer = pathWriterFunction.getWriter(styleFile)) {
+            reader.transferTo(writer);
         } catch (IOException e) {
             throw new ArchiveBuildingException(format("Could not copy archive-style.css to %s", outputPath), e);
         }
