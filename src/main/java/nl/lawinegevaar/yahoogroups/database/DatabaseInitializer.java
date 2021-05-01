@@ -135,8 +135,30 @@ public class DatabaseInitializer {
                     ).migrate();
                     break;
                 case 4:
-                    // current, nothing to do
+                    new MigrationStep(5, connection,
+//@formatter:off
+                            "create view sitemap_links as\n" +
+                            "select \n" +
+                            "  cast('/' || y.GROUPNAME || '/index.html' as varchar(50)) as path,\n" +
+                            "  LOCALTIMESTAMP as last_change \n" +
+                            "from YGROUP y \n" +
+                            "union all\n" +
+                            "select \n" +
+                            "  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/index.html' as varchar(50)) as path,\n" +
+                            "  (select max(POST_DATE) from LINK_INFO li where li.GROUP_ID = l.GROUP_ID AND li.POST_YEAR = l.POST_YEAR AND li.POST_MONTH = l.POST_MONTH) as last_change\n" +
+                            "from (select distinct GROUP_ID, POST_YEAR, POST_MONTH from LINK_INFO) l\n" +
+                            "inner join YGROUP y on y.ID = l.GROUP_ID \n" +
+                            "union all\n" +
+                            "select \n" +
+                            "  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/' || l.MESSAGE_ID || '.html' as varchar(50)) as path,\n" +
+                            "  l.POST_DATE as last_change\n" +
+                            "from LINK_INFO l\n" +
+                            "inner join YGROUP y on y.ID = l.GROUP_ID "
+//@formatter:on
+                    ).migrate();
                     break;
+                case 5:
+                    // current, nothing to do
                 default:
                     log.warn("Unknown or unexpected database version: {}", dbVersion);
             }

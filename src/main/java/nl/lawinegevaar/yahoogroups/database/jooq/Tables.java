@@ -10,6 +10,7 @@ import nl.lawinegevaar.yahoogroups.database.jooq.tables.Dbversion;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.PostInformation;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Rawdata;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.SitemapLinks;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Ygroup;
 
 
@@ -45,6 +46,11 @@ public class Tables {
      * The table <code>RAWDATA</code>.
      */
     public static final Rawdata RAWDATA = Rawdata.RAWDATA;
+
+    /**
+     * The table <code>SITEMAP_LINKS</code>.
+     */
+    public static final SitemapLinks SITEMAP_LINKS = SitemapLinks.SITEMAP_LINKS;
 
     /**
      * The table <code>YGROUP</code>.

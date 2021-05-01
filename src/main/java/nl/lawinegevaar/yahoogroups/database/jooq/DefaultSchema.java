@@ -14,6 +14,7 @@ import nl.lawinegevaar.yahoogroups.database.jooq.tables.Dbversion;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.PostInformation;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Rawdata;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.SitemapLinks;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Ygroup;
 
 import org.jooq.Catalog;
@@ -35,7 +36,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = 1798791096;
+    private static final long serialVersionUID = 443948731;
 
     /**
      * The reference instance of <code></code>
@@ -61,6 +62,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>RAWDATA</code>.
      */
     public final Rawdata RAWDATA = nl.lawinegevaar.yahoogroups.database.jooq.tables.Rawdata.RAWDATA;
+
+    /**
+     * The table <code>SITEMAP_LINKS</code>.
+     */
+    public final SitemapLinks SITEMAP_LINKS = nl.lawinegevaar.yahoogroups.database.jooq.tables.SitemapLinks.SITEMAP_LINKS;
 
     /**
      * The table <code>YGROUP</code>.
@@ -105,6 +111,7 @@ public class DefaultSchema extends SchemaImpl {
             LinkInfo.LINK_INFO,
             PostInformation.POST_INFORMATION,
             Rawdata.RAWDATA,
+            SitemapLinks.SITEMAP_LINKS,
             Ygroup.YGROUP);
     }
 }

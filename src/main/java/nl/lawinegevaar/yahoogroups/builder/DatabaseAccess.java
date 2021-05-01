@@ -6,6 +6,7 @@ import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.PostInformationRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.RawdataRecord;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.SitemapLinksRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -101,6 +102,12 @@ class DatabaseAccess implements AutoCloseable {
                 .where(YGROUP.GROUPNAME.eq(groupName))
                 .and(LINK_INFO.MESSAGE_ID.isNull())
                 .fetchStreamInto(RAWDATA);
+    }
+
+    Stream<SitemapLinksRecord> getSitemapLinks() {
+        return ctx
+                .selectFrom(SITEMAP_LINKS)
+                .stream();
     }
 
     void insertLinkInfo(int groupId, int messageId, Integer yTopicId, Integer yPrevInTopic, Integer yPrevInTime,
