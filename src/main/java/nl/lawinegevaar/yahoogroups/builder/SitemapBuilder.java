@@ -28,7 +28,7 @@ public class SitemapBuilder {
         log.info("Starting building of sitemap at {}", OffsetDateTime.now());
         SitemapGenerator sitemapGenerator = new SitemapGenerator(outputPath, sitePrefix, pathWriterFunction);
 
-        sitemapGenerator.addSitemapEntry("/index.html", LocalDateTime.now());
+        sitemapGenerator.addSitemapEntry("/", LocalDateTime.now());
         
         try (var db = new DatabaseAccess(databaseInfo);
              var sitemapLinksStream = db.getSitemapLinks()) {
