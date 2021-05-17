@@ -58,6 +58,7 @@ final class SitemapGenerator {
         siteMapWriter.writeCharacters("\n");
         siteMapWriter.writeStartElement("urlset");
         siteMapWriter.writeDefaultNamespace(SITEMAP_NAMESPACE);
+        siteMapWriter.writeCharacters("\n");
         currentSiteMapWriter = siteMapWriter;
     }
 
@@ -76,6 +77,7 @@ final class SitemapGenerator {
             siteMapWriter.writeCharacters("never");
             siteMapWriter.writeEndElement();
             siteMapWriter.writeEndElement();
+            siteMapWriter.writeCharacters("\n");
             currentLinkCount++;
             if (currentLinkCount >= MAX_ELEMENTS) {
                 finishCurrentSiteMap();
@@ -102,6 +104,7 @@ final class SitemapGenerator {
                     siteMapWriter.writeCharacters("\n");
                     siteMapWriter.writeStartElement("sitemapindex");
                     siteMapWriter.writeDefaultNamespace(SITEMAP_NAMESPACE);
+                    siteMapWriter.writeCharacters("\n");
                     for (String sitemapFile : sitemapFiles) {
                         siteMapWriter.writeStartElement("sitemap");
                         siteMapWriter.writeStartElement("loc");
@@ -112,6 +115,7 @@ final class SitemapGenerator {
                                 .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
                         siteMapWriter.writeEndElement();
                         siteMapWriter.writeEndElement();
+                        siteMapWriter.writeCharacters("\n");
                     }
                     siteMapWriter.writeEndDocument();
                 } finally {
