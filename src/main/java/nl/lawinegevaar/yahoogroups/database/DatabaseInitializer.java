@@ -159,6 +159,7 @@ public class DatabaseInitializer {
                     break;
                 case 5:
                     // current, nothing to do
+                    break;
                 default:
                     log.warn("Unknown or unexpected database version: {}", dbVersion);
             }
