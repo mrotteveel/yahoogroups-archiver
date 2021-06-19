@@ -70,7 +70,7 @@ final class SitemapGenerator {
             siteMapWriter.writeStartElement("loc");
             siteMapWriter.writeCharacters(sitePrefix + page);
             siteMapWriter.writeEndElement();
-            siteMapWriter.writeStartElement("lastMod");
+            siteMapWriter.writeStartElement("lastmod");
             siteMapWriter.writeCharacters(lastChange.format(DateTimeFormatter.ISO_DATE));
             siteMapWriter.writeEndElement();
             siteMapWriter.writeStartElement("changefreq");
