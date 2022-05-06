@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'nu.studer.jooq' version '3.0.3'
+    id 'nu.studer.jooq' version '4.2'
 }
 
 group 'nl.lawinegevaar'
@@ -13,30 +13,30 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.8'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'org.slf4j:slf4j-simple:1.7.30'
-    implementation 'commons-cli:commons-cli:1.4'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'org.firebirdsql.jdbc:jaybird:4.0.6.java11'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
+    implementation 'commons-cli:commons-cli:1.5.0'
     implementation 'org.jooq:jooq'
-    implementation 'com.github.jknack:handlebars:4.1.2'
-    implementation 'com.github.jknack:handlebars-helpers:4.1.2'
-    implementation 'org.jsoup:jsoup:1.12.1'
-    implementation 'com.fasterxml.woodstox:woodstox-core:6.2.6'
+    implementation 'com.github.jknack:handlebars:4.3.0'
+    implementation 'com.github.jknack:handlebars-helpers:4.3.0'
+    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'com.fasterxml.woodstox:woodstox-core:6.2.8'
 
-    implementation 'com.fasterxml.jackson:jackson-bom:2.10.2.20200130'
+    implementation platform('com.fasterxml.jackson:jackson-bom:2.13.2.20220328')
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-    compileOnly 'org.projectlombok:lombok:1.18.10'
-    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    jooqRuntime 'org.firebirdsql.jdbc:jaybird-jdk18:3.0.8'
+    jooqRuntime 'org.firebirdsql.jdbc:jaybird:4.0.6.java11'
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
 
 jooq {
-    version = '3.12.1'
+    version = '3.13.6'
 
     archivedb(sourceSets.main) {
         jdbc {
