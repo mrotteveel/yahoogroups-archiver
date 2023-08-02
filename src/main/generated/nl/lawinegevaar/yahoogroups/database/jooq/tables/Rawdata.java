@@ -123,6 +123,9 @@ public class Rawdata extends TableImpl<RawdataRecord> {
 
     private transient Ygroup _ygroup;
 
+    /**
+     * Get the implicit join path to the <code>YGROUP</code> table.
+     */
     public Ygroup ygroup() {
         if (_ygroup == null)
             _ygroup = new Ygroup(this, Keys.FK_RAWDATA_YGROUP);

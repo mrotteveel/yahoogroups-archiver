@@ -138,6 +138,9 @@ public class LinkInfo extends TableImpl<LinkInfoRecord> {
 
     private transient Rawdata _rawdata;
 
+    /**
+     * Get the implicit join path to the <code>RAWDATA</code> table.
+     */
     public Rawdata rawdata() {
         if (_rawdata == null)
             _rawdata = new Rawdata(this, Keys.FK_LINK_INFO_RAWDATA);

@@ -69,10 +69,12 @@ public class DefaultSchema extends SchemaImpl {
     public final Transitions TRANSITIONS = Transitions.TRANSITIONS;
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Parameter type or return type is unknown.
+     * If this is a qualified, user-defined type, it may have been excluded from
+     * code generation. If this is a built-in type, you can define an explicit
+     * {@link org.jooq.Binding} to specify how this type should be handled.
+     * Deprecation can be turned off using {@literal
+     * <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Result<TransitionsRecord> TRANSITIONS(
@@ -89,10 +91,12 @@ public class DefaultSchema extends SchemaImpl {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Parameter type or return type is unknown.
+     * If this is a qualified, user-defined type, it may have been excluded from
+     * code generation. If this is a built-in type, you can define an explicit
+     * {@link org.jooq.Binding} to specify how this type should be handled.
+     * Deprecation can be turned off using {@literal
+     * <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Transitions TRANSITIONS(
@@ -108,10 +112,12 @@ public class DefaultSchema extends SchemaImpl {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. Parameter type or return type is unknown.
+     * If this is a qualified, user-defined type, it may have been excluded from
+     * code generation. If this is a built-in type, you can define an explicit
+     * {@link org.jooq.Binding} to specify how this type should be handled.
+     * Deprecation can be turned off using {@literal
+     * <deprecationOnUnknownTypes/>} in your code generator configuration.
      */
     @Deprecated
     public static Transitions TRANSITIONS(

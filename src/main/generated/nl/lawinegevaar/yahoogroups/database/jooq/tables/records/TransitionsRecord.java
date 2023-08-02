@@ -21,10 +21,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     private static final long serialVersionUID = 1L;
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     public void setRdb$startTimestamp(Object value) {
@@ -32,10 +34,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     public Object getRdb$startTimestamp() {
@@ -43,10 +47,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     public void setRdb$endTimestamp(Object value) {
@@ -54,10 +60,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     public Object getRdb$endTimestamp() {
@@ -121,10 +129,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
@@ -133,10 +143,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
@@ -160,10 +172,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
@@ -172,10 +186,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
@@ -199,10 +215,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
@@ -211,10 +229,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
@@ -238,10 +258,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
@@ -251,10 +273,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link
-     * org.jooq.Binding} to specify how this type should be handled. Deprecation
-     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
-     * code generator configuration.
+     * @deprecated Unknown data type. If this is a qualified, user-defined type,
+     * it may have been excluded from code generation. If this is a built-in
+     * type, you can define an explicit {@link org.jooq.Binding} to specify how
+     * this type should be handled. Deprecation can be turned off using
+     * {@literal <deprecationOnUnknownTypes/>} in your code generator
+     * configuration.
      */
     @Deprecated
     @Override
