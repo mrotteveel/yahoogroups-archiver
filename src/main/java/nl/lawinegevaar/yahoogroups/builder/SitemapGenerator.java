@@ -16,7 +16,7 @@ import java.util.List;
 
 final class SitemapGenerator {
 
-    private static final int MAX_ELEMENTS = 50_000;
+    private static final int MAX_ELEMENTS = 20_000;
 
     private static final XMLOutputFactory xof = XMLOutputFactory.newInstance();
     public static final String SITEMAP_NAMESPACE = "http://www.sitemaps.org/schemas/sitemap/0.9";
