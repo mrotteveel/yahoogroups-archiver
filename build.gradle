@@ -32,8 +32,6 @@ dependencies {
 
     jooqGenerator 'org.firebirdsql.jdbc:jaybird:5.0.2.java11'
     compileOnly 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-
-    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
 
 jooq {
