@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'nu.studer.jooq' version '4.2'
+    id 'nu.studer.jooq' version '5.2'
 }
 
 group 'nl.lawinegevaar'
@@ -30,7 +30,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
-    jooqRuntime 'org.firebirdsql.jdbc:jaybird:5.0.2.java11'
+    jooqGenerator 'org.firebirdsql.jdbc:jaybird:5.0.2.java11'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
@@ -38,36 +38,39 @@ dependencies {
 jooq {
     version = '3.13.6'
 
-    archivedb(sourceSets.main) {
-        jdbc {
-            driver = 'org.firebirdsql.jdbc.FBDriver'
-            url = 'jdbc:firebirdsql://localhost/E:/db/yahooarchive.fdb'
-            user = 'sysdba'
-            password = 'masterkey'
-            properties {
-                property {
-                    key = 'charSet'
-                    value = 'utf-8'
+    configurations {
+        main {
+            generationTool {
+                jdbc {
+                    driver = 'org.firebirdsql.jdbc.FBDriver'
+                    url = 'jdbc:firebirdsql://localhost/E:/db/yahooarchive.fdb'
+                    user = 'sysdba'
+                    password = 'masterkey'
+                    properties {
+                        property {
+                            key = 'charSet'
+                            value = 'utf-8'
+                        }
+                    }
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    generate {
+                        javaTimeTypes = true
+                    }
+                    strategy {
+                        name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                    }
+                    database {
+                        name = 'org.jooq.meta.firebird.FirebirdDatabase'
+                        excludes = 'RDB\\$.*|MON\\$.*|SEC\\$.*'
+                    }
+                    target {
+                        packageName = 'nl.lawinegevaar.yahoogroups.database.jooq'
+                        directory = 'src/main/generated'
+                    }
                 }
             }
         }
-        generator {
-            name = 'org.jooq.codegen.DefaultGenerator'
-            generate {
-                javaTimeTypes = 'true'
-            }
-            strategy {
-                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-            }
-            database {
-                name = 'org.jooq.meta.firebird.FirebirdDatabase'
-                excludes = 'RDB\\$.*|MON\\$.*|SEC\\$.*'
-            }
-            target {
-                packageName = 'nl.lawinegevaar.yahoogroups.database.jooq'
-                directory = 'src/main/java'
-            }
-        }
     }
-
 }

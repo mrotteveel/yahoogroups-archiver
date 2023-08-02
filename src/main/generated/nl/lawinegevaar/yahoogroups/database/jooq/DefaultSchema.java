@@ -12,9 +12,14 @@ import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.PostInformation;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Rawdata;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.SitemapLinks;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.Ygroup;
+import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.TransitionsRecord;
 
 import org.jooq.Catalog;
+import org.jooq.Configuration;
+import org.jooq.Field;
+import org.jooq.Result;
 import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
@@ -26,7 +31,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -986501657;
+    private static final long serialVersionUID = 1004153795;
 
     /**
      * The reference instance of <code>DEFAULT_SCHEMA</code>
@@ -57,6 +62,35 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>SITEMAP_LINKS</code>.
      */
     public final SitemapLinks SITEMAP_LINKS = SitemapLinks.SITEMAP_LINKS;
+
+    /**
+     * The table <code>TRANSITIONS</code>.
+     */
+    public final Transitions TRANSITIONS = Transitions.TRANSITIONS;
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     */
+    @java.lang.Deprecated
+    public static Result<TransitionsRecord> TRANSITIONS(Configuration configuration, String rdb$timeZoneName, Object rdb$fromTimestamp, Object rdb$toTimestamp) {
+        return configuration.dsl().selectFrom(nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(rdb$timeZoneName, rdb$fromTimestamp, rdb$toTimestamp)).fetch();
+    }
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     */
+    @java.lang.Deprecated
+    public static Transitions TRANSITIONS(String rdb$timeZoneName, Object rdb$fromTimestamp, Object rdb$toTimestamp) {
+        return nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(rdb$timeZoneName, rdb$fromTimestamp, rdb$toTimestamp);
+    }
+
+    /**
+     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     */
+    @java.lang.Deprecated
+    public static Transitions TRANSITIONS(Field<String> rdb$timeZoneName, Field<Object> rdb$fromTimestamp, Field<Object> rdb$toTimestamp) {
+        return nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(rdb$timeZoneName, rdb$fromTimestamp, rdb$toTimestamp);
+    }
 
     /**
      * The table <code>YGROUP</code>.
@@ -90,6 +124,7 @@ public class DefaultSchema extends SchemaImpl {
             PostInformation.POST_INFORMATION,
             Rawdata.RAWDATA,
             SitemapLinks.SITEMAP_LINKS,
+            Transitions.TRANSITIONS,
             Ygroup.YGROUP);
     }
 }
