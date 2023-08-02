@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingInt;
 
 /**
  * Provides various summaries on a group.
@@ -43,10 +44,10 @@ public final class GroupSummary {
                 .distinct()
                 .sorted()
                 .boxed()
-                .collect(toList());
+                .toList();
         yearMonths = postSummariesPerMonth.keySet().stream()
                 .sorted(comparingInt(YearMonth::getYear).thenComparingInt(YearMonth::getMonth))
-                .collect(toList());
+                .toList();
         doneAddingMessages = true;
     }
 
@@ -125,7 +126,7 @@ public final class GroupSummary {
                 .entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(entry -> new PostsPerYear(entry.getKey(), entry.getValue()))
-                .collect(toList());
+                .toList();
     }
 
     public Map<Integer, List<PostsPerMonth>> getPostsPerMonthPerYear() {

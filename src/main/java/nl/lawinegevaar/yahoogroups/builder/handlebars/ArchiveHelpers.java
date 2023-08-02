@@ -13,7 +13,7 @@ import static com.github.jknack.handlebars.internal.lang3.Validate.notNull;
 public enum ArchiveHelpers implements Helper<Object> {
     monthName {
 
-        String[] monthNames;
+        final String[] monthNames;
         {
             var dfSymbols = new DateFormatSymbols(Locale.ENGLISH);
             monthNames = dfSymbols.getMonths();
