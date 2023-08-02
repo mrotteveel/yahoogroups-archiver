@@ -21,7 +21,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DbversionRecord extends UpdatableRecordImpl<DbversionRecord> implements Record2<Integer, LocalDateTime> {
 
-    private static final long serialVersionUID = -51713660;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>DBVERSION.VERSION</code>.
@@ -140,7 +140,7 @@ public class DbversionRecord extends UpdatableRecordImpl<DbversionRecord> implem
     public DbversionRecord(Integer version, LocalDateTime migrationDate) {
         super(Dbversion.DBVERSION);
 
-        set(0, version);
-        set(1, migrationDate);
+        setVersion(version);
+        setMigrationDate(migrationDate);
     }
 }

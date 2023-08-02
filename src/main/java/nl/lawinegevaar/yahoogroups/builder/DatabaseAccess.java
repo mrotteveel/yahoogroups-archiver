@@ -30,6 +30,7 @@ import static org.jooq.impl.DSL.param;
 @Slf4j
 class DatabaseAccess implements AutoCloseable {
 
+    private final Connection connection;
     private final DSLContext ctx;
     private final DatabaseInfo databaseInfo;
     private final Query linkInfoInsert;
@@ -38,13 +39,14 @@ class DatabaseAccess implements AutoCloseable {
     DatabaseAccess(DatabaseInfo databaseInfo) {
         this.databaseInfo = databaseInfo;
         try {
-            Connection connection = databaseInfo.getConnection();
+            connection = databaseInfo.getConnection();
             Settings settings = new Settings();
             settings.setParamCastMode(ParamCastMode.NEVER);
             ctx = DSL.using(connection, SQLDialect.FIREBIRD, settings);
         } catch (SQLException e) {
             throw new ScrapingFailureException("Could not create connection to database", e);
         }
+        //noinspection resource
         linkInfoInsert = ctx.insertInto(LINK_INFO, LINK_INFO.GROUP_ID, LINK_INFO.MESSAGE_ID, LINK_INFO.Y_TOPIC_ID,
                 LINK_INFO.Y_PREV_IN_TOPIC, LINK_INFO.Y_PREV_IN_TIME, LINK_INFO.POST_DATE)
                 .values(
@@ -55,6 +57,7 @@ class DatabaseAccess implements AutoCloseable {
                         param("yPrevInTime", SQLDataType.INTEGER),
                         param("postDate", SQLDataType.LOCALDATETIME))
                 .keepStatement(true);
+        //noinspection resource
         updateLinkInfoPostDate = ctx.update(LINK_INFO)
                 .set(LINK_INFO.POST_DATE,
                         param("postDate", SQLDataType.LOCALDATETIME))
@@ -75,7 +78,11 @@ class DatabaseAccess implements AutoCloseable {
             linkInfoInsert.close();
             updateLinkInfoPostDate.close();
         } finally {
-            ctx.close();
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                log.error("Exception closing connection of DatabaseAccess", e);
+            }
         }
     }
 

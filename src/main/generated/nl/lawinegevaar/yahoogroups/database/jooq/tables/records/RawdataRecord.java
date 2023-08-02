@@ -21,7 +21,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RawdataRecord extends UpdatableRecordImpl<RawdataRecord> implements Record5<Integer, Integer, String, String, LocalDateTime> {
 
-    private static final long serialVersionUID = -397526499;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>RAWDATA.GROUP_ID</code>.
@@ -248,10 +248,10 @@ public class RawdataRecord extends UpdatableRecordImpl<RawdataRecord> implements
     public RawdataRecord(Integer groupId, Integer messageId, String messageJson, String rawMessageJson, LocalDateTime lastUpdate) {
         super(Rawdata.RAWDATA);
 
-        set(0, groupId);
-        set(1, messageId);
-        set(2, messageJson);
-        set(3, rawMessageJson);
-        set(4, lastUpdate);
+        setGroupId(groupId);
+        setMessageId(messageId);
+        setMessageJson(messageJson);
+        setRawMessageJson(rawMessageJson);
+        setLastUpdate(lastUpdate);
     }
 }

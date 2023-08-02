@@ -20,7 +20,7 @@ import org.jooq.impl.TableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PostInformationRecord extends TableRecordImpl<PostInformationRecord> implements Record22<Integer, Integer, String, LocalDateTime, Short, Short, Integer, Short, Short, Integer, Short, Short, Integer, Short, Short, Integer, Short, Short, Integer, Short, Short, String> {
 
-    private static final long serialVersionUID = 1076748686;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>POST_INFORMATION.GROUP_ID</code>.
@@ -850,27 +850,27 @@ public class PostInformationRecord extends TableRecordImpl<PostInformationRecord
     public PostInformationRecord(Integer groupId, Integer messageId, String groupname, LocalDateTime postDate, Short postYear, Short postMonth, Integer topicId, Short topicYear, Short topicMonth, Integer prevInTopic, Short prevInTopicYear, Short prevInTopicMonth, Integer nextInTopic, Short nextInTopicYear, Short nextInTopicMonth, Integer prevInTime, Short prevInTimeYear, Short prevInTimeMonth, Integer nextInTime, Short nextInTimeYear, Short nextInTimeMonth, String messageJson) {
         super(PostInformation.POST_INFORMATION);
 
-        set(0, groupId);
-        set(1, messageId);
-        set(2, groupname);
-        set(3, postDate);
-        set(4, postYear);
-        set(5, postMonth);
-        set(6, topicId);
-        set(7, topicYear);
-        set(8, topicMonth);
-        set(9, prevInTopic);
-        set(10, prevInTopicYear);
-        set(11, prevInTopicMonth);
-        set(12, nextInTopic);
-        set(13, nextInTopicYear);
-        set(14, nextInTopicMonth);
-        set(15, prevInTime);
-        set(16, prevInTimeYear);
-        set(17, prevInTimeMonth);
-        set(18, nextInTime);
-        set(19, nextInTimeYear);
-        set(20, nextInTimeMonth);
-        set(21, messageJson);
+        setGroupId(groupId);
+        setMessageId(messageId);
+        setGroupname(groupname);
+        setPostDate(postDate);
+        setPostYear(postYear);
+        setPostMonth(postMonth);
+        setTopicId(topicId);
+        setTopicYear(topicYear);
+        setTopicMonth(topicMonth);
+        setPrevInTopic(prevInTopic);
+        setPrevInTopicYear(prevInTopicYear);
+        setPrevInTopicMonth(prevInTopicMonth);
+        setNextInTopic(nextInTopic);
+        setNextInTopicYear(nextInTopicYear);
+        setNextInTopicMonth(nextInTopicMonth);
+        setPrevInTime(prevInTime);
+        setPrevInTimeYear(prevInTimeYear);
+        setPrevInTimeMonth(prevInTimeMonth);
+        setNextInTime(nextInTime);
+        setNextInTimeYear(nextInTimeYear);
+        setNextInTimeMonth(nextInTimeMonth);
+        setMessageJson(messageJson);
     }
 }

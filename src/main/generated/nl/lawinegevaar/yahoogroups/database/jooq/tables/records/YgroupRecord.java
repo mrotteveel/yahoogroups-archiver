@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class YgroupRecord extends UpdatableRecordImpl<YgroupRecord> implements Record2<Integer, String> {
 
-    private static final long serialVersionUID = -231140816;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>YGROUP.ID</code>.
@@ -138,7 +138,7 @@ public class YgroupRecord extends UpdatableRecordImpl<YgroupRecord> implements R
     public YgroupRecord(Integer id, String groupname) {
         super(Ygroup.YGROUP);
 
-        set(0, id);
-        set(1, groupname);
+        setId(id);
+        setGroupname(groupname);
     }
 }

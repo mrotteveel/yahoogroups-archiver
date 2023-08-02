@@ -23,6 +23,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LinkInfo extends TableImpl<LinkInfoRecord> {
 
-    private static final long serialVersionUID = -763604456;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>LINK_INFO</code>
@@ -50,48 +51,49 @@ public class LinkInfo extends TableImpl<LinkInfoRecord> {
     /**
      * The column <code>LINK_INFO.GROUP_ID</code>.
      */
-    public final TableField<LinkInfoRecord, Integer> GROUP_ID = createField(DSL.name("GROUP_ID"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<LinkInfoRecord, Integer> GROUP_ID = createField(DSL.name("GROUP_ID"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>LINK_INFO.MESSAGE_ID</code>.
      */
-    public final TableField<LinkInfoRecord, Integer> MESSAGE_ID = createField(DSL.name("MESSAGE_ID"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<LinkInfoRecord, Integer> MESSAGE_ID = createField(DSL.name("MESSAGE_ID"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>LINK_INFO.Y_TOPIC_ID</code>.
      */
-    public final TableField<LinkInfoRecord, Integer> Y_TOPIC_ID = createField(DSL.name("Y_TOPIC_ID"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<LinkInfoRecord, Integer> Y_TOPIC_ID = createField(DSL.name("Y_TOPIC_ID"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>LINK_INFO.Y_PREV_IN_TOPIC</code>.
      */
-    public final TableField<LinkInfoRecord, Integer> Y_PREV_IN_TOPIC = createField(DSL.name("Y_PREV_IN_TOPIC"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<LinkInfoRecord, Integer> Y_PREV_IN_TOPIC = createField(DSL.name("Y_PREV_IN_TOPIC"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>LINK_INFO.Y_PREV_IN_TIME</code>.
      */
-    public final TableField<LinkInfoRecord, Integer> Y_PREV_IN_TIME = createField(DSL.name("Y_PREV_IN_TIME"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<LinkInfoRecord, Integer> Y_PREV_IN_TIME = createField(DSL.name("Y_PREV_IN_TIME"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>LINK_INFO.POST_DATE</code>.
      */
-    public final TableField<LinkInfoRecord, LocalDateTime> POST_DATE = createField(DSL.name("POST_DATE"), org.jooq.impl.SQLDataType.LOCALDATETIME, this, "");
+    public final TableField<LinkInfoRecord, LocalDateTime> POST_DATE = createField(DSL.name("POST_DATE"), SQLDataType.LOCALDATETIME(0), this, "");
 
     /**
      * The column <code>LINK_INFO.POST_YEAR</code>.
      */
-    public final TableField<LinkInfoRecord, Short> POST_YEAR = createField(DSL.name("POST_YEAR"), org.jooq.impl.SQLDataType.SMALLINT, this, "");
+    public final TableField<LinkInfoRecord, Short> POST_YEAR = createField(DSL.name("POST_YEAR"), SQLDataType.SMALLINT, this, "");
 
     /**
      * The column <code>LINK_INFO.POST_MONTH</code>.
      */
-    public final TableField<LinkInfoRecord, Short> POST_MONTH = createField(DSL.name("POST_MONTH"), org.jooq.impl.SQLDataType.SMALLINT, this, "");
+    public final TableField<LinkInfoRecord, Short> POST_MONTH = createField(DSL.name("POST_MONTH"), SQLDataType.SMALLINT, this, "");
 
-    /**
-     * Create a <code>LINK_INFO</code> table reference
-     */
-    public LinkInfo() {
-        this(DSL.name("LINK_INFO"), null);
+    private LinkInfo(Name alias, Table<LinkInfoRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private LinkInfo(Name alias, Table<LinkInfoRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -108,12 +110,11 @@ public class LinkInfo extends TableImpl<LinkInfoRecord> {
         this(alias, LINK_INFO);
     }
 
-    private LinkInfo(Name alias, Table<LinkInfoRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private LinkInfo(Name alias, Table<LinkInfoRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>LINK_INFO</code> table reference
+     */
+    public LinkInfo() {
+        this(DSL.name("LINK_INFO"), null);
     }
 
     public <O extends Record> LinkInfo(Table<O> child, ForeignKey<O, LinkInfoRecord> key) {
@@ -122,7 +123,7 @@ public class LinkInfo extends TableImpl<LinkInfoRecord> {
 
     @Override
     public Schema getSchema() {
-        return DefaultSchema.DEFAULT_SCHEMA;
+        return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
     }
 
     @Override
@@ -131,17 +132,17 @@ public class LinkInfo extends TableImpl<LinkInfoRecord> {
     }
 
     @Override
-    public List<UniqueKey<LinkInfoRecord>> getKeys() {
-        return Arrays.<UniqueKey<LinkInfoRecord>>asList(Keys.PK_LINK_INFO);
+    public List<ForeignKey<LinkInfoRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.FK_LINK_INFO_RAWDATA);
     }
 
-    @Override
-    public List<ForeignKey<LinkInfoRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<LinkInfoRecord, ?>>asList(Keys.FK_LINK_INFO_RAWDATA);
-    }
+    private transient Rawdata _rawdata;
 
     public Rawdata rawdata() {
-        return new Rawdata(this, Keys.FK_LINK_INFO_RAWDATA);
+        if (_rawdata == null)
+            _rawdata = new Rawdata(this, Keys.FK_LINK_INFO_RAWDATA);
+
+        return _rawdata;
     }
 
     @Override

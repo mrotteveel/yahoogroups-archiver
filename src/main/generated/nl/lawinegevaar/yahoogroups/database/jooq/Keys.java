@@ -16,52 +16,31 @@ import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
+import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 
 
 /**
- * A class modelling foreign key relationships and constraints of tables of 
- * the <code></code> schema.
+ * A class modelling foreign key relationships and constraints of tables in the
+ * default schema.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Keys {
 
     // -------------------------------------------------------------------------
-    // IDENTITY definitions
-    // -------------------------------------------------------------------------
-
-
-    // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<DbversionRecord> PK_DBVERSION = UniqueKeys0.PK_DBVERSION;
-    public static final UniqueKey<LinkInfoRecord> PK_LINK_INFO = UniqueKeys0.PK_LINK_INFO;
-    public static final UniqueKey<RawdataRecord> PK_RAWDATA = UniqueKeys0.PK_RAWDATA;
-    public static final UniqueKey<YgroupRecord> PK_YGROUP = UniqueKeys0.PK_YGROUP;
-    public static final UniqueKey<YgroupRecord> UQ_YGROUP_NAME = UniqueKeys0.UQ_YGROUP_NAME;
+    public static final UniqueKey<DbversionRecord> PK_DBVERSION = Internal.createUniqueKey(Dbversion.DBVERSION, DSL.name("PK_DBVERSION"), new TableField[] { Dbversion.DBVERSION.VERSION }, true);
+    public static final UniqueKey<LinkInfoRecord> PK_LINK_INFO = Internal.createUniqueKey(LinkInfo.LINK_INFO, DSL.name("PK_LINK_INFO"), new TableField[] { LinkInfo.LINK_INFO.GROUP_ID, LinkInfo.LINK_INFO.MESSAGE_ID }, true);
+    public static final UniqueKey<RawdataRecord> PK_RAWDATA = Internal.createUniqueKey(Rawdata.RAWDATA, DSL.name("PK_RAWDATA"), new TableField[] { Rawdata.RAWDATA.GROUP_ID, Rawdata.RAWDATA.MESSAGE_ID }, true);
+    public static final UniqueKey<YgroupRecord> PK_YGROUP = Internal.createUniqueKey(Ygroup.YGROUP, DSL.name("PK_YGROUP"), new TableField[] { Ygroup.YGROUP.ID }, true);
+    public static final UniqueKey<YgroupRecord> UQ_YGROUP_NAME = Internal.createUniqueKey(Ygroup.YGROUP, DSL.name("UQ_YGROUP_NAME"), new TableField[] { Ygroup.YGROUP.GROUPNAME }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<LinkInfoRecord, RawdataRecord> FK_LINK_INFO_RAWDATA = ForeignKeys0.FK_LINK_INFO_RAWDATA;
-    public static final ForeignKey<RawdataRecord, YgroupRecord> FK_RAWDATA_YGROUP = ForeignKeys0.FK_RAWDATA_YGROUP;
-
-    // -------------------------------------------------------------------------
-    // [#1459] distribute members to avoid static initialisers > 64kb
-    // -------------------------------------------------------------------------
-
-    private static class UniqueKeys0 {
-        public static final UniqueKey<DbversionRecord> PK_DBVERSION = Internal.createUniqueKey(Dbversion.DBVERSION, "PK_DBVERSION", new TableField[] { Dbversion.DBVERSION.VERSION }, true);
-        public static final UniqueKey<LinkInfoRecord> PK_LINK_INFO = Internal.createUniqueKey(LinkInfo.LINK_INFO, "PK_LINK_INFO", new TableField[] { LinkInfo.LINK_INFO.GROUP_ID, LinkInfo.LINK_INFO.MESSAGE_ID }, true);
-        public static final UniqueKey<RawdataRecord> PK_RAWDATA = Internal.createUniqueKey(Rawdata.RAWDATA, "PK_RAWDATA", new TableField[] { Rawdata.RAWDATA.GROUP_ID, Rawdata.RAWDATA.MESSAGE_ID }, true);
-        public static final UniqueKey<YgroupRecord> PK_YGROUP = Internal.createUniqueKey(Ygroup.YGROUP, "PK_YGROUP", new TableField[] { Ygroup.YGROUP.ID }, true);
-        public static final UniqueKey<YgroupRecord> UQ_YGROUP_NAME = Internal.createUniqueKey(Ygroup.YGROUP, "UQ_YGROUP_NAME", new TableField[] { Ygroup.YGROUP.GROUPNAME }, true);
-    }
-
-    private static class ForeignKeys0 {
-        public static final ForeignKey<LinkInfoRecord, RawdataRecord> FK_LINK_INFO_RAWDATA = Internal.createForeignKey(Keys.PK_RAWDATA, LinkInfo.LINK_INFO, "FK_LINK_INFO_RAWDATA", new TableField[] { LinkInfo.LINK_INFO.GROUP_ID, LinkInfo.LINK_INFO.MESSAGE_ID }, true);
-        public static final ForeignKey<RawdataRecord, YgroupRecord> FK_RAWDATA_YGROUP = Internal.createForeignKey(Keys.PK_YGROUP, Rawdata.RAWDATA, "FK_RAWDATA_YGROUP", new TableField[] { Rawdata.RAWDATA.GROUP_ID }, true);
-    }
+    public static final ForeignKey<LinkInfoRecord, RawdataRecord> FK_LINK_INFO_RAWDATA = Internal.createForeignKey(LinkInfo.LINK_INFO, DSL.name("FK_LINK_INFO_RAWDATA"), new TableField[] { LinkInfo.LINK_INFO.GROUP_ID, LinkInfo.LINK_INFO.MESSAGE_ID }, Keys.PK_RAWDATA, new TableField[] { Rawdata.RAWDATA.GROUP_ID, Rawdata.RAWDATA.MESSAGE_ID }, true);
+    public static final ForeignKey<RawdataRecord, YgroupRecord> FK_RAWDATA_YGROUP = Internal.createForeignKey(Rawdata.RAWDATA, DSL.name("FK_RAWDATA_YGROUP"), new TableField[] { Rawdata.RAWDATA.GROUP_ID }, Keys.PK_YGROUP, new TableField[] { Ygroup.YGROUP.ID }, true);
 }

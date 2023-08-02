@@ -13,6 +13,7 @@ import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row2;
@@ -22,6 +23,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Ygroup extends TableImpl<YgroupRecord> {
 
-    private static final long serialVersionUID = -1110257860;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>YGROUP</code>
@@ -49,18 +51,19 @@ public class Ygroup extends TableImpl<YgroupRecord> {
     /**
      * The column <code>YGROUP.ID</code>.
      */
-    public final TableField<YgroupRecord, Integer> ID = createField(DSL.name("ID"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<YgroupRecord, Integer> ID = createField(DSL.name("ID"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>YGROUP.GROUPNAME</code>.
      */
-    public final TableField<YgroupRecord, String> GROUPNAME = createField(DSL.name("GROUPNAME"), org.jooq.impl.SQLDataType.VARCHAR(50).nullable(false), this, "");
+    public final TableField<YgroupRecord, String> GROUPNAME = createField(DSL.name("GROUPNAME"), SQLDataType.VARCHAR(50).nullable(false), this, "");
 
-    /**
-     * Create a <code>YGROUP</code> table reference
-     */
-    public Ygroup() {
-        this(DSL.name("YGROUP"), null);
+    private Ygroup(Name alias, Table<YgroupRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Ygroup(Name alias, Table<YgroupRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -77,12 +80,11 @@ public class Ygroup extends TableImpl<YgroupRecord> {
         this(alias, YGROUP);
     }
 
-    private Ygroup(Name alias, Table<YgroupRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Ygroup(Name alias, Table<YgroupRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>YGROUP</code> table reference
+     */
+    public Ygroup() {
+        this(DSL.name("YGROUP"), null);
     }
 
     public <O extends Record> Ygroup(Table<O> child, ForeignKey<O, YgroupRecord> key) {
@@ -91,7 +93,12 @@ public class Ygroup extends TableImpl<YgroupRecord> {
 
     @Override
     public Schema getSchema() {
-        return DefaultSchema.DEFAULT_SCHEMA;
+        return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    @Override
+    public Identity<YgroupRecord, Integer> getIdentity() {
+        return (Identity<YgroupRecord, Integer>) super.getIdentity();
     }
 
     @Override
@@ -100,8 +107,8 @@ public class Ygroup extends TableImpl<YgroupRecord> {
     }
 
     @Override
-    public List<UniqueKey<YgroupRecord>> getKeys() {
-        return Arrays.<UniqueKey<YgroupRecord>>asList(Keys.PK_YGROUP, Keys.UQ_YGROUP_NAME);
+    public List<UniqueKey<YgroupRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UQ_YGROUP_NAME);
     }
 
     @Override

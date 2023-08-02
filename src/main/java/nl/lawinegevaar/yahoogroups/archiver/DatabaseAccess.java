@@ -1,5 +1,6 @@
 package nl.lawinegevaar.yahoogroups.archiver;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 import org.jooq.*;
@@ -17,20 +18,23 @@ import static nl.lawinegevaar.yahoogroups.database.jooq.Tables.RAWDATA;
 import static nl.lawinegevaar.yahoogroups.database.jooq.Tables.YGROUP;
 import static org.jooq.impl.DSL.*;
 
+@Slf4j
 class DatabaseAccess implements AutoCloseable {
 
+    private final Connection connection;
     private final DSLContext ctx;
     private final Query rawDataInsert;
 
     DatabaseAccess(DatabaseInfo databaseInfo) {
         try {
-            Connection connection = databaseInfo.getConnection();
+            connection = databaseInfo.getConnection();
             Settings settings = new Settings();
             settings.setParamCastMode(ParamCastMode.NEVER);
             ctx = DSL.using(connection, SQLDialect.FIREBIRD, settings);
         } catch (SQLException e) {
             throw new ScrapingFailureException("Could not create connection to database", e);
         }
+        //noinspection resource
         rawDataInsert = ctx.insertInto(RAWDATA, RAWDATA.GROUP_ID, RAWDATA.MESSAGE_ID, RAWDATA.MESSAGE_JSON, RAWDATA.RAW_MESSAGE_JSON)
                 .values(
                         param("groupId", SQLDataType.INTEGER),
@@ -45,7 +49,11 @@ class DatabaseAccess implements AutoCloseable {
         try {
             rawDataInsert.close();
         } finally {
-            ctx.close();
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                log.error("Exception closing connection of DatabaseAccess", e);
+            }
         }
     }
 

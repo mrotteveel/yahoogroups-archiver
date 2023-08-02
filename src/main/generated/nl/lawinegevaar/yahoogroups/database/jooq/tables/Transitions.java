@@ -8,15 +8,14 @@ import nl.lawinegevaar.yahoogroups.database.jooq.DefaultSchema;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.TransitionsRecord;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Name;
-import org.jooq.Record;
 import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -26,7 +25,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Transitions extends TableImpl<TransitionsRecord> {
 
-    private static final long serialVersionUID = -983624040;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>TRANSITIONS</code>
@@ -42,37 +41,48 @@ public class Transitions extends TableImpl<TransitionsRecord> {
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public final TableField<TransitionsRecord, Object> RDB$START_TIMESTAMP = createField(DSL.name("RDB$START_TIMESTAMP"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false), this, "");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public final TableField<TransitionsRecord, Object> RDB$END_TIMESTAMP = createField(DSL.name("RDB$END_TIMESTAMP"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false), this, "");
 
     /**
      * The column <code>TRANSITIONS.RDB$ZONE_OFFSET</code>.
      */
-    public final TableField<TransitionsRecord, Short> RDB$ZONE_OFFSET = createField(DSL.name("RDB$ZONE_OFFSET"), org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<TransitionsRecord, Short> RDB$ZONE_OFFSET = createField(DSL.name("RDB$ZONE_OFFSET"), SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * The column <code>TRANSITIONS.RDB$DST_OFFSET</code>.
      */
-    public final TableField<TransitionsRecord, Short> RDB$DST_OFFSET = createField(DSL.name("RDB$DST_OFFSET"), org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<TransitionsRecord, Short> RDB$DST_OFFSET = createField(DSL.name("RDB$DST_OFFSET"), SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * The column <code>TRANSITIONS.RDB$EFFECTIVE_OFFSET</code>.
      */
-    public final TableField<TransitionsRecord, Short> RDB$EFFECTIVE_OFFSET = createField(DSL.name("RDB$EFFECTIVE_OFFSET"), org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<TransitionsRecord, Short> RDB$EFFECTIVE_OFFSET = createField(DSL.name("RDB$EFFECTIVE_OFFSET"), SQLDataType.SMALLINT.nullable(false), this, "");
 
-    /**
-     * Create a <code>TRANSITIONS</code> table reference
-     */
-    public Transitions() {
-        this(DSL.name("TRANSITIONS"), null);
+    private Transitions(Name alias, Table<TransitionsRecord> aliased) {
+        this(alias, aliased, new Field[] {
+            DSL.val(null, SQLDataType.CHAR(63).nullable(false)),
+            DSL.val(null, org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false)),
+            DSL.val(null, org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false))
+        });
+    }
+
+    private Transitions(Name alias, Table<TransitionsRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function());
     }
 
     /**
@@ -89,21 +99,16 @@ public class Transitions extends TableImpl<TransitionsRecord> {
         this(alias, TRANSITIONS);
     }
 
-    private Transitions(Name alias, Table<TransitionsRecord> aliased) {
-        this(alias, aliased, new Field[3]);
-    }
-
-    private Transitions(Name alias, Table<TransitionsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.function());
-    }
-
-    public <O extends Record> Transitions(Table<O> child, ForeignKey<O, TransitionsRecord> key) {
-        super(child, key, TRANSITIONS);
+    /**
+     * Create a <code>TRANSITIONS</code> table reference
+     */
+    public Transitions() {
+        this(DSL.name("TRANSITIONS"), null);
     }
 
     @Override
     public Schema getSchema() {
-        return DefaultSchema.DEFAULT_SCHEMA;
+        return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
     }
 
     @Override
@@ -144,22 +149,34 @@ public class Transitions extends TableImpl<TransitionsRecord> {
     /**
      * Call this table-valued function
      */
-    public Transitions call(String rdb$timeZoneName, Object rdb$fromTimestamp, Object rdb$toTimestamp) {
-        return new Transitions(DSL.name(getName()), null, new Field[] { 
-              DSL.val(rdb$timeZoneName, org.jooq.impl.SQLDataType.CHAR(63).nullable(false))
-            , DSL.val(rdb$fromTimestamp, org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false))
-            , DSL.val(rdb$toTimestamp, org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false))
+    public Transitions call(
+          String rdb$timeZoneName
+        , Object rdb$fromTimestamp
+        , Object rdb$toTimestamp
+    ) {
+        Transitions result = new Transitions(DSL.name("TRANSITIONS"), null, new Field[] {
+            DSL.val(rdb$timeZoneName, SQLDataType.CHAR(63).nullable(false)),
+            DSL.val(rdb$fromTimestamp, org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false)),
+            DSL.val(rdb$toTimestamp, org.jooq.impl.DefaultDataType.getDefaultDataType("\"UNKNOWN\"").nullable(false))
         });
+
+        return aliased() ? result.as(getUnqualifiedName()) : result;
     }
 
     /**
      * Call this table-valued function
      */
-    public Transitions call(Field<String> rdb$timeZoneName, Field<Object> rdb$fromTimestamp, Field<Object> rdb$toTimestamp) {
-        return new Transitions(DSL.name(getName()), null, new Field[] { 
-              rdb$timeZoneName
-            , rdb$fromTimestamp
-            , rdb$toTimestamp
+    public Transitions call(
+          Field<String> rdb$timeZoneName
+        , Field<Object> rdb$fromTimestamp
+        , Field<Object> rdb$toTimestamp
+    ) {
+        Transitions result = new Transitions(DSL.name("TRANSITIONS"), null, new Field[] {
+            rdb$timeZoneName,
+            rdb$fromTimestamp,
+            rdb$toTimestamp
         });
+
+        return aliased() ? result.as(getUnqualifiedName()) : result;
     }
 }

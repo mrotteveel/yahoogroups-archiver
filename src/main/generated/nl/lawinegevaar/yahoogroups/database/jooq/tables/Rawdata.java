@@ -23,6 +23,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Rawdata extends TableImpl<RawdataRecord> {
 
-    private static final long serialVersionUID = -598823991;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>RAWDATA</code>
@@ -50,33 +51,34 @@ public class Rawdata extends TableImpl<RawdataRecord> {
     /**
      * The column <code>RAWDATA.GROUP_ID</code>.
      */
-    public final TableField<RawdataRecord, Integer> GROUP_ID = createField(DSL.name("GROUP_ID"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<RawdataRecord, Integer> GROUP_ID = createField(DSL.name("GROUP_ID"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>RAWDATA.MESSAGE_ID</code>.
      */
-    public final TableField<RawdataRecord, Integer> MESSAGE_ID = createField(DSL.name("MESSAGE_ID"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<RawdataRecord, Integer> MESSAGE_ID = createField(DSL.name("MESSAGE_ID"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>RAWDATA.MESSAGE_JSON</code>.
      */
-    public final TableField<RawdataRecord, String> MESSAGE_JSON = createField(DSL.name("MESSAGE_JSON"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<RawdataRecord, String> MESSAGE_JSON = createField(DSL.name("MESSAGE_JSON"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>RAWDATA.RAW_MESSAGE_JSON</code>.
      */
-    public final TableField<RawdataRecord, String> RAW_MESSAGE_JSON = createField(DSL.name("RAW_MESSAGE_JSON"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<RawdataRecord, String> RAW_MESSAGE_JSON = createField(DSL.name("RAW_MESSAGE_JSON"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>RAWDATA.LAST_UPDATE</code>.
      */
-    public final TableField<RawdataRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("LAST_UPDATE"), org.jooq.impl.SQLDataType.LOCALDATETIME.nullable(false).defaultValue(org.jooq.impl.DSL.field("default current_timestamp", org.jooq.impl.SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<RawdataRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("LAST_UPDATE"), SQLDataType.LOCALDATETIME(0).nullable(false).defaultValue(DSL.field("default current_timestamp", SQLDataType.LOCALDATETIME)), this, "");
 
-    /**
-     * Create a <code>RAWDATA</code> table reference
-     */
-    public Rawdata() {
-        this(DSL.name("RAWDATA"), null);
+    private Rawdata(Name alias, Table<RawdataRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Rawdata(Name alias, Table<RawdataRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -93,12 +95,11 @@ public class Rawdata extends TableImpl<RawdataRecord> {
         this(alias, RAWDATA);
     }
 
-    private Rawdata(Name alias, Table<RawdataRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Rawdata(Name alias, Table<RawdataRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>RAWDATA</code> table reference
+     */
+    public Rawdata() {
+        this(DSL.name("RAWDATA"), null);
     }
 
     public <O extends Record> Rawdata(Table<O> child, ForeignKey<O, RawdataRecord> key) {
@@ -107,7 +108,7 @@ public class Rawdata extends TableImpl<RawdataRecord> {
 
     @Override
     public Schema getSchema() {
-        return DefaultSchema.DEFAULT_SCHEMA;
+        return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
     }
 
     @Override
@@ -116,17 +117,17 @@ public class Rawdata extends TableImpl<RawdataRecord> {
     }
 
     @Override
-    public List<UniqueKey<RawdataRecord>> getKeys() {
-        return Arrays.<UniqueKey<RawdataRecord>>asList(Keys.PK_RAWDATA);
+    public List<ForeignKey<RawdataRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.FK_RAWDATA_YGROUP);
     }
 
-    @Override
-    public List<ForeignKey<RawdataRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RawdataRecord, ?>>asList(Keys.FK_RAWDATA_YGROUP);
-    }
+    private transient Ygroup _ygroup;
 
     public Ygroup ygroup() {
-        return new Ygroup(this, Keys.FK_RAWDATA_YGROUP);
+        if (_ygroup == null)
+            _ygroup = new Ygroup(this, Keys.FK_RAWDATA_YGROUP);
+
+        return _ygroup;
     }
 
     @Override

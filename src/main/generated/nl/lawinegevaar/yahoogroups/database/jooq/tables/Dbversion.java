@@ -5,8 +5,6 @@ package nl.lawinegevaar.yahoogroups.database.jooq.tables;
 
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 import nl.lawinegevaar.yahoogroups.database.jooq.DefaultSchema;
 import nl.lawinegevaar.yahoogroups.database.jooq.Keys;
@@ -23,6 +21,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Dbversion extends TableImpl<DbversionRecord> {
 
-    private static final long serialVersionUID = -1944078457;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>DBVERSION</code>
@@ -50,18 +49,19 @@ public class Dbversion extends TableImpl<DbversionRecord> {
     /**
      * The column <code>DBVERSION.VERSION</code>.
      */
-    public final TableField<DbversionRecord, Integer> VERSION = createField(DSL.name("VERSION"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DbversionRecord, Integer> VERSION = createField(DSL.name("VERSION"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>DBVERSION.MIGRATION_DATE</code>.
      */
-    public final TableField<DbversionRecord, LocalDateTime> MIGRATION_DATE = createField(DSL.name("MIGRATION_DATE"), org.jooq.impl.SQLDataType.LOCALDATETIME.nullable(false).defaultValue(org.jooq.impl.DSL.field("default current_timestamp", org.jooq.impl.SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<DbversionRecord, LocalDateTime> MIGRATION_DATE = createField(DSL.name("MIGRATION_DATE"), SQLDataType.LOCALDATETIME(0).nullable(false).defaultValue(DSL.field("default current_timestamp", SQLDataType.LOCALDATETIME)), this, "");
 
-    /**
-     * Create a <code>DBVERSION</code> table reference
-     */
-    public Dbversion() {
-        this(DSL.name("DBVERSION"), null);
+    private Dbversion(Name alias, Table<DbversionRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Dbversion(Name alias, Table<DbversionRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -78,12 +78,11 @@ public class Dbversion extends TableImpl<DbversionRecord> {
         this(alias, DBVERSION);
     }
 
-    private Dbversion(Name alias, Table<DbversionRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Dbversion(Name alias, Table<DbversionRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>DBVERSION</code> table reference
+     */
+    public Dbversion() {
+        this(DSL.name("DBVERSION"), null);
     }
 
     public <O extends Record> Dbversion(Table<O> child, ForeignKey<O, DbversionRecord> key) {
@@ -92,17 +91,12 @@ public class Dbversion extends TableImpl<DbversionRecord> {
 
     @Override
     public Schema getSchema() {
-        return DefaultSchema.DEFAULT_SCHEMA;
+        return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
     }
 
     @Override
     public UniqueKey<DbversionRecord> getPrimaryKey() {
         return Keys.PK_DBVERSION;
-    }
-
-    @Override
-    public List<UniqueKey<DbversionRecord>> getKeys() {
-        return Arrays.<UniqueKey<DbversionRecord>>asList(Keys.PK_DBVERSION);
     }
 
     @Override

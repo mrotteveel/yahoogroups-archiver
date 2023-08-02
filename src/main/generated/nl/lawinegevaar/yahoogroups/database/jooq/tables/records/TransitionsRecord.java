@@ -18,36 +18,48 @@ import org.jooq.impl.TableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implements Record5<Object, Object, Short, Short, Short> {
 
-    private static final long serialVersionUID = 534026376;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public void setRdb$startTimestamp(Object value) {
         set(0, value);
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public Object getRdb$startTimestamp() {
         return get(0);
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public void setRdb$endTimestamp(Object value) {
         set(1, value);
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public Object getRdb$endTimestamp() {
         return get(1);
     }
@@ -109,18 +121,24 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public Field<Object> field1() {
         return Transitions.TRANSITIONS.RDB$START_TIMESTAMP;
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public Field<Object> field2() {
         return Transitions.TRANSITIONS.RDB$END_TIMESTAMP;
@@ -142,18 +160,24 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public Object component1() {
         return getRdb$startTimestamp();
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public Object component2() {
         return getRdb$endTimestamp();
@@ -175,18 +199,24 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public Object value1() {
         return getRdb$startTimestamp();
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public Object value2() {
         return getRdb$endTimestamp();
@@ -208,9 +238,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public TransitionsRecord value1(Object value) {
         setRdb$startTimestamp(value);
@@ -218,9 +251,12 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
+    @Deprecated
     @Override
     public TransitionsRecord value2(Object value) {
         setRdb$endTimestamp(value);
@@ -272,10 +308,10 @@ public class TransitionsRecord extends TableRecordImpl<TransitionsRecord> implem
     public TransitionsRecord(Object rdb$startTimestamp, Object rdb$endTimestamp, Short rdb$zoneOffset, Short rdb$dstOffset, Short rdb$effectiveOffset) {
         super(Transitions.TRANSITIONS);
 
-        set(0, rdb$startTimestamp);
-        set(1, rdb$endTimestamp);
-        set(2, rdb$zoneOffset);
-        set(3, rdb$dstOffset);
-        set(4, rdb$effectiveOffset);
+        setRdb$startTimestamp(rdb$startTimestamp);
+        setRdb$endTimestamp(rdb$endTimestamp);
+        setRdb$zoneOffset(rdb$zoneOffset);
+        setRdb$dstOffset(rdb$dstOffset);
+        setRdb$effectiveOffset(rdb$effectiveOffset);
     }
 }

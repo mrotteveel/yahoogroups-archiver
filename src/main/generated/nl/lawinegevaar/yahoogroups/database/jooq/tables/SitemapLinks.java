@@ -19,6 +19,7 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -28,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
 
-    private static final long serialVersionUID = -1866071499;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>SITEMAP_LINKS</code>
@@ -46,18 +47,19 @@ public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
     /**
      * The column <code>SITEMAP_LINKS.PATH</code>.
      */
-    public final TableField<SitemapLinksRecord, String> PATH = createField(DSL.name("PATH"), org.jooq.impl.SQLDataType.VARCHAR(50), this, "");
+    public final TableField<SitemapLinksRecord, String> PATH = createField(DSL.name("PATH"), SQLDataType.VARCHAR(50), this, "");
 
     /**
      * The column <code>SITEMAP_LINKS.LAST_CHANGE</code>.
      */
-    public final TableField<SitemapLinksRecord, LocalDateTime> LAST_CHANGE = createField(DSL.name("LAST_CHANGE"), org.jooq.impl.SQLDataType.LOCALDATETIME, this, "");
+    public final TableField<SitemapLinksRecord, LocalDateTime> LAST_CHANGE = createField(DSL.name("LAST_CHANGE"), SQLDataType.LOCALDATETIME(0), this, "");
 
-    /**
-     * Create a <code>SITEMAP_LINKS</code> table reference
-     */
-    public SitemapLinks() {
-        this(DSL.name("SITEMAP_LINKS"), null);
+    private SitemapLinks(Name alias, Table<SitemapLinksRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private SitemapLinks(Name alias, Table<SitemapLinksRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"SITEMAP_LINKS\" as select \n  cast('/' || y.GROUPNAME || '/index.html' as varchar(50)) as path,\n  LOCALTIMESTAMP as last_change \nfrom YGROUP y \nunion all\nselect \n  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/index.html' as varchar(50)) as path,\n  (select max(POST_DATE) from LINK_INFO li where li.GROUP_ID = l.GROUP_ID AND li.POST_YEAR = l.POST_YEAR AND li.POST_MONTH = l.POST_MONTH) as last_change\nfrom (select distinct GROUP_ID, POST_YEAR, POST_MONTH from LINK_INFO) l\ninner join YGROUP y on y.ID = l.GROUP_ID \nunion all\nselect \n  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/' || l.MESSAGE_ID || '.html' as varchar(50)) as path,\n  l.POST_DATE as last_change\nfrom LINK_INFO l\ninner join YGROUP y on y.ID = l.GROUP_ID"));
     }
 
     /**
@@ -74,12 +76,11 @@ public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
         this(alias, SITEMAP_LINKS);
     }
 
-    private SitemapLinks(Name alias, Table<SitemapLinksRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private SitemapLinks(Name alias, Table<SitemapLinksRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"SITEMAP_LINKS\" as select \n  cast('/' || y.GROUPNAME || '/index.html' as varchar(50)) as path,\n  LOCALTIMESTAMP as last_change \nfrom YGROUP y \nunion all\nselect \n  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/index.html' as varchar(50)) as path,\n  (select max(POST_DATE) from LINK_INFO li where li.GROUP_ID = l.GROUP_ID AND li.POST_YEAR = l.POST_YEAR AND li.POST_MONTH = l.POST_MONTH) as last_change\nfrom (select distinct GROUP_ID, POST_YEAR, POST_MONTH from LINK_INFO) l\ninner join YGROUP y on y.ID = l.GROUP_ID \nunion all\nselect \n  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/' || l.MESSAGE_ID || '.html' as varchar(50)) as path,\n  l.POST_DATE as last_change\nfrom LINK_INFO l\ninner join YGROUP y on y.ID = l.GROUP_ID"));
+    /**
+     * Create a <code>SITEMAP_LINKS</code> table reference
+     */
+    public SitemapLinks() {
+        this(DSL.name("SITEMAP_LINKS"), null);
     }
 
     public <O extends Record> SitemapLinks(Table<O> child, ForeignKey<O, SitemapLinksRecord> key) {
@@ -88,7 +89,7 @@ public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
 
     @Override
     public Schema getSchema() {
-        return DefaultSchema.DEFAULT_SCHEMA;
+        return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
     }
 
     @Override

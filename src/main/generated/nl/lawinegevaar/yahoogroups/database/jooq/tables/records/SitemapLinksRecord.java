@@ -20,7 +20,7 @@ import org.jooq.impl.TableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class SitemapLinksRecord extends TableRecordImpl<SitemapLinksRecord> implements Record2<String, LocalDateTime> {
 
-    private static final long serialVersionUID = -562882782;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>SITEMAP_LINKS.PATH</code>.
@@ -130,7 +130,7 @@ public class SitemapLinksRecord extends TableRecordImpl<SitemapLinksRecord> impl
     public SitemapLinksRecord(String path, LocalDateTime lastChange) {
         super(SitemapLinks.SITEMAP_LINKS);
 
-        set(0, path);
-        set(1, lastChange);
+        setPath(path);
+        setLastChange(lastChange);
     }
 }

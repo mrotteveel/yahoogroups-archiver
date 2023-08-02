@@ -6,10 +6,11 @@ package nl.lawinegevaar.yahoogroups.database.jooq;
 
 import org.jooq.Sequence;
 import org.jooq.impl.Internal;
+import org.jooq.impl.SQLDataType;
 
 
 /**
- * Convenience access to all sequences in 
+ * Convenience access to all sequences in the default schema.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Sequences {
@@ -17,5 +18,5 @@ public class Sequences {
     /**
      * The sequence <code>SQL$DEFAULT</code>
      */
-    public static final Sequence<Long> SQL$DEFAULT = Internal.createSequence("SQL$DEFAULT", DefaultSchema.DEFAULT_SCHEMA, org.jooq.impl.SQLDataType.BIGINT, null, 0, null, null, false, null);
+    public static final Sequence<Long> SQL$DEFAULT = Internal.createSequence("SQL$DEFAULT", DefaultSchema.DEFAULT_SCHEMA, SQLDataType.BIGINT, null, 0L, null, null, false, null);
 }

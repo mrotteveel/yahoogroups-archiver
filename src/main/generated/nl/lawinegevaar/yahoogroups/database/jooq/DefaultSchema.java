@@ -31,7 +31,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = 1004153795;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>DEFAULT_SCHEMA</code>
@@ -69,27 +69,61 @@ public class DefaultSchema extends SchemaImpl {
     public final Transitions TRANSITIONS = Transitions.TRANSITIONS;
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
-    public static Result<TransitionsRecord> TRANSITIONS(Configuration configuration, String rdb$timeZoneName, Object rdb$fromTimestamp, Object rdb$toTimestamp) {
-        return configuration.dsl().selectFrom(nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(rdb$timeZoneName, rdb$fromTimestamp, rdb$toTimestamp)).fetch();
+    @Deprecated
+    public static Result<TransitionsRecord> TRANSITIONS(
+          Configuration configuration
+        , String rdb$timeZoneName
+        , Object rdb$fromTimestamp
+        , Object rdb$toTimestamp
+    ) {
+        return configuration.dsl().selectFrom(nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(
+              rdb$timeZoneName
+            , rdb$fromTimestamp
+            , rdb$toTimestamp
+        )).fetch();
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
-    public static Transitions TRANSITIONS(String rdb$timeZoneName, Object rdb$fromTimestamp, Object rdb$toTimestamp) {
-        return nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(rdb$timeZoneName, rdb$fromTimestamp, rdb$toTimestamp);
+    @Deprecated
+    public static Transitions TRANSITIONS(
+          String rdb$timeZoneName
+        , Object rdb$fromTimestamp
+        , Object rdb$toTimestamp
+    ) {
+        return nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(
+            rdb$timeZoneName,
+            rdb$fromTimestamp,
+            rdb$toTimestamp
+        );
     }
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * @deprecated Unknown data type. Please define an explicit {@link
+     * org.jooq.Binding} to specify how this type should be handled. Deprecation
+     * can be turned off using {@literal <deprecationOnUnknownTypes/>} in your
+     * code generator configuration.
      */
-    @java.lang.Deprecated
-    public static Transitions TRANSITIONS(Field<String> rdb$timeZoneName, Field<Object> rdb$fromTimestamp, Field<Object> rdb$toTimestamp) {
-        return nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(rdb$timeZoneName, rdb$fromTimestamp, rdb$toTimestamp);
+    @Deprecated
+    public static Transitions TRANSITIONS(
+          Field<String> rdb$timeZoneName
+        , Field<Object> rdb$fromTimestamp
+        , Field<Object> rdb$toTimestamp
+    ) {
+        return nl.lawinegevaar.yahoogroups.database.jooq.tables.Transitions.TRANSITIONS.call(
+            rdb$timeZoneName,
+            rdb$fromTimestamp,
+            rdb$toTimestamp
+        );
     }
 
     /**
@@ -112,19 +146,21 @@ public class DefaultSchema extends SchemaImpl {
 
     @Override
     public final List<Sequence<?>> getSequences() {
-        return Arrays.<Sequence<?>>asList(
-            Sequences.SQL$DEFAULT);
+        return Arrays.asList(
+            Sequences.SQL$DEFAULT
+        );
     }
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
+        return Arrays.asList(
             Dbversion.DBVERSION,
             LinkInfo.LINK_INFO,
             PostInformation.POST_INFORMATION,
             Rawdata.RAWDATA,
             SitemapLinks.SITEMAP_LINKS,
             Transitions.TRANSITIONS,
-            Ygroup.YGROUP);
+            Ygroup.YGROUP
+        );
     }
 }

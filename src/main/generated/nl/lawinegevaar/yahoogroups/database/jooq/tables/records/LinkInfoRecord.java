@@ -21,7 +21,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LinkInfoRecord extends UpdatableRecordImpl<LinkInfoRecord> implements Record8<Integer, Integer, Integer, Integer, Integer, LocalDateTime, Short, Short> {
 
-    private static final long serialVersionUID = 351178685;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>LINK_INFO.GROUP_ID</code>.
@@ -356,13 +356,13 @@ public class LinkInfoRecord extends UpdatableRecordImpl<LinkInfoRecord> implemen
     public LinkInfoRecord(Integer groupId, Integer messageId, Integer yTopicId, Integer yPrevInTopic, Integer yPrevInTime, LocalDateTime postDate, Short postYear, Short postMonth) {
         super(LinkInfo.LINK_INFO);
 
-        set(0, groupId);
-        set(1, messageId);
-        set(2, yTopicId);
-        set(3, yPrevInTopic);
-        set(4, yPrevInTime);
-        set(5, postDate);
-        set(6, postYear);
-        set(7, postMonth);
+        setGroupId(groupId);
+        setMessageId(messageId);
+        setYTopicId(yTopicId);
+        setYPrevInTopic(yPrevInTopic);
+        setYPrevInTime(yPrevInTime);
+        setPostDate(postDate);
+        setPostYear(postYear);
+        setPostMonth(postMonth);
     }
 }
