@@ -5,16 +5,20 @@ package nl.lawinegevaar.yahoogroups.database.jooq.tables;
 
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 import nl.lawinegevaar.yahoogroups.database.jooq.DefaultSchema;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.SitemapLinksRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -59,7 +63,24 @@ public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
     }
 
     private SitemapLinks(Name alias, Table<SitemapLinksRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"SITEMAP_LINKS\" as select \n  cast('/' || y.GROUPNAME || '/index.html' as varchar(50)) as path,\n  LOCALTIMESTAMP as last_change \nfrom YGROUP y \nunion all\nselect \n  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/index.html' as varchar(50)) as path,\n  (select max(POST_DATE) from LINK_INFO li where li.GROUP_ID = l.GROUP_ID AND li.POST_YEAR = l.POST_YEAR AND li.POST_MONTH = l.POST_MONTH) as last_change\nfrom (select distinct GROUP_ID, POST_YEAR, POST_MONTH from LINK_INFO) l\ninner join YGROUP y on y.ID = l.GROUP_ID \nunion all\nselect \n  cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/' || l.MESSAGE_ID || '.html' as varchar(50)) as path,\n  l.POST_DATE as last_change\nfrom LINK_INFO l\ninner join YGROUP y on y.ID = l.GROUP_ID"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
+          create view "SITEMAP_LINKS" as select
+          cast('/' || y.GROUPNAME || '/index.html' as varchar(50)) as path,
+          LOCALTIMESTAMP as last_change
+        from YGROUP y
+        union all
+        select
+          cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/index.html' as varchar(50)) as path,
+          (select max(POST_DATE) from LINK_INFO li where li.GROUP_ID = l.GROUP_ID AND li.POST_YEAR = l.POST_YEAR AND li.POST_MONTH = l.POST_MONTH) as last_change
+        from (select distinct GROUP_ID, POST_YEAR, POST_MONTH from LINK_INFO) l
+        inner join YGROUP y on y.ID = l.GROUP_ID
+        union all
+        select
+          cast('/' || y.GROUPNAME || '/' || l.POST_YEAR || '/' || l.POST_MONTH || '/' || l.MESSAGE_ID || '.html' as varchar(50)) as path,
+          l.POST_DATE as last_change
+        from LINK_INFO l
+        inner join YGROUP y on y.ID = l.GROUP_ID
+        """));
     }
 
     /**
@@ -102,6 +123,11 @@ public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
         return new SitemapLinks(alias, this);
     }
 
+    @Override
+    public SitemapLinks as(Table<?> alias) {
+        return new SitemapLinks(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -118,6 +144,14 @@ public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
         return new SitemapLinks(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public SitemapLinks rename(Table<?> name) {
+        return new SitemapLinks(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -125,5 +159,20 @@ public class SitemapLinks extends TableImpl<SitemapLinksRecord> {
     @Override
     public Row2<String, LocalDateTime> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super LocalDateTime, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super LocalDateTime, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

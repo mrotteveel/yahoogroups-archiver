@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'nu.studer.jooq' version '7.1.1'
+    id 'nu.studer.jooq' version '8.1'
 }
 
 group 'nl.lawinegevaar'
@@ -36,7 +36,7 @@ dependencies {
 }
 
 jooq {
-    version = '3.16.20'
+    version = '3.17.14'
 
     configurations {
         main {

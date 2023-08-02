@@ -23,7 +23,7 @@ class DatabaseAccess implements AutoCloseable {
 
     private final Connection connection;
     private final DSLContext ctx;
-    private final Query rawDataInsert;
+    private final CloseableQuery rawDataInsert;
 
     DatabaseAccess(DatabaseInfo databaseInfo) {
         try {
@@ -34,7 +34,6 @@ class DatabaseAccess implements AutoCloseable {
         } catch (SQLException e) {
             throw new ScrapingFailureException("Could not create connection to database", e);
         }
-        //noinspection resource
         rawDataInsert = ctx.insertInto(RAWDATA, RAWDATA.GROUP_ID, RAWDATA.MESSAGE_ID, RAWDATA.MESSAGE_JSON, RAWDATA.RAW_MESSAGE_JSON)
                 .values(
                         param("groupId", SQLDataType.INTEGER),

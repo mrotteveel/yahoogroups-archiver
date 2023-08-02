@@ -5,16 +5,20 @@ package nl.lawinegevaar.yahoogroups.database.jooq.tables;
 
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 import nl.lawinegevaar.yahoogroups.database.jooq.DefaultSchema;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.PostInformationRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function22;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row22;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -159,7 +163,55 @@ public class PostInformation extends TableImpl<PostInformationRecord> {
     }
 
     private PostInformation(Name alias, Table<PostInformationRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view \"POST_INFORMATION\" as SELECT\n  a.GROUP_ID,\n  a.MESSAGE_ID,\n  a.GROUPNAME,\n  a.POST_DATE,\n  a.POST_YEAR,\n  a.POST_MONTH,\n  a.TOPIC_ID,\n  topic.POST_YEAR AS TOPIC_YEAR,\n  topic.POST_MONTH AS TOPIC_MONTH,\n  a.PREV_IN_TOPIC,\n  prev_in_topic.POST_YEAR AS PREV_IN_TOPIC_YEAR,\n  prev_in_topic.POST_MONTH AS PREV_IN_TOPIC_MONTH,\n  a.NEXT_IN_TOPIC,\n  next_in_topic.POST_YEAR AS NEXT_IN_TOPIC_YEAR,\n  next_in_topic.POST_MONTH AS NEXT_IN_TOPIC_MONTH,\n  a.PREV_IN_TIME,\n  prev_in_time.POST_YEAR AS PREV_IN_TIME_YEAR,\n  prev_in_time.POST_MONTH AS PREV_IN_TIME_MONTH,\n  a.NEXT_IN_TIME,\n  next_in_time.POST_YEAR AS NEXT_IN_TIME_YEAR,\n  next_in_time.POST_MONTH AS NEXT_IN_TIME_MONTH,\n  a.MESSAGE_JSON\nFROM (\n    SELECT \n      GROUP_ID, \n      MESSAGE_ID,\n      g.GROUPNAME,\n      -- Using the MESSAGE_ID as an indication of time ordering between messages, not the POST_DATE\n      FIRST_VALUE(MESSAGE_ID) OVER (PARTITION BY GROUP_ID, li.Y_TOPIC_ID ORDER BY MESSAGE_ID) AS TOPIC_ID,\n      LAG(MESSAGE_ID) OVER (PARTITION BY GROUP_ID, li.Y_TOPIC_ID ORDER BY MESSAGE_ID) AS PREV_IN_TOPIC,\n      LEAD(MESSAGE_ID) OVER (PARTITION BY GROUP_ID, li.Y_TOPIC_ID ORDER BY MESSAGE_ID) AS NEXT_IN_TOPIC,\n      LAG(MESSAGE_ID) OVER (PARTITION BY GROUP_ID ORDER BY MESSAGE_ID) AS PREV_IN_TIME,\n      LEAD(MESSAGE_ID) OVER (PARTITION BY GROUP_ID ORDER BY MESSAGE_ID) AS NEXT_IN_TIME,\n      POST_DATE,\n      POST_YEAR,\n      POST_MONTH,\n      r.MESSAGE_JSON\n    FROM LINK_INFO li\n    INNER JOIN RAWDATA r USING (GROUP_ID, MESSAGE_ID)\n    INNER JOIN YGROUP g ON g.ID = GROUP_ID\n) a\nINNER JOIN LINK_INFO topic ON topic.GROUP_ID = a.GROUP_ID AND topic.MESSAGE_ID = a.TOPIC_ID\nLEFT JOIN LINK_INFO prev_in_topic ON prev_in_topic.GROUP_ID = a.GROUP_ID AND prev_in_topic.MESSAGE_ID = a.PREV_IN_TOPIC\nLEFT JOIN LINK_INFO next_in_topic ON next_in_topic.GROUP_ID = a.GROUP_ID AND next_in_topic.MESSAGE_ID = a.NEXT_IN_TOPIC \nLEFT JOIN LINK_INFO prev_in_time ON prev_in_time.GROUP_ID = a.GROUP_ID AND prev_in_time.MESSAGE_ID = a.PREV_IN_TIME\nLEFT JOIN LINK_INFO next_in_time ON next_in_time.GROUP_ID = a.GROUP_ID AND next_in_time.MESSAGE_ID = a.NEXT_IN_TIME"));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
+          create view "POST_INFORMATION" as SELECT
+          a.GROUP_ID,
+          a.MESSAGE_ID,
+          a.GROUPNAME,
+          a.POST_DATE,
+          a.POST_YEAR,
+          a.POST_MONTH,
+          a.TOPIC_ID,
+          topic.POST_YEAR AS TOPIC_YEAR,
+          topic.POST_MONTH AS TOPIC_MONTH,
+          a.PREV_IN_TOPIC,
+          prev_in_topic.POST_YEAR AS PREV_IN_TOPIC_YEAR,
+          prev_in_topic.POST_MONTH AS PREV_IN_TOPIC_MONTH,
+          a.NEXT_IN_TOPIC,
+          next_in_topic.POST_YEAR AS NEXT_IN_TOPIC_YEAR,
+          next_in_topic.POST_MONTH AS NEXT_IN_TOPIC_MONTH,
+          a.PREV_IN_TIME,
+          prev_in_time.POST_YEAR AS PREV_IN_TIME_YEAR,
+          prev_in_time.POST_MONTH AS PREV_IN_TIME_MONTH,
+          a.NEXT_IN_TIME,
+          next_in_time.POST_YEAR AS NEXT_IN_TIME_YEAR,
+          next_in_time.POST_MONTH AS NEXT_IN_TIME_MONTH,
+          a.MESSAGE_JSON
+        FROM (
+            SELECT
+              GROUP_ID,
+              MESSAGE_ID,
+              g.GROUPNAME,
+              -- Using the MESSAGE_ID as an indication of time ordering between messages, not the POST_DATE
+              FIRST_VALUE(MESSAGE_ID) OVER (PARTITION BY GROUP_ID, li.Y_TOPIC_ID ORDER BY MESSAGE_ID) AS TOPIC_ID,
+              LAG(MESSAGE_ID) OVER (PARTITION BY GROUP_ID, li.Y_TOPIC_ID ORDER BY MESSAGE_ID) AS PREV_IN_TOPIC,
+              LEAD(MESSAGE_ID) OVER (PARTITION BY GROUP_ID, li.Y_TOPIC_ID ORDER BY MESSAGE_ID) AS NEXT_IN_TOPIC,
+              LAG(MESSAGE_ID) OVER (PARTITION BY GROUP_ID ORDER BY MESSAGE_ID) AS PREV_IN_TIME,
+              LEAD(MESSAGE_ID) OVER (PARTITION BY GROUP_ID ORDER BY MESSAGE_ID) AS NEXT_IN_TIME,
+              POST_DATE,
+              POST_YEAR,
+              POST_MONTH,
+              r.MESSAGE_JSON
+            FROM LINK_INFO li
+            INNER JOIN RAWDATA r USING (GROUP_ID, MESSAGE_ID)
+            INNER JOIN YGROUP g ON g.ID = GROUP_ID
+        ) a
+        INNER JOIN LINK_INFO topic ON topic.GROUP_ID = a.GROUP_ID AND topic.MESSAGE_ID = a.TOPIC_ID
+        LEFT JOIN LINK_INFO prev_in_topic ON prev_in_topic.GROUP_ID = a.GROUP_ID AND prev_in_topic.MESSAGE_ID = a.PREV_IN_TOPIC
+        LEFT JOIN LINK_INFO next_in_topic ON next_in_topic.GROUP_ID = a.GROUP_ID AND next_in_topic.MESSAGE_ID = a.NEXT_IN_TOPIC
+        LEFT JOIN LINK_INFO prev_in_time ON prev_in_time.GROUP_ID = a.GROUP_ID AND prev_in_time.MESSAGE_ID = a.PREV_IN_TIME
+        LEFT JOIN LINK_INFO next_in_time ON next_in_time.GROUP_ID = a.GROUP_ID AND next_in_time.MESSAGE_ID = a.NEXT_IN_TIME
+        """));
     }
 
     /**
@@ -202,6 +254,11 @@ public class PostInformation extends TableImpl<PostInformationRecord> {
         return new PostInformation(alias, this);
     }
 
+    @Override
+    public PostInformation as(Table<?> alias) {
+        return new PostInformation(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -218,6 +275,14 @@ public class PostInformation extends TableImpl<PostInformationRecord> {
         return new PostInformation(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public PostInformation rename(Table<?> name) {
+        return new PostInformation(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row22 type methods
     // -------------------------------------------------------------------------
@@ -225,5 +290,20 @@ public class PostInformation extends TableImpl<PostInformationRecord> {
     @Override
     public Row22<Integer, Integer, String, LocalDateTime, Short, Short, Integer, Short, Short, Integer, Short, Short, Integer, Short, Short, Integer, Short, Short, Integer, Short, Short, String> fieldsRow() {
         return (Row22) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function22<? super Integer, ? super Integer, ? super String, ? super LocalDateTime, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function22<? super Integer, ? super Integer, ? super String, ? super LocalDateTime, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super Integer, ? super Short, ? super Short, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

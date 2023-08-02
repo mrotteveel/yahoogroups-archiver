@@ -5,6 +5,7 @@ package nl.lawinegevaar.yahoogroups.database.jooq.tables;
 
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 import nl.lawinegevaar.yahoogroups.database.jooq.DefaultSchema;
 import nl.lawinegevaar.yahoogroups.database.jooq.Keys;
@@ -12,10 +13,13 @@ import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.DbversionRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -109,6 +113,11 @@ public class Dbversion extends TableImpl<DbversionRecord> {
         return new Dbversion(alias, this);
     }
 
+    @Override
+    public Dbversion as(Table<?> alias) {
+        return new Dbversion(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -125,6 +134,14 @@ public class Dbversion extends TableImpl<DbversionRecord> {
         return new Dbversion(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public Dbversion rename(Table<?> name) {
+        return new Dbversion(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -132,5 +149,20 @@ public class Dbversion extends TableImpl<DbversionRecord> {
     @Override
     public Row2<Integer, LocalDateTime> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super Integer, ? super LocalDateTime, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super Integer, ? super LocalDateTime, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -4,13 +4,18 @@
 package nl.lawinegevaar.yahoogroups.database.jooq.tables;
 
 
+import java.util.function.Function;
+
 import nl.lawinegevaar.yahoogroups.database.jooq.DefaultSchema;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.TransitionsRecord;
 
 import org.jooq.Field;
+import org.jooq.Function5;
 import org.jooq.Name;
+import org.jooq.Records;
 import org.jooq.Row5;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -125,6 +130,11 @@ public class Transitions extends TableImpl<TransitionsRecord> {
         return new Transitions(alias, this, parameters);
     }
 
+    @Override
+    public Transitions as(Table<?> alias) {
+        return new Transitions(alias.getQualifiedName(), this, parameters);
+    }
+
     /**
      * Rename this table
      */
@@ -139,6 +149,14 @@ public class Transitions extends TableImpl<TransitionsRecord> {
     @Override
     public Transitions rename(Name name) {
         return new Transitions(name, null, parameters);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Transitions rename(Table<?> name) {
+        return new Transitions(name.getQualifiedName(), null, parameters);
     }
 
     // -------------------------------------------------------------------------
@@ -182,5 +200,20 @@ public class Transitions extends TableImpl<TransitionsRecord> {
         });
 
         return aliased() ? result.as(getUnqualifiedName()) : result;
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function5<? super Object, ? super Object, ? super Short, ? super Short, ? super Short, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super Object, ? super Object, ? super Short, ? super Short, ? super Short, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }
