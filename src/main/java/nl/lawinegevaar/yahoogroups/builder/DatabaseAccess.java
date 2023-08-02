@@ -1,7 +1,6 @@
 package nl.lawinegevaar.yahoogroups.builder;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.lawinegevaar.yahoogroups.archiver.ScrapingFailureException;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.LinkInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.PostInformationRecord;
@@ -17,8 +16,6 @@ import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
@@ -30,7 +27,6 @@ import static org.jooq.impl.DSL.param;
 @Slf4j
 class DatabaseAccess implements AutoCloseable {
 
-    private final Connection connection;
     private final DSLContext ctx;
     private final DatabaseInfo databaseInfo;
     private final CloseableQuery linkInfoInsert;
@@ -38,14 +34,9 @@ class DatabaseAccess implements AutoCloseable {
 
     DatabaseAccess(DatabaseInfo databaseInfo) {
         this.databaseInfo = databaseInfo;
-        try {
-            connection = databaseInfo.getConnection();
-            Settings settings = new Settings();
-            settings.setParamCastMode(ParamCastMode.NEVER);
-            ctx = DSL.using(connection, SQLDialect.FIREBIRD, settings);
-        } catch (SQLException e) {
-            throw new ScrapingFailureException("Could not create connection to database", e);
-        }
+        Settings settings = new Settings();
+        settings.setParamCastMode(ParamCastMode.NEVER);
+        ctx = DSL.using(databaseInfo.getDataSource(), SQLDialect.FIREBIRD, settings);
         linkInfoInsert = ctx.insertInto(LINK_INFO, LINK_INFO.GROUP_ID, LINK_INFO.MESSAGE_ID, LINK_INFO.Y_TOPIC_ID,
                 LINK_INFO.Y_PREV_IN_TOPIC, LINK_INFO.Y_PREV_IN_TIME, LINK_INFO.POST_DATE)
                 .values(
@@ -72,16 +63,8 @@ class DatabaseAccess implements AutoCloseable {
 
     @Override
     public void close() {
-        try {
-            linkInfoInsert.close();
-            updateLinkInfoPostDate.close();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                log.error("Exception closing connection of DatabaseAccess", e);
-            }
-        }
+        linkInfoInsert.close();
+        updateLinkInfoPostDate.close();
     }
 
     List<YgroupRecord> getYahooGroupsInformation() {

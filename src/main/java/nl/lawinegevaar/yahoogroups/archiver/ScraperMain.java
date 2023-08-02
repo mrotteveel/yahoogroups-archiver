@@ -13,29 +13,30 @@ public class ScraperMain {
 
     public static void main(String[] args) {
         CommandLine commandLine = getCommandLine(args);
-        DatabaseInfo databaseInfo = DatabaseInfo.createDatabaseInfo();
-        initialize(databaseInfo);
-        if (commandLine.hasOption("init-only")) {
-            String message = "Initialization only requested, exiting...";
-            System.out.println(message);
-            log.info(message);
-            return;
-        }
-
-        String cookieString = commandLine.getOptionValue("c");
-        if (commandLine.hasOption("u")) {
-            boolean retryGaps = commandLine.hasOption("r");
-            Updater updater = new Updater(databaseInfo, retryGaps, cookieString);
-            updater.startUpdating();
-        } else {
-            String groupName = commandLine.getOptionValue("g");
-            if (groupName == null || groupName.isEmpty()) {
-                printUsage(buildCommandLineOptions());
+        try (DatabaseInfo databaseInfo = DatabaseInfo.createDatabaseInfo()) {
+            initialize(databaseInfo);
+            if (commandLine.hasOption("init-only")) {
+                String message = "Initialization only requested, exiting...";
+                System.out.println(message);
+                log.info(message);
                 return;
             }
 
-            Scraper scraper = new Scraper(databaseInfo, groupName, cookieString);
-            scraper.startScraping();
+            String cookieString = commandLine.getOptionValue("c");
+            if (commandLine.hasOption("u")) {
+                boolean retryGaps = commandLine.hasOption("r");
+                Updater updater = new Updater(databaseInfo, retryGaps, cookieString);
+                updater.startUpdating();
+            } else {
+                String groupName = commandLine.getOptionValue("g");
+                if (groupName == null || groupName.isEmpty()) {
+                    printUsage(buildCommandLineOptions());
+                    return;
+                }
+
+                Scraper scraper = new Scraper(databaseInfo, groupName, cookieString);
+                scraper.startScraping();
+            }
         }
     }
 

@@ -9,8 +9,6 @@ import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,19 +19,13 @@ import static org.jooq.impl.DSL.*;
 @Slf4j
 class DatabaseAccess implements AutoCloseable {
 
-    private final Connection connection;
     private final DSLContext ctx;
     private final CloseableQuery rawDataInsert;
 
     DatabaseAccess(DatabaseInfo databaseInfo) {
-        try {
-            connection = databaseInfo.getConnection();
-            Settings settings = new Settings();
-            settings.setParamCastMode(ParamCastMode.NEVER);
-            ctx = DSL.using(connection, SQLDialect.FIREBIRD, settings);
-        } catch (SQLException e) {
-            throw new ScrapingFailureException("Could not create connection to database", e);
-        }
+        Settings settings = new Settings();
+        settings.setParamCastMode(ParamCastMode.NEVER);
+        ctx = DSL.using(databaseInfo.getDataSource(), SQLDialect.FIREBIRD, settings);
         rawDataInsert = ctx.insertInto(RAWDATA, RAWDATA.GROUP_ID, RAWDATA.MESSAGE_ID, RAWDATA.MESSAGE_JSON, RAWDATA.RAW_MESSAGE_JSON)
                 .values(
                         param("groupId", SQLDataType.INTEGER),
@@ -45,15 +37,7 @@ class DatabaseAccess implements AutoCloseable {
 
     @Override
     public void close() {
-        try {
-            rawDataInsert.close();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                log.error("Exception closing connection of DatabaseAccess", e);
-            }
-        }
+        rawDataInsert.close();
     }
 
     YgroupRecord getYahooGroupInformation(String groupName) {

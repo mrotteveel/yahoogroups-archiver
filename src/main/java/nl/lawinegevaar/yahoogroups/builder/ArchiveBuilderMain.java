@@ -18,30 +18,30 @@ import java.util.zip.GZIPOutputStream;
 public class ArchiveBuilderMain {
     public static void main(String[] args) {
         CommandLine commandLine = getCommandLine(args);
-        DatabaseInfo databaseInfo = DatabaseInfo.createDatabaseInfo();
-        initialize(databaseInfo);
-        if (commandLine.hasOption("init-only")) {
-            String message = "Initialization only requested, exiting...";
-            System.out.println(message);
-            log.info(message);
-            return;
+        try (var databaseInfo = DatabaseInfo.createDatabaseInfo()) {
+            initialize(databaseInfo);
+            if (commandLine.hasOption("init-only")) {
+                String message = "Initialization only requested, exiting...";
+                System.out.println(message);
+                log.info(message);
+                return;
+            }
+
+            String outputDirectory = commandLine.getOptionValue("o");
+            if (outputDirectory == null || outputDirectory.isEmpty()) {
+                printUsage(buildCommandLineOptions());
+                return;
+            }
+
+            boolean applyGzip = commandLine.hasOption("g");
+            PathWriterFunction pathWriterFunction = applyGzip
+                    ? ArchiveBuilderMain::getGzippedWriter
+                    : Files::newBufferedWriter;
+
+            boolean rebuildLinkInfo = commandLine.hasOption("r");
+            new ArchiveBuilder(outputDirectory, rebuildLinkInfo, pathWriterFunction, databaseInfo)
+                    .build();
         }
-
-        String outputDirectory = commandLine.getOptionValue("o");
-        if (outputDirectory == null || outputDirectory.isEmpty()) {
-            printUsage(buildCommandLineOptions());
-            return;
-        }
-
-        boolean rebuildLinkInfo = commandLine.hasOption("r");
-        boolean applyGzip = commandLine.hasOption("g");
-
-        PathWriterFunction pathWriterFunction = applyGzip
-                ? ArchiveBuilderMain::getGzippedWriter
-                : Files::newBufferedWriter;
-
-        new ArchiveBuilder(outputDirectory, rebuildLinkInfo, pathWriterFunction, databaseInfo)
-                .build();
     }
 
     private static void initialize(DatabaseInfo databaseInfo) {

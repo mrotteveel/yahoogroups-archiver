@@ -19,35 +19,36 @@ public class SitemapBuilderMain {
 
     public static void main(String[] args) {
         CommandLine commandLine = getCommandLine(args);
-        DatabaseInfo databaseInfo = DatabaseInfo.createDatabaseInfo();
-        initialize(databaseInfo);
-        if (commandLine.hasOption("init-only")) {
-            String message = "Initialization only requested, exiting...";
-            System.out.println(message);
-            log.info(message);
-            return;
+        try (var databaseInfo = DatabaseInfo.createDatabaseInfo()) {
+            initialize(databaseInfo);
+            if (commandLine.hasOption("init-only")) {
+                String message = "Initialization only requested, exiting...";
+                System.out.println(message);
+                log.info(message);
+                return;
+            }
+
+            String outputDirectory = commandLine.getOptionValue("o");
+            if (outputDirectory == null || outputDirectory.isEmpty()) {
+                printUsage(buildCommandLineOptions());
+                return;
+            }
+
+            String sitePrefix = commandLine.getOptionValue("s");
+            if (sitePrefix == null || sitePrefix.isEmpty()) {
+                printUsage(buildCommandLineOptions());
+                return;
+            }
+
+            boolean applyGzip = commandLine.hasOption("g");
+
+            PathWriterFunction pathWriterFunction = applyGzip
+                    ? SitemapBuilderMain::getGzippedWriter
+                    : Files::newBufferedWriter;
+
+            new SitemapBuilder(outputDirectory, sitePrefix, pathWriterFunction, databaseInfo)
+                    .build();
         }
-
-        String outputDirectory = commandLine.getOptionValue("o");
-        if (outputDirectory == null || outputDirectory.isEmpty()) {
-            printUsage(buildCommandLineOptions());
-            return;
-        }
-
-        String sitePrefix = commandLine.getOptionValue("s");
-        if (sitePrefix == null || sitePrefix.isEmpty()) {
-            printUsage(buildCommandLineOptions());
-            return;
-        }
-
-        boolean applyGzip = commandLine.hasOption("g");
-
-        PathWriterFunction pathWriterFunction = applyGzip
-                ? SitemapBuilderMain::getGzippedWriter
-                : Files::newBufferedWriter;
-
-        new SitemapBuilder(outputDirectory, sitePrefix, pathWriterFunction, databaseInfo)
-                .build();
     }
 
     private static void initialize(DatabaseInfo databaseInfo) {

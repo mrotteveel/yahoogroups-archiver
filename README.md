@@ -14,8 +14,45 @@ any warranty or support. Use at your own risk.
 Requirements
 ------------
 
-- Java 11
-- [Firebird 3](https://www.firebirdsql.org/)
+- Java 17
+- [Firebird 3 or higher](https://www.firebirdsql.org/)
+
+Upgrade Note
+------------
+
+If you used Yahoogroups-archiver before the 2nd of August 2023, you'll need
+to migrate your database manually to make it compatible with the switch to 
+Flyway for migrations.
+
+Attempting to run any of the tools will produce the error
+
+> Exception in thread "main" org.flywaydb.core.api.FlywayException: Found 
+> non-empty schema(s) "default" but no schema history table.
+
+To fix this, execute the following (e.g. using ISQL) on your database:
+
+```sql
+CREATE TABLE "flyway_schema_history" (
+  "installed_rank" INTEGER CONSTRAINT "flyway_schema_history_pk" PRIMARY KEY,
+  "version" VARCHAR(50),
+  "description" VARCHAR(200) NOT NULL,
+  "type" VARCHAR(20) NOT NULL,
+  "script" VARCHAR(1000) NOT NULL,
+  "checksum" INTEGER,
+  "installed_by" VARCHAR(100) NOT NULL,
+  "installed_on" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  "execution_time" INTEGER NOT NULL,
+  "success" SMALLINT NOT NULL
+);
+CREATE INDEX "flyway_schema_history_s_idx" ON "flyway_schema_history" ("success");
+COMMIT;
+
+INSERT INTO "flyway_schema_history" ("installed_rank","version","description","type","script","checksum","installed_by","installed_on","execution_time","success") VALUES
+  (1,'1','initial tables','SQL','V1__initial_tables.sql',1520187526,'SYSDBA','2023-08-02 16:42:47.788',80,1);
+
+DROP TABLE DBVERSION;
+COMMIT;
+```
 
 Setup
 -----
