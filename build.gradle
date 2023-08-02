@@ -6,7 +6,7 @@ plugins {
 group 'nl.lawinegevaar'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -14,23 +14,23 @@ repositories {
 
 dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'org.firebirdsql.jdbc:jaybird:4.0.6.java11'
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'org.slf4j:slf4j-simple:1.7.36'
+    implementation 'org.firebirdsql.jdbc:jaybird:5.0.2.java11'
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
     implementation 'commons-cli:commons-cli:1.5.0'
     implementation 'org.jooq:jooq'
-    implementation 'com.github.jknack:handlebars:4.3.0'
-    implementation 'com.github.jknack:handlebars-helpers:4.3.0'
-    implementation 'org.jsoup:jsoup:1.14.3'
-    implementation 'com.fasterxml.woodstox:woodstox-core:6.2.8'
+    implementation 'com.github.jknack:handlebars:4.3.1'
+    implementation 'com.github.jknack:handlebars-helpers:4.3.1'
+    implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'com.fasterxml.woodstox:woodstox-core:6.5.1'
 
-    implementation platform('com.fasterxml.jackson:jackson-bom:2.13.2.20220328')
+    implementation platform('com.fasterxml.jackson:jackson-bom:2.15.2')
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
-    jooqRuntime 'org.firebirdsql.jdbc:jaybird:4.0.6.java11'
+    jooqRuntime 'org.firebirdsql.jdbc:jaybird:5.0.2.java11'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
