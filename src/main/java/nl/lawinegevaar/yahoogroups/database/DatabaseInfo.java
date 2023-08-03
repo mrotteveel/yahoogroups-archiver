@@ -27,6 +27,7 @@ public class DatabaseInfo implements AutoCloseable {
     @NonNull private final String databaseName;
     @NonNull private final String user;
     @NonNull private final String password;
+    @Getter(AccessLevel.NONE)
     private volatile boolean dataSourceInitialized;
     @Getter(lazy = true, value = AccessLevel.PUBLIC)
     private final DataSource dataSource = initDataSource();

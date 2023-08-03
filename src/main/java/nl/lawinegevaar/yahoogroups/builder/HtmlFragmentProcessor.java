@@ -44,7 +44,7 @@ class HtmlFragmentProcessor implements UnaryOperator<String> {
      * @param whiteListedUrlPrefixes URL prefixes that will have their {@code rel="nofollow"} attribute removed
      * @return Function to process html to html
      */
-    public static Function<String, String> htmlFragmentProcessor(Collection<String> whiteListedUrlPrefixes) {
+    static Function<String, String> htmlFragmentProcessor(Collection<String> whiteListedUrlPrefixes) {
         if (whiteListedUrlPrefixes.isEmpty()) {
             return Function.identity();
         }

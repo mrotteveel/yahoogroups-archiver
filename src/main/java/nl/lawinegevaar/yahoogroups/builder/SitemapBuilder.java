@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Slf4j
-public class SitemapBuilder {
+class SitemapBuilder {
 
     private final Path outputPath;
     private final String sitePrefix;
     private final PathWriterFunction pathWriterFunction;
     private final DatabaseInfo databaseInfo;
 
-    public SitemapBuilder(String outputDirectory, String sitePrefix, PathWriterFunction pathWriterFunction, DatabaseInfo databaseInfo) {
+    SitemapBuilder(String outputDirectory, String sitePrefix, PathWriterFunction pathWriterFunction, DatabaseInfo databaseInfo) {
         this.outputPath = createOutputDirectory(outputDirectory);
         this.sitePrefix = sitePrefix;
         this.pathWriterFunction = pathWriterFunction;

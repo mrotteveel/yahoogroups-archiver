@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -73,7 +72,7 @@ class ArchiveBuilder {
         List<String> groupNames = yahooGroupsInformation.stream()
                 .map(YgroupRecord::getGroupname)
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
         try (var writer = pathWriterFunction.getWriter(outputPath.resolve("index.html"))) {
             Template rootIndex = handlebars.compile("root-index");
             Map<String, Object> variables = Map.of(
@@ -118,7 +117,7 @@ class ArchiveBuilder {
 
     private static Properties readSiteProperties() {
         try (InputStream is = ArchiveBuilder.class.getResourceAsStream("/site.properties")) {
-            Properties props = new Properties();
+            var props = new Properties();
             props.load(is);
             return props;
         } catch (IOException e) {

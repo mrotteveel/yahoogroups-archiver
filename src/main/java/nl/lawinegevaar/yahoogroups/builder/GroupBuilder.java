@@ -27,7 +27,6 @@ import static java.lang.String.format;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingInt;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 class GroupBuilder {
@@ -74,7 +73,7 @@ class GroupBuilder {
         List<String> whitelistedUrlPrefixes = Arrays
                 .stream(siteProperties.getProperty("whitelistedUrlPrefixes", "").split(","))
                 .filter(urlPrefix -> !urlPrefix.isBlank())
-                .collect(toList());
+                .toList();
         htmlFragmentProcessor = HtmlFragmentProcessor.htmlFragmentProcessor(whitelistedUrlPrefixes);
     }
 
