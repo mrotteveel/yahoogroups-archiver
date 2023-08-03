@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import static java.lang.String.format;
 
 @Slf4j
-class Scraper {
+final class Scraper {
 
     private final OkHttpClient httpClient;
     private final Retrofit retrofit;

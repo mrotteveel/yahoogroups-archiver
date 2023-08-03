@@ -20,7 +20,7 @@ import java.util.Properties;
 @Builder
 @Getter
 @Slf4j
-public class DatabaseInfo implements AutoCloseable {
+public final class DatabaseInfo implements AutoCloseable {
 
     @NonNull private final String hostname;
     private final int port;

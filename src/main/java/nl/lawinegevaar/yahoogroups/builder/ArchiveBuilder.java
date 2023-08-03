@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import static java.lang.String.format;
 
 @Slf4j
-class ArchiveBuilder {
+final class ArchiveBuilder {
 
     private final DatabaseInfo databaseInfo;
     private final Path outputPath;

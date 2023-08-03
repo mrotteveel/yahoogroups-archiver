@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Slf4j
-class SitemapBuilder {
+final class SitemapBuilder {
 
     private final Path outputPath;
     private final String sitePrefix;

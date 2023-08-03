@@ -1,9 +1,10 @@
 package nl.lawinegevaar.yahoogroups.builder;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.lawinegevaar.yahoogroups.common.AbstractApplication;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
-import nl.lawinegevaar.yahoogroups.database.DatabaseInitializer;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,72 +16,37 @@ import java.nio.file.Path;
 import java.util.zip.GZIPOutputStream;
 
 @Slf4j
-public class ArchiveBuilderMain {
+public final class ArchiveBuilderMain extends AbstractApplication {
+
+    private ArchiveBuilderMain() {
+        super("ArchiveBuilderMain");
+    }
+
     public static void main(String[] args) {
-        CommandLine commandLine = getCommandLine(args);
-        try (var databaseInfo = DatabaseInfo.createDatabaseInfo()) {
-            initialize(databaseInfo);
-            if (commandLine.hasOption("init-only")) {
-                String message = "Initialization only requested, exiting...";
-                System.out.println(message);
-                log.info(message);
-                return;
-            }
+        new ArchiveBuilderMain().run(args);
+    }
 
-            String outputDirectory = commandLine.getOptionValue("o");
-            if (outputDirectory == null || outputDirectory.isEmpty()) {
-                printUsage(buildCommandLineOptions());
-                return;
-            }
-
-            boolean applyGzip = commandLine.hasOption("g");
-            PathWriterFunction pathWriterFunction = applyGzip
-                    ? ArchiveBuilderMain::getGzippedWriter
-                    : Files::newBufferedWriter;
-
-            boolean rebuildLinkInfo = commandLine.hasOption("r");
-            new ArchiveBuilder(outputDirectory, rebuildLinkInfo, pathWriterFunction, databaseInfo)
-                    .build();
+    @Override
+    protected void runApplication(CommandLine commandLine, DatabaseInfo databaseInfo) {
+        String outputDirectory = commandLine.getOptionValue("o");
+        if (outputDirectory == null || outputDirectory.isEmpty()) {
+            printUsage();
+            return;
         }
+
+        boolean applyGzip = commandLine.hasOption("g");
+        PathWriterFunction pathWriterFunction = applyGzip
+                ? ArchiveBuilderMain::getGzippedWriter
+                : Files::newBufferedWriter;
+
+        boolean rebuildLinkInfo = commandLine.hasOption("r");
+        new ArchiveBuilder(outputDirectory, rebuildLinkInfo, pathWriterFunction, databaseInfo)
+                .build();
     }
 
-    private static void initialize(DatabaseInfo databaseInfo) {
-        DatabaseInitializer initializer = new DatabaseInitializer(databaseInfo);
-        initializer.initializeDatabase();
-    }
-
-    private static CommandLine getCommandLine(String[] args) {
-        Options options = buildCommandLineOptions();
-        CommandLineParser clParser = new DefaultParser();
-        try {
-            CommandLine commandLine = clParser.parse(options, args);
-
-            if (commandLine.hasOption("h")) {
-                printUsage(options);
-                System.exit(0);
-            }
-            return commandLine;
-        } catch (ParseException e) {
-            System.err.println("Invalid command line: " + e.getMessage());
-            printUsage(options);
-            System.exit(-1);
-        }
-        throw new AssertionError("should not get here");
-    }
-
-    private static void printUsage(Options options) {
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("ArchiveBuilderMain", options);
-    }
-
-    private static Options buildCommandLineOptions() {
-        return new Options()
-                .addOption("h", "help", false, "Prints usage instructions and exits")
-                .addOption(Option.builder()
-                        .longOpt("init-only")
-                        .desc("Initialize database only and exit")
-                        .build())
-                .addOption("o", "output", true, "Output directory for archive (must be empty)")
+    @Override
+    protected void addApplicationOptions(Options options) {
+        options.addOption("o", "output", true, "Output directory for archive (must be empty)")
                 .addOption("r", "rebuild-link-info", false, "Rebuild link info")
                 .addOption("g", "gzip", false, "Gzip output files");
     }

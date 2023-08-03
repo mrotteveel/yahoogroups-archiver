@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.joining;
  * </ul>
  * </p>
  */
-class HtmlFragmentProcessor implements UnaryOperator<String> {
+final class HtmlFragmentProcessor implements UnaryOperator<String> {
 
     private final String nofollowRemovalSelector;
 

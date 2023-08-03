@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 @Slf4j
-class RawMessageDateParser {
+final class RawMessageDateParser {
 
     private static final Duration ALLOWED_DATE_DIFFERENCE = Duration.ofHours(6);
 

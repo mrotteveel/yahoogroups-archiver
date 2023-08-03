@@ -7,7 +7,7 @@ import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import java.util.List;
 
 @Slf4j
-class Updater {
+final class Updater {
 
     private final DatabaseInfo databaseInfo;
     private final boolean retryGaps;

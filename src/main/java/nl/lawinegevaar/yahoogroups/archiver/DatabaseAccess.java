@@ -1,11 +1,10 @@
 package nl.lawinegevaar.yahoogroups.archiver;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.lawinegevaar.yahoogroups.common.AbstractDatabaseAccess;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 import org.jooq.*;
-import org.jooq.conf.ParamCastMode;
-import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 
@@ -17,16 +16,14 @@ import static nl.lawinegevaar.yahoogroups.database.jooq.Tables.YGROUP;
 import static org.jooq.impl.DSL.*;
 
 @Slf4j
-class DatabaseAccess implements AutoCloseable {
+final class DatabaseAccess extends AbstractDatabaseAccess {
 
-    private final DSLContext ctx;
     private final CloseableQuery rawDataInsert;
 
     DatabaseAccess(DatabaseInfo databaseInfo) {
-        Settings settings = new Settings();
-        settings.setParamCastMode(ParamCastMode.NEVER);
-        ctx = DSL.using(databaseInfo.getDataSource(), SQLDialect.FIREBIRD, settings);
-        rawDataInsert = ctx.insertInto(RAWDATA, RAWDATA.GROUP_ID, RAWDATA.MESSAGE_ID, RAWDATA.MESSAGE_JSON, RAWDATA.RAW_MESSAGE_JSON)
+        super(databaseInfo);
+        rawDataInsert = ctx()
+                .insertInto(RAWDATA, RAWDATA.GROUP_ID, RAWDATA.MESSAGE_ID, RAWDATA.MESSAGE_JSON, RAWDATA.RAW_MESSAGE_JSON)
                 .values(
                         param("groupId", SQLDataType.INTEGER),
                         param("messageId", SQLDataType.INTEGER),
@@ -41,14 +38,14 @@ class DatabaseAccess implements AutoCloseable {
     }
 
     YgroupRecord getYahooGroupInformation(String groupName) {
-        return ctx
+        return ctx()
                 .selectFrom(YGROUP)
                 .where(YGROUP.GROUPNAME.eq(groupName))
                 .fetchOne();
     }
 
     YgroupRecord getOrCreateYahooGroupInformation(String groupName) {
-        return ctx.transactionResult((Configuration config) -> {
+        return ctx().transactionResult((Configuration config) -> {
             DSLContext txCtx = DSL.using(config);
             YgroupRecord ygroupRecord = txCtx
                     .selectFrom(YGROUP)
@@ -65,13 +62,13 @@ class DatabaseAccess implements AutoCloseable {
     }
 
     List<YgroupRecord> getYahooGroupsInformation() {
-        return ctx
+        return ctx()
                 .selectFrom(YGROUP)
                 .fetch();
     }
 
     int getHighestMessageId(int groupId) {
-        return ctx
+        return ctx()
                 .select(max(RAWDATA.MESSAGE_ID)).from(RAWDATA).where(RAWDATA.GROUP_ID.eq(groupId))
                 .fetchOptional()
                 .map(Record1::value1)
@@ -79,7 +76,7 @@ class DatabaseAccess implements AutoCloseable {
     }
 
     Stream<Record2<Integer, Integer>> getGapsForGroupId(int groupId) {
-        TableLike<Record3<Integer, Integer, Integer>> nextMessageIdSelect = ctx
+        TableLike<Record3<Integer, Integer, Integer>> nextMessageIdSelect = ctx()
                 .select(
                         RAWDATA.GROUP_ID,
                         RAWDATA.MESSAGE_ID,
@@ -90,7 +87,7 @@ class DatabaseAccess implements AutoCloseable {
 
         Field<Integer> messageId = nextMessageIdSelect.field(1, Integer.class);
         Field<Integer> nextMessageId = nextMessageIdSelect.field(2, Integer.class);
-        return ctx.select(messageId, nextMessageId)
+        return ctx().select(messageId, nextMessageId)
                 .from(nextMessageIdSelect)
                 .where(nextMessageId.minus(messageId).greaterThan(1))
                 .fetchStream();

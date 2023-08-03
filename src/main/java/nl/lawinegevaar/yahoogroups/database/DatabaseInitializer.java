@@ -6,7 +6,7 @@ import org.flywaydb.core.Flyway;
 import java.sql.SQLException;
 
 @Slf4j
-public class DatabaseInitializer {
+public final class DatabaseInitializer {
 
     private final DatabaseInfo databaseInfo;
 

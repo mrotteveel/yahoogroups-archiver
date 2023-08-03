@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class YgMessage {
+public final class YgMessage {
 
     private YgData ygData;
 

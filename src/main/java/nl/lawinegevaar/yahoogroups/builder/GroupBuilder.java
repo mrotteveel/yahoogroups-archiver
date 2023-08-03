@@ -29,7 +29,7 @@ import static java.util.Comparator.comparingInt;
 import static java.util.Objects.requireNonNull;
 
 @Slf4j
-class GroupBuilder {
+final class GroupBuilder {
 
     private static final Duration ALLOWED_POST_DATE_DIFFERENCE = Duration.ofHours(6);
     private final boolean rebuildLinkInfo;

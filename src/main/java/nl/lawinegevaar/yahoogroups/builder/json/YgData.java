@@ -13,7 +13,7 @@ import java.time.ZoneOffset;
 @Setter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class YgData {
+public final class YgData {
 
     private long userId;
     private String authorName;
