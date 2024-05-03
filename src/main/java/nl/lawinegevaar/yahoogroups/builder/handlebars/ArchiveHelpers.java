@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.util.Locale;
 
-import static com.github.jknack.handlebars.internal.lang3.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 public enum ArchiveHelpers implements Helper<Object> {
     monthName {
@@ -24,8 +24,8 @@ public enum ArchiveHelpers implements Helper<Object> {
             int month;
             if (context instanceof Integer || context instanceof Short) {
                 month = ((Number) context).intValue();
-            } else if (context instanceof String) {
-                month = Integer.parseInt((String) context);
+            } else if (context instanceof String stringContext) {
+                month = Integer.parseInt(stringContext);
             } else {
                 throw new IllegalArgumentException("Expected an int or a string convertible to int");
             }

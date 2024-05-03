@@ -6,34 +6,34 @@ plugins {
 group 'nl.lawinegevaar'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'org.firebirdsql.jdbc:jaybird:5.0.2.java11'
-    implementation 'org.slf4j:slf4j-api:2.0.7'
-    implementation 'org.slf4j:slf4j-simple:2.0.7'
-    implementation 'commons-cli:commons-cli:1.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'org.firebirdsql.jdbc:jaybird:5.0.4.java11'
+    implementation 'org.slf4j:slf4j-api:2.0.13'
+    implementation 'org.slf4j:slf4j-simple:2.0.13'
+    implementation 'commons-cli:commons-cli:1.7.0'
     implementation 'org.jooq:jooq'
-    implementation 'com.github.jknack:handlebars:4.3.1'
-    implementation 'com.github.jknack:handlebars-helpers:4.3.1'
-    implementation 'org.jsoup:jsoup:1.16.1'
-    implementation 'com.fasterxml.woodstox:woodstox-core:6.5.1'
-    implementation 'com.zaxxer:HikariCP:5.0.1'
-    implementation 'org.flywaydb:flyway-firebird:9.21.1'
+    implementation 'com.github.jknack:handlebars:4.4.0'
+    implementation 'com.github.jknack:handlebars-helpers:4.4.0'
+    implementation 'org.jsoup:jsoup:1.17.2'
+    implementation 'com.fasterxml.woodstox:woodstox-core:6.6.2'
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+    implementation 'org.flywaydb:flyway-firebird:10.12.0'
 
-    implementation platform('com.fasterxml.jackson:jackson-bom:2.15.2')
+    implementation platform('com.fasterxml.jackson:jackson-bom:2.17.0')
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-    compileOnly 'org.projectlombok:lombok:1.18.28'
-    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-    jooqGenerator 'org.firebirdsql.jdbc:jaybird:5.0.2.java11'
-    compileOnly 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+    jooqGenerator 'org.firebirdsql.jdbc:jaybird:5.0.4.java11'
+    compileOnly 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
 }
 
 jooq {

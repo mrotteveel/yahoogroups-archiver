@@ -2,7 +2,7 @@ package nl.lawinegevaar.yahoogroups.builder;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.helper.AssignHelper;
+import com.github.jknack.handlebars.helper.ext.AssignHelper;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import lombok.extern.slf4j.Slf4j;
 import nl.lawinegevaar.yahoogroups.builder.handlebars.ArchiveHelpers;
