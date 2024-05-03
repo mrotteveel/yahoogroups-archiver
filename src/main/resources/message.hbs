@@ -4,8 +4,8 @@
     {{~#eq site.useAbsolutePaths 'true'~}}
         {{~#assign "siteRoot"}}{{site.baseUrl}}{{/assign~}}
         {{~#assign "groupRoot"}}{{siteRoot}}{{groupName}}/{{/assign~}}
-        {{~#assign "yearRoot"}}{{groupRoot}}{{yearMonth.year}}/{{/assign~}}
-        {{~#assign "monthRoot"}}{{yearRoot}}{{yearMonth.month}}/{{/assign~}}
+        {{~#assign "yearRoot"}}{{groupRoot}}{{postInfo.postYear}}/{{/assign~}}
+        {{~#assign "monthRoot"}}{{yearRoot}}{{postInfo.postMonth}}/{{/assign~}}
     {{~else~}}
         {{~#assign "siteRoot"}}../../../{{/assign~}}
         {{~#assign "groupRoot"}}../../{{/assign~}}
@@ -16,6 +16,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
+    {{~#if site.generateCanonicalLink}}
+    <link rel="canonical" href="{{site.canonicalBaseUrl}}{{groupName}}/{{postInfo.postYear}}/{{postInfo.postMonth}}/{{postInfo.messageId}}.html"/>
+    {{~/if}}
     <title>{{groupName}} - {{{ygMessage.ygData.subject}}}</title>
 </head>
 <body id="message" class="d-flex flex-column h-100">
@@ -99,7 +102,7 @@
                 </table>
             </div>
             <div class="my-sm-2 msg-body">
-    {{{ygMessage.ygData.messageBody}}}
+{{{ygMessage.ygData.messageBody}}}
             </div>
         </div>
         <nav class="my-sm-2 msg-nav content-nav-bottom">
