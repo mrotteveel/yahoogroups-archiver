@@ -209,15 +209,14 @@ final class GroupBuilder {
                             "site", siteProperties);
                     messageTemplate.apply(variables, writer);
                 } catch (Exception e) {
-                    log.error(format("Unable to parse message for groupId: %d, messageId: %d; skipping",
-                            groupId, messageId), e);
+                    log.error("Unable to parse message for groupId: {}, messageId: {}; skipping",
+                            groupId, messageId, e);
                 }
             });
 
             groupSummary.addToSummary(yearMonth, ygMessage);
         } catch (Exception e) {
-            log.error(
-                    format("Unable to parse message for groupId: %d, messageId: %d; skipping", groupId, messageId), e);
+            log.error("Unable to parse message for groupId: {}, messageId: {}; skipping", groupId, messageId, e);
         }
     }
 
@@ -286,8 +285,7 @@ final class GroupBuilder {
             db.insertLinkInfo(groupId, messageId, zeroAsNull(ygData.getTopicId()), zeroAsNull(ygData.getPrevInTopic()),
                     zeroAsNull(ygData.getPrevInTime()), asLocalDateTime(dateTime));
         } catch (Exception e) {
-            log.error(
-                    format("Unable to parse message for groupId: %d, messageId: %d; skipping", groupId, messageId), e);
+            log.error("Unable to parse message for groupId: {}, messageId: {}; skipping", groupId, messageId, e);
         }
     }
 
