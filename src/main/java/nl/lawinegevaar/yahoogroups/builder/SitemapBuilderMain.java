@@ -13,6 +13,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.zip.GZIPOutputStream;
 
 @Slf4j
@@ -45,7 +47,22 @@ public final class SitemapBuilderMain extends AbstractApplication {
                 ? SitemapBuilderMain::getGzippedWriter
                 : Files::newBufferedWriter;
 
-        new SitemapBuilder(outputDirectory, sitePrefix, pathWriterFunction, databaseInfo)
+        String lastModOverride = commandLine.getOptionValue("m");
+        if (lastModOverride == null || lastModOverride.isEmpty()) {
+            lastModOverride = null;
+        } else {
+            try {
+                LocalDate.parse(lastModOverride);
+            } catch (DateTimeParseException e) {
+                System.err.println(
+                        "Invalid date for option -m/--lastmod-override, expected format is yyyy-MM-dd, value was "
+                                + lastModOverride);
+                printUsage();
+                return;
+            }
+        }
+
+        new SitemapBuilder(outputDirectory, sitePrefix, lastModOverride, pathWriterFunction, databaseInfo)
                 .build();
     }
 
@@ -53,7 +70,8 @@ public final class SitemapBuilderMain extends AbstractApplication {
     protected void addApplicationOptions(Options options) {
         options.addOption("o", "output", true, "Output directory for archive (must be empty)")
                 .addOption("s", "site-prefix", true, "Url prefix (including protocol) for the site, without trailing slash")
-                .addOption("g", "gzip", false, "Gzip output files");
+                .addOption("g", "gzip", false, "Gzip output files")
+                .addOption("m", "lastmod-override", true, "Override lastmod value for all sitemap entries (note sitemap-index), format yyyy-MM-dd");
     }
 
     private static Writer getGzippedWriter(Path path) throws IOException {

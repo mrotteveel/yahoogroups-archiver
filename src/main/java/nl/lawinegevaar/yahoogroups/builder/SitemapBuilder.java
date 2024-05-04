@@ -14,19 +14,21 @@ final class SitemapBuilder {
 
     private final Path outputPath;
     private final String sitePrefix;
+    private final String lastmodOverride;
     private final PathWriterFunction pathWriterFunction;
     private final DatabaseInfo databaseInfo;
 
-    SitemapBuilder(String outputDirectory, String sitePrefix, PathWriterFunction pathWriterFunction, DatabaseInfo databaseInfo) {
+    SitemapBuilder(String outputDirectory, String sitePrefix, String lastmodOverride, PathWriterFunction pathWriterFunction, DatabaseInfo databaseInfo) {
         this.outputPath = createOutputDirectory(outputDirectory);
         this.sitePrefix = sitePrefix;
+        this.lastmodOverride = lastmodOverride;
         this.pathWriterFunction = pathWriterFunction;
         this.databaseInfo = databaseInfo;
     }
 
     void build() {
         log.info("Starting building of sitemap at {}", OffsetDateTime.now());
-        SitemapGenerator sitemapGenerator = new SitemapGenerator(outputPath, sitePrefix, pathWriterFunction);
+        var sitemapGenerator = new SitemapGenerator(outputPath, sitePrefix, lastmodOverride, pathWriterFunction);
 
         sitemapGenerator.addSitemapEntry("/", LocalDateTime.now());
         

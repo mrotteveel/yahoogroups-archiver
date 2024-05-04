@@ -23,14 +23,17 @@ final class SitemapGenerator {
     private final List<String> sitemapFiles = new ArrayList<>();
     private final Path outputPath;
     private final String sitePrefix;
+    private final String lastmodOverride;
     private final PathWriterFunction pathWriterFunction;
     private int siteMapId = 0;
     private int currentLinkCount = 0;
     private XMLStreamWriter2 currentSiteMapWriter;
 
-    SitemapGenerator(Path outputPath, String sitePrefix, PathWriterFunction pathWriterFunction) {
+    SitemapGenerator(Path outputPath, String sitePrefix, String lastmodOverride,
+                     PathWriterFunction pathWriterFunction) {
         this.outputPath = outputPath;
         this.sitePrefix = sitePrefix;
+        this.lastmodOverride = lastmodOverride;
         this.pathWriterFunction = pathWriterFunction;
     }
 
@@ -71,7 +74,7 @@ final class SitemapGenerator {
             siteMapWriter.writeCharacters(sitePrefix + page);
             siteMapWriter.writeEndElement();
             siteMapWriter.writeStartElement("lastmod");
-            siteMapWriter.writeCharacters(lastChange.format(DateTimeFormatter.ISO_DATE));
+            siteMapWriter.writeCharacters(toLastmodValue(lastChange));
             siteMapWriter.writeEndElement();
             siteMapWriter.writeStartElement("changefreq");
             siteMapWriter.writeCharacters("never");
@@ -86,6 +89,10 @@ final class SitemapGenerator {
         } catch (IOException | XMLStreamException e) {
             throw new ArchiveBuildingException("Unable to add sitemap entry", e);
         }
+    }
+
+    private String toLastmodValue(LocalDateTime lastChange) {
+        return lastmodOverride != null ? lastmodOverride : lastChange.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     void createSitemapIndex() {
