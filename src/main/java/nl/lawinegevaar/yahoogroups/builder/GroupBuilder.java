@@ -12,6 +12,8 @@ import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.RawdataRecord;
 import nl.lawinegevaar.yahoogroups.database.jooq.tables.records.YgroupRecord;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -107,6 +109,7 @@ final class GroupBuilder {
                 Map<String, Object> variables = Map.of(
                         "postsPerYear", postsPerYear,
                         "groupName", groupName,
+                        "groupDescriptionHtml", loadGroupDescription(groupName),
                         "site", siteProperties);
                 groupIndex.apply(variables, writer);
             } catch (IOException e) {
@@ -114,6 +117,23 @@ final class GroupBuilder {
                         format("Could not create group index for %s", groupName), e);
             }
         });
+    }
+
+    /**
+     * Loads the group description from the resource {@code /description/_groupName_.html}.
+     *
+     * @param groupName group name
+     * @return the content of {@code /description/_groupName_.html} or an empty string if the resource does not exist or
+     * failed to load
+     */
+    private String loadGroupDescription(String groupName) {
+        try (InputStream in = getClass().getResourceAsStream("/description/" + groupName + ".html")) {
+            // No group description
+            if (in == null) return "";
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return "";
+        }
     }
 
     private void buildYearIndices() {
