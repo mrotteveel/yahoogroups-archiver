@@ -3,7 +3,7 @@ Yahoogroups-archiver
 
 Yahoogroups-archiver was a tool to archive the messages of a Yahoo Group to a
 Firebird database. Archiving itself is no longer available. The REST API was
-removed by Yahoo on December 14th, 2019, and the related code was eventuall
+removed by Yahoo on December 14th, 2019, and the related code was eventually
 removed from this project.
 
 Since the Yahoo Groups archive is no longer accessible, its current function is
