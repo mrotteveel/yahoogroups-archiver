@@ -70,7 +70,7 @@ public abstract class AbstractApplication {
     @SuppressWarnings("CallToPrintStackTrace")
     private void printUsage(Options options) {
         try {
-            HelpFormatter formatter = HelpFormatter.builder().get();
+            HelpFormatter formatter = HelpFormatter.builder().setShowSince(false).get();
             formatter.printHelp(applicationName, null, options, null, true);
         } catch (IOException e) {
             System.err.println("Could not print usage help.");
