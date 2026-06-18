@@ -83,3 +83,18 @@ nl.lawinegevaar.yahoogroups.archiver.ArchiveBuilderMain --output <output-directo
 ```
 
 The output directory must be empty.
+
+Extra options are available for the executable, see its `--help` for details.
+
+Building HTML sitemap
+---------------------
+
+To build a sitemap, run:
+
+```
+nl.lawinegevaar.yahoogroups.builder.SitemapBuilderMain --output <output-directory> --site-prefix <base-url>
+```
+
+The output directory must be empty.
+
+Extra options are available for the executable, see its `--help` for details.
