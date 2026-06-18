@@ -71,7 +71,7 @@ public final class SitemapBuilderMain extends AbstractApplication {
         options.addOption("o", "output", true, "Output directory for archive (must be empty)")
                 .addOption("s", "site-prefix", true, "Url prefix (including protocol) for the site, without trailing slash")
                 .addOption("g", "gzip", false, "Gzip output files")
-                .addOption("m", "lastmod-override", true, "Override lastmod value for all sitemap entries (note sitemap-index), format yyyy-MM-dd");
+                .addOption("m", "lastmod-override", true, "Override lastmod value for all sitemap entries (not sitemap-index), format yyyy-MM-dd");
     }
 
     private static Writer getGzippedWriter(Path path) throws IOException {
