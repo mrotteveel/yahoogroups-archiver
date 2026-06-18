@@ -44,7 +44,7 @@ jooq {
             generationTool {
                 jdbc {
                     driver = 'org.firebirdsql.jdbc.FBDriver'
-                    url = 'jdbc:firebirdsql://localhost/E:/db/yahooarchive.fdb'
+                    url = 'jdbc:firebird://localhost/yahooarchive.fdb'
                     user = 'sysdba'
                     password = 'masterkey'
                     properties {
