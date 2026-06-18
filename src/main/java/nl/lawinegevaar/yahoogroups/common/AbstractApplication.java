@@ -3,7 +3,15 @@ package nl.lawinegevaar.yahoogroups.common;
 import lombok.extern.slf4j.Slf4j;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInfo;
 import nl.lawinegevaar.yahoogroups.database.DatabaseInitializer;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
+
+import java.io.IOException;
 
 @Slf4j
 public abstract class AbstractApplication {
@@ -59,9 +67,16 @@ public abstract class AbstractApplication {
         printUsage(buildCommandLineOptions());
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private void printUsage(Options options) {
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(applicationName, options);
+        try {
+            HelpFormatter formatter = HelpFormatter.builder().get();
+            formatter.printHelp(applicationName, null, options, null, true);
+        } catch (IOException e) {
+            System.err.println("Could not print usage help.");
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     private Options buildCommandLineOptions() {
@@ -83,7 +98,7 @@ public abstract class AbstractApplication {
                 .addOption(Option.builder()
                         .longOpt("init-only")
                         .desc("Initialize database only and exit")
-                        .build());
+                        .get());
     }
 
 }
