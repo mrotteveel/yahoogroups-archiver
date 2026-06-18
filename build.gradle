@@ -1,12 +1,14 @@
 plugins {
     id 'java'
-    id 'nu.studer.jooq' version '8.2.1'
+    id 'nu.studer.jooq' version '10.2.1'
 }
 
-group 'nl.lawinegevaar'
-version '1.0-SNAPSHOT'
+group = 'nl.lawinegevaar'
+version = '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_21
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+}
 
 repositories {
     mavenCentral()
@@ -29,8 +31,8 @@ dependencies {
     implementation platform('com.fasterxml.jackson:jackson-bom:2.17.0')
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    compileOnly 'org.projectlombok:lombok:1.18.46'
+    annotationProcessor 'org.projectlombok:lombok:1.18.46'
 
     jooqGenerator 'org.firebirdsql.jdbc:jaybird:5.0.4.java11'
     compileOnly 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
