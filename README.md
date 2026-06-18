@@ -25,7 +25,7 @@ If you used Yahoogroups-archiver before the 2nd of August 2023, you'll need
 to migrate your database manually to make it compatible with the switch to 
 Flyway for migrations.
 
-Attempting to run any of the tools will produce the error
+Otherwise, attempting to run any of the tools will produce the error
 
 > Exception in thread "main" org.flywaydb.core.api.FlywayException: Found 
 > non-empty schema(s) "default" but no schema history table.
