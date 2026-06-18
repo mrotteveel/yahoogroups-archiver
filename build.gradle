@@ -15,7 +15,6 @@ repositories {
 }
 
 dependencies {
-    implementation libs.retrofit
     implementation libs.jaybird
     implementation libs.bundles.logging
     implementation libs.commons.cli

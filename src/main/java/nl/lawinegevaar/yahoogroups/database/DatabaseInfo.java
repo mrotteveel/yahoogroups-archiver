@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import nl.lawinegevaar.yahoogroups.archiver.ScraperMain;
 import org.firebirdsql.ds.FBSimpleDataSource;
 import org.firebirdsql.management.FBManager;
 
@@ -82,7 +81,7 @@ public final class DatabaseInfo implements AutoCloseable {
     }
 
     private static Properties readDatabaseConfiguration() {
-        try (InputStream is = ScraperMain.class.getResourceAsStream("/database.properties")) {
+        try (InputStream is = DatabaseInfo.class.getResourceAsStream("/database.properties")) {
             Properties props = new Properties();
             props.load(is);
             return props;

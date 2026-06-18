@@ -1,5 +1,4 @@
 [versions]
-retrofit = "2.12.0"
 jaybird = "6.0.5"
 slf4j = "2.0.18"
 commons-cli = "1.11.0"
@@ -15,7 +14,6 @@ jooq = "3.18.5"
 nu-studer-jooq = "10.2.1"
 
 [libraries]
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 jaybird = { module = "org.firebirdsql.jdbc:jaybird", version.ref = "jaybird" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
