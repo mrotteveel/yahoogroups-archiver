@@ -4,3 +4,5 @@
 /out/
 deploy-instructions-private.md
 /src/main/resources/description/
+
+podman-compose.yml
