@@ -1,12 +1,13 @@
 Yahoogroups-archiver
 ====================
 
-Yahoogroups-archiver is a tool to archive the messages of a Yahoo Group to a
+Yahoogroups-archiver was a tool to archive the messages of a Yahoo Group to a
 Firebird database.
 
-Be aware, this tool started out as an experiment that I abandoned over a year
-ago. With the imminent closure of the archive of Yahoo Groups, I have decided to
-publish it in the hope that maybe it is useful for someone else as well.
+Since the Yahoo Groups archive is no longer accessible, its current function is
+to build a HTML site with messages previously archived using this tool. The
+configuration in this repository is specific to generate the archive site for
+the Firebird groups, https://fb-list-archive.lawinegevaar.nl/. 
 
 This tool is offered free of charge under the MIT license. It is offered without
 any warranty or support. Use at your own risk.
@@ -61,13 +62,33 @@ Edit `src/main/resources/database.properties` with the connection details of
 your Firebird database server. The tool will automatically create the 
 database configured in `db.databaseName` if it does not yet exist.
 
+Building HTML archive
+---------------------
+
+If you previously archived using this tool, you can build an HTML archive.
+
+NOTE: I have only ever run this from within an IDE (IntelliJ IDEA), so these
+instructions assume sufficient Java knowledge to get things compiled and
+running in IntelliJ IDEA or the tool of your choice.
+
+The file `src/main/resources/site.properties` can be used to configure parts of
+the HTML generation.
+
+To build a HTML archive of all messages, run
+
+```
+nl.lawinegevaar.yahoogroups.archiver.ArchiveBuilderMain --output <output-directory>
+```
+
+The output directory must be empty.
+
 Archiving
 ---------
 
 **With the removal of the API on December 14th, 2019, the archiving no longer
-works**
+works.**
 
-NOTE: I have only ever run this from within an IDE (IntelliJ IDEA), so these 
+NOTE: I have only ever run this from within an IDE (IntelliJ IDEA), so these
 instructions assume sufficient Java knowledge to get things compiled and
 running in IntelliJ IDEA or the tool of your choice.
 
@@ -119,17 +140,3 @@ messages that were on hold for moderation in previous runs.
 
 The update option will not revisit previous message, for example to update the
 references between messages.
-
-Building HTML archive
----------------------
-
-The file `src/main/resources/site.properties` can be used to configure parts of
-the HTML generation.
-
-To build a HTML archive of all messages, run
-
-```
-nl.lawinegevaar.yahoogroups.archiver.ArchiveBuilderMain --output <output-directory>
-```
-
-The output directory must be empty.
