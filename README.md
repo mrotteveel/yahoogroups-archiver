@@ -15,7 +15,7 @@ any warranty or support. Use at your own risk.
 Requirements
 ------------
 
-- Java 17
+- Java 21
 - [Firebird 3 or higher](https://www.firebirdsql.org/)
 
 Upgrade Note
