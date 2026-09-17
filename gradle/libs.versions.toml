@@ -10,7 +10,7 @@ jackson = "2.22.2"
 flyway = "13.7.0"
 lombok = "1.18.48"
 jaxb = "4.0.5"
-jooq = "3.18.38"
+jooq = "3.21.8"
 nu-studer-jooq = "10.2.1"
 
 [libraries]
