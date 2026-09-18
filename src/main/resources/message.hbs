@@ -57,7 +57,7 @@
                     {{~/if~}}
                     {{~#if postInfo.prevInTopic}}
                     <li class="page-item previous previous-in-topic">
-                        <a class="page-link h-100" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
+                        <a class="page-link h-100" rel="prev" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
                     </li>
                     {{~else}}
                     <li class="page-item disabled previous previous-in-topic">
@@ -67,7 +67,7 @@
                     <li class="page-item first-in-topic"><a class="page-link h-100" href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
                     {{~#if postInfo.nextInTopic}}
                     <li class="page-item next next-in-topic">
-                        <a class="page-link h-100" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
+                        <a class="page-link h-100" rel="next" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
                     </li>
                     {{~else}}
                     <li class="page-item disabled next next-in-topic">
@@ -125,7 +125,7 @@
                     {{~/if~}}
                     {{~#if postInfo.prevInTopic}}
                     <li class="page-item previous previous-in-topic">
-                        <a class="page-link h-100" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
+                        <a class="page-link h-100" rel="prev" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
                     </li>
                     {{~else}}
                     <li class="page-item disabled previous previous-in-topic">
@@ -135,7 +135,7 @@
                     <li class="page-item first-in-topic"><a class="page-link h-100" href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
                     {{~#if postInfo.nextInTopic}}
                     <li class="page-item next next-in-topic">
-                        <a class="page-link h-100" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
+                        <a class="page-link h-100" rel="next" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
                     </li>
                     {{~else}}
                     <li class="page-item disabled next next-in-topic">
