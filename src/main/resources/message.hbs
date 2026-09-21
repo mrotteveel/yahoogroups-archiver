@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{site.lang}}">
 <head>
+    {{~#assign "canonicalUrl"}}{{site.canonicalBaseUrl}}{{groupName}}/{{postInfo.postYear}}/{{postInfo.postMonth}}/{{postInfo.messageId}}.html{{/assign~}}
+    {{~#assign "canonicalTopic"}}{{site.canonicalBaseUrl}}{{groupName}}/{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html{{/assign~}}
     {{~#eq site.useAbsolutePaths 'true'~}}
         {{~#assign "siteRoot"}}{{site.baseUrl}}{{/assign~}}
         {{~#assign "groupRoot"}}{{siteRoot}}{{groupName}}/{{/assign~}}
@@ -17,11 +19,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="{{siteRoot}}archive-style.css" rel="stylesheet" type="text/css"/>
     {{~#if site.generateCanonicalLink}}
-    <link rel="canonical" href="{{site.canonicalBaseUrl}}{{groupName}}/{{postInfo.postYear}}/{{postInfo.postMonth}}/{{postInfo.messageId}}.html"/>
+    <link rel="canonical" href="{{canonicalUrl}}"/>
     {{~/if}}
     <title>{{groupName}} - {{{ygMessage.ygData.subject}}}</title>
 </head>
-<body id="message" class="d-flex flex-column h-100">
+<body id="message" class="d-flex flex-column h-100" itemscope itemtype="https://schema.org/WebPage">
 <header class="archive-nav">
     <nav class="navbar navbar-expand-lg bg-dark site-menu" data-bs-theme="dark">
         <div class="container-fluid">
@@ -31,7 +33,7 @@
             </ul>
         </div>
     </nav>
-    <nav class="navbar navbar-expand-lg bg-light group-nav">
+    <nav class="navbar navbar-expand-lg bg-light group-nav" itemprop="breadcrumb">
         <div class="container-fluid">
             <ul class="navbar-nav">
                 <li class="nav-item group-root"><a class="nav-link" href="{{groupRoot}}index.html"><span class="group-name">{{postInfo.groupname}}</span></a></li>
@@ -41,7 +43,11 @@
         </div>
     </nav>
 </header>
-<main role="main" class="flex-shrink-0">
+<main role="main" class="flex-shrink-0" itemprop="mainContentOfPage" itemscope itemtype="https://schema.org/DiscussionForumPosting">
+    {{~#unless postInfo.topicStart}}
+    <meta itemprop="mainEntity" content="{{canonicalTopic}}"/>
+    {{~/unless}}
+    <meta itemprop="url" content="{{canonicalUrl}}"/>
     <div class="container">
         <nav class="my-sm-2 msg-nav content-nav-top">
             <div class="container-fluid">
@@ -64,7 +70,9 @@
                         <span class="page-link h-100">previous in topic</span>
                     </li>
                     {{~/if}}
-                    <li class="page-item first-in-topic"><a class="page-link h-100" href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
+                    <li class="page-item first-in-topic">
+                        <a class="page-link h-100" href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a>
+                    </li>
                     {{~#if postInfo.nextInTopic}}
                     <li class="page-item next next-in-topic">
                         <a class="page-link h-100" rel="next" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
@@ -86,7 +94,7 @@
                 </ul>
             </div>
         </nav>
-        <div class="msg">
+        <div class="msg" {{~#unless postInfo.topicStart}} itemprop="comment" itemscope itemtype="https://schema.org/Comment"{{/unless}}>
             <div class="msg-header">
                 <table class="table table-borderless table-sm">
                     <colgroup>
@@ -95,19 +103,19 @@
                     </colgroup>
                     <tr class="msg-subject">
                         <th scope="row" class="ps-sm-0 text-nowrap msg-header-name">Subject</th>
-                        <td class="msg-header-value subject">{{{ygMessage.ygData.subject}}}</td>
+                        <td class="msg-header-value subject" itemprop="headline">{{{ygMessage.ygData.subject}}}</td>
                     </tr>
-                    <tr class="msg-author">
+                    <tr class="msg-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
                         <th scope="row" class="ps-sm-0 text-nowrap msg-header-name">Author</th>
-                        <td class="msg-header-value author">{{{ygMessage.ygData.authorName}}}</td>
+                        <td class="msg-header-value author" itemprop="name">{{{ygMessage.ygData.authorName}}}</td>
                     </tr>
                     <tr class="msg-postdate">
                         <th scope="row" class="ps-sm-0 text-nowrap msg-header-name">Post date</th>
-                        <td class="msg-header-value date-time">{{postDate}}</td>
+                        <td class="msg-header-value date-time" itemprop="dateCreated">{{postDate}}</td>
                     </tr>
                 </table>
             </div>
-            <div class="my-sm-2 msg-body">
+            <div class="my-sm-2 msg-body" itemprop="text">
 {{{ygMessage.ygData.messageBody}}}
             </div>
         </div>
@@ -125,7 +133,7 @@
                     {{~/if~}}
                     {{~#if postInfo.prevInTopic}}
                     <li class="page-item previous previous-in-topic">
-                        <a class="page-link h-100" rel="prev" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
+                        <a class="page-link h-100" href="{{groupRoot}}{{postInfo.prevInTopicYear}}/{{postInfo.prevInTopicMonth}}/{{postInfo.prevInTopic}}.html">previous in topic</a>
                     </li>
                     {{~else}}
                     <li class="page-item disabled previous previous-in-topic">
@@ -135,7 +143,7 @@
                     <li class="page-item first-in-topic"><a class="page-link h-100" href="{{groupRoot}}{{postInfo.topicYear}}/{{postInfo.topicMonth}}/{{postInfo.topicId}}.html">first in topic</a></li>
                     {{~#if postInfo.nextInTopic}}
                     <li class="page-item next next-in-topic">
-                        <a class="page-link h-100" rel="next" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
+                        <a class="page-link h-100" href="{{groupRoot}}{{postInfo.nextInTopicYear}}/{{postInfo.nextInTopicMonth}}/{{postInfo.nextInTopic}}.html">next in topic</a>
                     </li>
                     {{~else}}
                     <li class="page-item disabled next next-in-topic">

@@ -223,7 +223,7 @@ final class GroupBuilder {
                 try (var writer = pathWriterFunction.getWriter(yearMonthPath.resolve(messageId + ".html"))) {
                     Map<String, Object> variables = Map.of(
                             "ygMessage", ygMessage,
-                            "postInfo", postInformationRecord,
+                            "postInfo", new PostInfo(postInformationRecord),
                             "postDate", offsetPostDate,
                             "groupName", groupName,
                             "site", siteProperties);
